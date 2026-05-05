@@ -7,7 +7,7 @@ export default defineConfig({
   name: 'weeksport-trail-cms',
   title: 'WEEK&SPORT — Gestion des sites Trail',
 
-  projectId: process.env.SANITY_PROJECT_ID || 'REMPLACER_PAR_VOTRE_PROJECT_ID',
+  projectId: process.env.SANITY_PROJECT_ID || 'd2tkdmxe',
   dataset: 'production',
 
   plugins: [
