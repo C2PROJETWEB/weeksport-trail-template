@@ -65,6 +65,7 @@ export const sectionPartenaires = {
         fields: [
           { name: 'nom', title: 'Nom', type: 'string' },
           { name: 'logo', title: 'Logo', type: 'image', options: { hotspot: true } },
+          { name: 'logoUrl', title: 'URL logo (externe)', type: 'url' },
           { name: 'url', title: 'Site web', type: 'url' }
         ],
         preview: { select: { title: 'nom', media: 'logo' } }
@@ -92,6 +93,7 @@ export const sectionEpreuves = {
           { name: 'denivele', title: 'Dénivelé', type: 'string', description: 'Ex: +1200 m' },
           { name: 'description', title: 'Description', type: 'text', rows: 3 },
           { name: 'image', title: 'Image', type: 'image', options: { hotspot: true } },
+          { name: 'imageUrl', title: 'URL image (externe)', type: 'url' },
           { name: 'lienInscription', title: "Lien d'inscription", type: 'url' }
         ],
         preview: { select: { title: 'nom', subtitle: 'distance' } }
@@ -147,7 +149,75 @@ export const sectionBenevoles = {
     { name: 'titre', title: 'Titre', type: 'string', initialValue: 'Devenir bénévole' },
     { name: 'description', title: 'Description', type: 'text', rows: 4 },
     { name: 'lienInscription', title: "Lien d'inscription bénévoles", type: 'url' },
-    { name: 'image', title: 'Image', type: 'image', options: { hotspot: true } }
+    { name: 'image', title: 'Image', type: 'image', options: { hotspot: true } },
+    { name: 'imageUrl', title: 'URL image (externe)', type: 'url' }
   ],
   preview: { prepare() { return { title: 'Bénévoles' } } }
+}
+
+export const sectionCompteur = {
+  name: 'sectionCompteur',
+  title: 'Compte à rebours',
+  type: 'object',
+  fields: [
+    { name: 'titre', title: 'Titre', type: 'string', initialValue: 'Prochaine édition' },
+    { name: 'dateEpreuve', title: "Date de l'épreuve", type: 'datetime', description: 'Date et heure de départ (heure locale France)' }
+  ],
+  preview: { select: { title: 'titre' }, prepare({ title }) { return { title: `Compte à rebours — ${title || ''}` } } }
+}
+
+export const sectionProgramme = {
+  name: 'sectionProgramme',
+  title: 'Programme',
+  type: 'object',
+  fields: [
+    { name: 'titre', title: 'Titre', type: 'string', initialValue: 'Le Programme' },
+    {
+      name: 'contenu',
+      title: 'Contenu',
+      type: 'array',
+      of: [{
+        type: 'block',
+        styles: [
+          { title: 'Normal', value: 'normal' },
+          { title: 'H2', value: 'h2' },
+          { title: 'H3', value: 'h3' }
+        ],
+        marks: {
+          decorators: [
+            { title: 'Gras', value: 'strong' },
+            { title: 'Italique', value: 'em' }
+          ]
+        }
+      }]
+    },
+    { name: 'image', title: 'Image de fond', type: 'image', options: { hotspot: true } },
+    { name: 'imageUrl', title: 'URL image de fond (externe)', type: 'url' }
+  ],
+  preview: { prepare() { return { title: 'Programme' } } }
+}
+
+export const sectionPhotos = {
+  name: 'sectionPhotos',
+  title: 'Photos par année',
+  type: 'object',
+  fields: [
+    { name: 'titre', title: 'Titre', type: 'string', initialValue: 'Photos' },
+    {
+      name: 'annees',
+      title: 'Albums par année',
+      type: 'array',
+      of: [{
+        type: 'object',
+        fields: [
+          { name: 'annee', title: 'Année', type: 'string' },
+          { name: 'lien', title: "Lien vers l'album", type: 'url' },
+          { name: 'image', title: "Image d'aperçu", type: 'image', options: { hotspot: true } },
+          { name: 'imageUrl', title: "URL image d'aperçu (externe)", type: 'url' }
+        ],
+        preview: { select: { title: 'annee' } }
+      }]
+    }
+  ],
+  preview: { prepare() { return { title: 'Photos' } } }
 }

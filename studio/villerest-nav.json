@@ -1,0 +1,14 @@
+{
+  "_type": "navigation",
+  "_id": "nav-villerest",
+  "site": { "_type": "reference", "_ref": "site-villerest" },
+  "items": [
+    { "_type": "navItem", "_key": "nav1", "label": "Les Épreuves", "slug": "#epreuves" },
+    { "_type": "navItem", "_key": "nav2", "label": "Programme", "slug": "#programme" },
+    { "_type": "navItem", "_key": "nav3", "label": "Résultats", "slug": "#resultats" },
+    { "_type": "navItem", "_key": "nav4", "label": "Photos", "slug": "#photos" },
+    { "_type": "navItem", "_key": "nav5", "label": "Partenaires", "slug": "#partenaires" },
+    { "_type": "navItem", "_key": "nav6", "label": "Bénévoles", "slug": "#benevoles" },
+    { "_type": "navItem", "_key": "nav7", "label": "Contact", "slug": "#contact" }
+  ]
+}

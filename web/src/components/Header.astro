@@ -1,7 +1,7 @@
 ---
 import { urlFor } from '../lib/sanity'
 const { site, nav } = Astro.props
-const logoUrl = site?.logo ? urlFor(site.logo).height(80).url() : null
+const logoUrl = site?.logo ? urlFor(site.logo).height(80).url() : (site?.logoUrl || null)
 const items = nav?.items || []
 ---
 <header id="header" class="fixed top-0 w-full z-50 transition-all duration-300">

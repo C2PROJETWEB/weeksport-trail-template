@@ -47,6 +47,18 @@ export default {
       options: { hotspot: true }
     },
     {
+      name: 'heroImageUrl',
+      title: "URL image d'en-tête (externe)",
+      type: 'url',
+      description: 'Utilisé si pas d\'image uploadée dans Sanity'
+    },
+    {
+      name: 'logoUrl',
+      title: 'URL logo (externe)',
+      type: 'url',
+      description: 'Utilisé si pas de logo uploadé dans Sanity'
+    },
+    {
       name: 'heroTitre',
       title: "Titre principal",
       type: 'string'

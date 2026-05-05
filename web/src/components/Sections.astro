@@ -24,9 +24,43 @@ const { sections = [] } = Astro.props
     </section>
   )
 
+  // ─── COMPTE À REBOURS ────────────────────────────────────
+  if (section._type === 'sectionCompteur') return (
+    <section id="compteur" class="py-24 px-6 border-t border-white/5">
+      <div class="max-w-5xl mx-auto text-center">
+        <div class="reveal mb-16">
+          <span class="section-label mx-auto block text-center">{section.titre || 'Prochaine édition'}</span>
+          <span class="deco-line mx-auto"></span>
+        </div>
+        <div
+          id="countdown"
+          class="flex items-center justify-center gap-4 md:gap-12"
+          data-date={section.dateEpreuve}
+        >
+          {[
+            { id: 'cd-jours', label: 'Jours' },
+            { id: 'cd-heures', label: 'Heures' },
+            { id: 'cd-min', label: 'Min' },
+            { id: 'cd-sec', label: 'Sec' }
+          ].map(({ id, label }) => (
+            <div class="flex flex-col items-center">
+              <span
+                class="font-display text-6xl md:text-8xl lg:text-9xl text-white tabular-nums"
+                id={id}
+                style="color: var(--color-primary)"
+              >--</span>
+              <span class="text-xs uppercase tracking-[0.3em] text-white/30 mt-3">{label}</span>
+            </div>
+          ))}
+        </div>
+        <p class="text-white/20 text-xs mt-12 uppercase tracking-widest">Cap sur la 7ème édition</p>
+      </div>
+    </section>
+  )
+
   // ─── ÉPREUVES ─────────────────────────────────────────────
   if (section._type === 'sectionEpreuves') return (
-    <section id="programme" class="py-24 px-6">
+    <section id="epreuves" class="py-24 px-6">
       <div class="max-w-7xl mx-auto">
         <div class="reveal mb-16">
           <span class="section-label">{section.titre || 'Les épreuves'}</span>
@@ -36,10 +70,10 @@ const { sections = [] } = Astro.props
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {section.epreuves?.map((e, i) => (
             <div class={`epreuve-card reveal reveal-delay-${Math.min(i+1,4)}`}>
-              {e.image && (
+              {(e.image || e.imageUrl) && (
                 <div class="relative h-52 overflow-hidden">
                   <img
-                    src={urlFor(e.image).width(700).height(500).url()}
+                    src={e.image ? urlFor(e.image).width(700).height(500).url() : e.imageUrl}
                     alt={e.nom}
                     class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     loading="lazy"
@@ -78,9 +112,43 @@ const { sections = [] } = Astro.props
     </section>
   )
 
+  // ─── PROGRAMME ────────────────────────────────────────────
+  if (section._type === 'sectionProgramme') {
+    const bgImg = section.image
+      ? urlFor(section.image).width(1920).url()
+      : (section.imageUrl || null)
+    return (
+      <section id="programme" class="relative py-32 px-6 overflow-hidden">
+        {bgImg && (
+          <div
+            class="absolute inset-0 bg-cover bg-center"
+            style={`background-image: url('${bgImg}')`}
+          />
+        )}
+        <div class="absolute inset-0 bg-[#0d0d0d]/80" />
+        <div class="absolute left-0 top-0 bottom-0 w-1 overflow-hidden">
+          <div class="w-full h-full" style="background: linear-gradient(to bottom, transparent, var(--color-primary), transparent)" />
+        </div>
+        <div class="relative z-10 max-w-4xl mx-auto">
+          <div class="reveal mb-12">
+            <span class="section-label">{section.titre || 'Le Programme'}</span>
+            <span class="deco-line"></span>
+            <h2 class="section-title">Un programme <span>XXL</span></h2>
+          </div>
+          {section.contenu && (
+            <div
+              class="prose prose-invert prose-lg max-w-none prose-headings:font-display prose-headings:tracking-wide prose-a:text-[var(--color-primary)] prose-p:text-white/70 prose-strong:text-white"
+              set:html={toHTML(section.contenu)}
+            />
+          )}
+        </div>
+      </section>
+    )
+  }
+
   // ─── GALERIE ──────────────────────────────────────────────
   if (section._type === 'sectionGalerie') return (
-    <section class="py-24 px-6">
+    <section id="galerie" class="py-24 px-6">
       <div class="max-w-7xl mx-auto">
         <div class="reveal mb-12">
           <span class="section-label">Photos</span>
@@ -108,9 +176,53 @@ const { sections = [] } = Astro.props
     </section>
   )
 
+  // ─── PHOTOS PAR ANNÉE ─────────────────────────────────────
+  if (section._type === 'sectionPhotos') return (
+    <section id="photos" class="py-24 px-6">
+      <div class="max-w-7xl mx-auto">
+        <div class="reveal mb-16">
+          <span class="section-label">{section.titre || 'Photos'}</span>
+          <span class="deco-line"></span>
+          <h2 class="section-title">La <span>Galerie</span></h2>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {section.annees?.map((a, i) => {
+            const thumbUrl = a.image
+              ? urlFor(a.image).width(800).height(500).url()
+              : (a.imageUrl || null)
+            return (
+              <a
+                href={a.lien || '#'}
+                target={a.lien ? '_blank' : undefined}
+                rel="noopener"
+                class={`group relative overflow-hidden reveal reveal-delay-${Math.min(i+1,4)} block`}
+                style="min-height: 240px"
+              >
+                {thumbUrl
+                  ? <img src={thumbUrl} alt={`Photos ${a.annee}`} class="w-full h-60 object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+                  : <div class="w-full h-60" style="background: var(--color-secondary)" />
+                }
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
+                <div class="absolute bottom-0 left-0 p-6 flex items-end justify-between w-full">
+                  <div>
+                    <span class="font-display text-6xl text-white/20 group-hover:text-white/40 transition-colors leading-none block">{a.annee}</span>
+                    <span class="text-xs font-bold uppercase tracking-widest text-white/50 group-hover:text-white transition-colors">Voir les photos</span>
+                  </div>
+                  <svg class="w-5 h-5 text-white/30 group-hover:text-[var(--color-primary)] transition-all group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                  </svg>
+                </div>
+              </a>
+            )
+          })}
+        </div>
+      </div>
+    </section>
+  )
+
   // ─── PARTENAIRES ─────────────────────────────────────────
   if (section._type === 'sectionPartenaires') return (
-    <section class="py-24 px-6 border-t border-white/5">
+    <section id="partenaires" class="py-24 px-6 border-t border-white/5">
       <div class="max-w-7xl mx-auto">
         <div class="reveal text-center mb-16">
           <span class="section-label text-center block">{section.titre || 'Partenaires'}</span>
@@ -123,7 +235,9 @@ const { sections = [] } = Astro.props
               class="group transition-all duration-300 opacity-40 hover:opacity-100 grayscale hover:grayscale-0 filter">
               {p.logo
                 ? <img src={urlFor(p.logo).height(70).url()} alt={p.nom} class="h-14 object-contain" />
-                : <span class="font-bold text-white/60 group-hover:text-white text-lg">{p.nom}</span>
+                : p.logoUrl
+                  ? <img src={p.logoUrl} alt={p.nom} class="h-14 object-contain" />
+                  : <span class="font-bold text-white/60 group-hover:text-white text-lg">{p.nom}</span>
               }
             </a>
           ))}
@@ -134,7 +248,7 @@ const { sections = [] } = Astro.props
 
   // ─── RÉSULTATS ───────────────────────────────────────────
   if (section._type === 'sectionResultats') return (
-    <section class="py-24 px-6">
+    <section id="resultats" class="py-24 px-6">
       <div class="max-w-4xl mx-auto">
         <div class="reveal mb-12">
           <span class="section-label">Palmarès</span>
@@ -164,13 +278,13 @@ const { sections = [] } = Astro.props
 
   // ─── CONTACT ─────────────────────────────────────────────
   if (section._type === 'sectionContact') return (
-    <section class="py-24 px-6 border-t border-white/5">
+    <section id="contact" class="py-24 px-6 border-t border-white/5">
       <div class="max-w-6xl mx-auto">
         <div class="grid lg:grid-cols-2 gap-16 items-start">
           <div class="reveal">
             <span class="section-label">{section.titre || 'Contact'}</span>
             <span class="deco-line"></span>
-            <h2 class="section-title">Parlons de <span>votre projet</span></h2>
+            <h2 class="section-title">Une <span>question ?</span></h2>
             <div class="space-y-4 mt-8">
               {section.email && (
                 <a href={`mailto:${section.email}`} class="flex items-center gap-3 text-white/60 hover:text-white transition-colors group">
@@ -216,7 +330,7 @@ const { sections = [] } = Astro.props
 
   // ─── BÉNÉVOLES ───────────────────────────────────────────
   if (section._type === 'sectionBenevoles') return (
-    <section class="py-24 px-6">
+    <section id="benevoles" class="py-24 px-6">
       <div class="max-w-6xl mx-auto">
         <div class="grid lg:grid-cols-2 gap-16 items-center">
           <div class="reveal order-2 lg:order-1">
@@ -231,10 +345,10 @@ const { sections = [] } = Astro.props
               </a>
             )}
           </div>
-          {section.image && (
+          {(section.image || section.imageUrl) && (
             <div class="reveal reveal-delay-2 order-1 lg:order-2 overflow-hidden">
               <img
-                src={urlFor(section.image).width(800).url()}
+                src={section.image ? urlFor(section.image).width(800).url() : section.imageUrl}
                 alt="Bénévoles"
                 class="w-full h-80 lg:h-96 object-cover"
               />
@@ -247,3 +361,36 @@ const { sections = [] } = Astro.props
 
   return null
 })}
+
+<script>
+  // Countdown timer
+  const countdownEl = document.getElementById('countdown')
+  if (countdownEl) {
+    const targetDate = new Date(countdownEl.dataset.date as string).getTime()
+    const ids = ['cd-jours', 'cd-heures', 'cd-min', 'cd-sec'] as const
+
+    function updateCountdown() {
+      const diff = targetDate - Date.now()
+      if (diff <= 0) {
+        ids.forEach(id => {
+          const el = document.getElementById(id)
+          if (el) el.textContent = '00'
+        })
+        return
+      }
+      const values = [
+        Math.floor(diff / 86400000),
+        Math.floor((diff % 86400000) / 3600000),
+        Math.floor((diff % 3600000) / 60000),
+        Math.floor((diff % 60000) / 1000)
+      ]
+      ids.forEach((id, i) => {
+        const el = document.getElementById(id)
+        if (el) el.textContent = String(values[i]).padStart(2, '0')
+      })
+    }
+
+    updateCountdown()
+    setInterval(updateCountdown, 1000)
+  }
+</script>

@@ -14,8 +14,8 @@ export const urlFor = (source) => builder.image(source)
 export async function getSite(siteSlug) {
   return client.fetch(
     `*[_type == "site" && slug.current == $slug][0]{
-      name, slug, logo, favicon, couleurPrimaire, couleurSecondaire,
-      heroImage, heroTitre, heroDate, heroCTA, heroCTAUrl, metaDescription
+      name, slug, logo, logoUrl, favicon, couleurPrimaire, couleurSecondaire,
+      heroImage, heroImageUrl, heroTitre, heroDate, heroCTA, heroCTAUrl, metaDescription
     }`,
     { slug: siteSlug }
   )

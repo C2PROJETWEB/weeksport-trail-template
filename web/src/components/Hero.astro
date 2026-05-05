@@ -1,7 +1,9 @@
 ---
 import { urlFor } from '../lib/sanity'
 const { site } = Astro.props
-const bgUrl = site?.heroImage ? urlFor(site.heroImage).width(1920).url() : null
+const bgUrl = site?.heroImage
+  ? urlFor(site.heroImage).width(1920).url()
+  : (site?.heroImageUrl || null)
 ---
 <section class="relative min-h-screen flex items-end pb-24 overflow-hidden">
 

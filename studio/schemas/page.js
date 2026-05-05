@@ -34,7 +34,10 @@ export default {
         { type: 'sectionEpreuves' },
         { type: 'sectionResultats' },
         { type: 'sectionContact' },
-        { type: 'sectionBenevoles' }
+        { type: 'sectionBenevoles' },
+        { type: 'sectionCompteur' },
+        { type: 'sectionProgramme' },
+        { type: 'sectionPhotos' }
       ]
     }
   ],
