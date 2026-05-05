@@ -3,34 +3,94 @@ import { urlFor } from '../lib/sanity'
 const { site } = Astro.props
 const bgUrl = site?.heroImage ? urlFor(site.heroImage).width(1920).url() : null
 ---
-<section
-  class="relative min-h-screen flex items-center justify-center text-white text-center pt-16"
-  style={bgUrl ? `background-image: url('${bgUrl}'); background-size: cover; background-position: center;` : 'background-color: var(--color-secondary)'}
->
-  <!-- Overlay -->
-  <div class="absolute inset-0 bg-black/50"></div>
+<section class="relative min-h-screen flex items-end pb-24 overflow-hidden">
 
-  <div class="relative z-10 px-4 max-w-4xl mx-auto flex flex-col items-center gap-6">
-    {site?.heroDate && (
-      <p class="text-lg md:text-xl font-semibold uppercase tracking-widest opacity-90">
-        {site.heroDate}
-      </p>
-    )}
-    <h1 class="text-5xl md:text-7xl font-black uppercase leading-tight drop-shadow-lg">
-      {site?.heroTitre || site?.name}
-    </h1>
-    <div class="w-24 h-1 rounded" style="background-color: var(--color-primary)"></div>
-    {site?.heroCTA && site?.heroCTAUrl && (
-      <a href={site.heroCTAUrl} class="btn-primary text-lg mt-4" target="_blank" rel="noopener">
-        {site.heroCTA}
-      </a>
-    )}
+  <!-- Image de fond -->
+  {bgUrl && (
+    <div
+      class="absolute inset-0 bg-cover bg-center scale-105"
+      style={`background-image: url('${bgUrl}')`}
+      id="hero-bg"
+    />
+  )}
+  {!bgUrl && <div class="absolute inset-0" style="background: var(--color-secondary)" />}
+
+  <!-- Overlays -->
+  <div class="absolute inset-0 bg-gradient-to-t from-[#0d0d0d] via-[#0d0d0d]/60 to-transparent" />
+  <div class="absolute inset-0 bg-gradient-to-r from-[#0d0d0d]/80 via-transparent to-transparent" />
+
+  <!-- Ligne déco animée -->
+  <div class="absolute left-0 top-0 bottom-0 w-1 overflow-hidden">
+    <div class="w-full h-full animate-pulse" style="background: linear-gradient(to bottom, transparent, var(--color-primary), transparent)" />
+  </div>
+
+  <!-- Contenu -->
+  <div class="relative z-10 max-w-7xl mx-auto px-6 w-full">
+    <div class="max-w-3xl">
+
+      {site?.heroDate && (
+        <div class="flex items-center gap-3 mb-6" id="hero-date">
+          <div class="w-8 h-px" style="background: var(--color-primary)"></div>
+          <span class="text-xs font-bold uppercase tracking-[0.3em]" style="color: var(--color-primary)">
+            {site.heroDate}
+          </span>
+        </div>
+      )}
+
+      <h1
+        class="font-display leading-none mb-8 text-white"
+        style="font-size: clamp(3.5rem, 10vw, 9rem)"
+        id="hero-title"
+      >
+        {site?.heroTitre || site?.name}
+      </h1>
+
+      {site?.heroCTA && site?.heroCTAUrl && (
+        <div class="flex items-center gap-4 flex-wrap" id="hero-cta">
+          <a href={site.heroCTAUrl} class="btn-primary" target="_blank" rel="noopener">
+            {site.heroCTA}
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+            </svg>
+          </a>
+          <a href="#programme" class="btn-outline">
+            Découvrir
+          </a>
+        </div>
+      )}
+
+    </div>
   </div>
 
   <!-- Scroll indicator -->
-  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce opacity-70">
-    <svg class="w-8 h-8" fill="none" stroke="white" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-    </svg>
+  <div class="absolute bottom-8 right-8 flex flex-col items-center gap-2 opacity-40">
+    <span class="text-xs uppercase tracking-widest font-bold rotate-90 mb-4">Scroll</span>
+    <div class="w-px h-16 overflow-hidden">
+      <div class="w-full h-full animate-bounce" style="background: white" />
+    </div>
   </div>
 </section>
+
+<script>
+  // Parallax léger sur le hero
+  const bg = document.getElementById('hero-bg')
+  window.addEventListener('scroll', () => {
+    if (bg) bg.style.transform = `scale(1.05) translateY(${window.scrollY * 0.3}px)`
+  })
+
+  // Animations d'entrée
+  const els = ['#hero-date', '#hero-title', '#hero-cta']
+  els.forEach((sel, i) => {
+    const el = document.querySelector(sel)
+    if (el) {
+      Object.assign((el as HTMLElement).style, { opacity: '0', transform: 'translateY(30px)' })
+      setTimeout(() => {
+        Object.assign((el as HTMLElement).style, {
+          transition: 'opacity 0.8s ease, transform 0.8s ease',
+          opacity: '1',
+          transform: 'none'
+        })
+      }, 200 + i * 150)
+    }
+  })
+</script>

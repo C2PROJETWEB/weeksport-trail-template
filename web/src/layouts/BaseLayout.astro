@@ -6,6 +6,12 @@ import Footer from '../components/Footer.astro'
 const { site, nav, title, description } = Astro.props
 const primaryColor = site?.couleurPrimaire || '#E63946'
 const secondaryColor = site?.couleurSecondaire || '#1D3557'
+
+// Compute RGB for CSS glow effects
+const hex = primaryColor.replace('#','')
+const r = parseInt(hex.substring(0,2),16)
+const g = parseInt(hex.substring(2,4),16)
+const b = parseInt(hex.substring(4,6),16)
 ---
 <!DOCTYPE html>
 <html lang="fr">
@@ -14,18 +20,29 @@ const secondaryColor = site?.couleurSecondaire || '#1D3557'
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{title || site?.name}</title>
   <meta name="description" content={description || site?.metaDescription || ''} />
-  <style define:vars={{ primaryColor, secondaryColor }}>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <style define:vars={{ primaryColor, secondaryColor, primaryRgb: `${r}, ${g}, ${b}` }}>
     :root {
       --color-primary: var(--primaryColor);
       --color-secondary: var(--secondaryColor);
+      --color-primary-rgb: var(--primaryRgb);
     }
   </style>
 </head>
-<body class="bg-white text-gray-800 font-sans">
+<body>
   <Header site={site} nav={nav} />
   <main>
     <slot />
   </main>
   <Footer site={site} />
+
+  <script>
+    // Reveal on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible') })
+    }, { threshold: 0.1 })
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el))
+  </script>
 </body>
 </html>
