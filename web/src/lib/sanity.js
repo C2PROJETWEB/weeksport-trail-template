@@ -1,0 +1,45 @@
+import { createClient } from '@sanity/client'
+import { createImageUrlBuilder } from '@sanity/image-url'
+
+export const client = createClient({
+  projectId: import.meta.env.PUBLIC_SANITY_PROJECT_ID,
+  dataset: import.meta.env.PUBLIC_SANITY_DATASET || 'production',
+  apiVersion: '2024-01-01',
+  useCdn: true,
+})
+
+const builder = createImageUrlBuilder(client)
+export const urlFor = (source) => builder.image(source)
+
+export async function getSite(siteSlug) {
+  return client.fetch(
+    `*[_type == "site" && slug.current == $slug][0]{
+      name, slug, logo, favicon, couleurPrimaire, couleurSecondaire,
+      heroImage, heroTitre, heroDate, heroCTA, heroCTAUrl, metaDescription
+    }`,
+    { slug: siteSlug }
+  )
+}
+
+export async function getNavigation(siteSlug) {
+  return client.fetch(
+    `*[_type == "navigation" && site->slug.current == $slug][0]{ items }`,
+    { slug: siteSlug }
+  )
+}
+
+export async function getPage(siteSlug, pageSlug) {
+  return client.fetch(
+    `*[_type == "page" && site->slug.current == $siteSlug && slug.current == $pageSlug][0]{
+      title, slug, sections
+    }`,
+    { siteSlug, pageSlug }
+  )
+}
+
+export async function getPages(siteSlug) {
+  return client.fetch(
+    `*[_type == "page" && site->slug.current == $slug]{ title, slug }`,
+    { slug: siteSlug }
+  )
+}

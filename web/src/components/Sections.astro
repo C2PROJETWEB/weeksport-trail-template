@@ -1,0 +1,149 @@
+---
+import { urlFor } from '../lib/sanity'
+import { toHTML } from '@portabletext/to-html'
+const { sections = [] } = Astro.props
+---
+
+{sections.map((section) => {
+
+  if (section._type === 'sectionTexte') return (
+    <section class="py-16 px-4 max-w-4xl mx-auto">
+      {section.titre && <h2 class="section-title mb-8">{section.titre}</h2>}
+      {section.contenu && (
+        <div class="prose prose-lg max-w-none" set:html={toHTML(section.contenu)} />
+      )}
+    </section>
+  )
+
+  if (section._type === 'sectionEpreuves') return (
+    <section class="py-16 px-4 max-w-7xl mx-auto">
+      <h2 class="section-title mb-10">{section.titre || 'Les épreuves'}</h2>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {section.epreuves?.map((e) => (
+          <div class="rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow group">
+            {e.image && (
+              <div class="overflow-hidden h-48">
+                <img
+                  src={urlFor(e.image).width(600).height(400).url()}
+                  alt={e.nom}
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+            )}
+            <div class="p-5">
+              <h3 class="text-xl font-black uppercase mb-2" style="color: var(--color-secondary)">{e.nom}</h3>
+              <div class="flex gap-4 text-sm font-bold mb-3" style="color: var(--color-primary)">
+                {e.distance && <span>📍 {e.distance}</span>}
+                {e.denivele && <span>⛰️ {e.denivele}</span>}
+              </div>
+              {e.description && <p class="text-gray-600 text-sm mb-4">{e.description}</p>}
+              {e.lienInscription && (
+                <a href={e.lienInscription} class="btn-primary text-sm" target="_blank">
+                  S'inscrire
+                </a>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  )
+
+  if (section._type === 'sectionGalerie') return (
+    <section class="py-16 px-4 max-w-7xl mx-auto">
+      {section.titre && <h2 class="section-title mb-8">{section.titre}</h2>}
+      <div class="columns-2 md:columns-3 lg:columns-4 gap-3 space-y-3">
+        {section.photos?.map((photo) => (
+          <div class="break-inside-avoid overflow-hidden rounded-xl">
+            <img
+              src={urlFor(photo).width(600).url()}
+              alt={photo.caption || ''}
+              class="w-full hover:scale-105 transition-transform duration-300"
+              loading="lazy"
+            />
+          </div>
+        ))}
+      </div>
+    </section>
+  )
+
+  if (section._type === 'sectionPartenaires') return (
+    <section class="py-16 px-4 max-w-7xl mx-auto">
+      {section.titre && <h2 class="section-title mb-10">{section.titre}</h2>}
+      <div class="flex flex-wrap justify-center items-center gap-8">
+        {section.partenaires?.map((p) => (
+          <a href={p.url || '#'} target="_blank" rel="noopener" class="grayscale hover:grayscale-0 transition-all duration-300 opacity-70 hover:opacity-100">
+            {p.logo
+              ? <img src={urlFor(p.logo).height(80).url()} alt={p.nom} class="h-16 object-contain" />
+              : <span class="font-bold text-gray-500">{p.nom}</span>
+            }
+          </a>
+        ))}
+      </div>
+    </section>
+  )
+
+  if (section._type === 'sectionResultats') return (
+    <section class="py-16 px-4 max-w-4xl mx-auto">
+      {section.titre && <h2 class="section-title mb-8">{section.titre}</h2>}
+      <div class="flex flex-col gap-3">
+        {section.annees?.map((a) => (
+          <a
+            href={a.lien || (a.fichier?.asset?._ref ? `/api/fichier/${a.fichier.asset._ref}` : '#')}
+            target="_blank"
+            class="flex items-center justify-between p-4 rounded-xl border-2 hover:border-[var(--color-primary)] transition-colors group"
+          >
+            <span class="font-bold text-lg group-hover:text-[var(--color-primary)]">Résultats {a.annee}</span>
+            <span class="text-[var(--color-primary)]">→</span>
+          </a>
+        ))}
+      </div>
+    </section>
+  )
+
+  if (section._type === 'sectionContact') return (
+    <section class="py-16 px-4 max-w-4xl mx-auto">
+      {section.titre && <h2 class="section-title mb-8">{section.titre}</h2>}
+      <div class="grid md:grid-cols-2 gap-10">
+        <div class="flex flex-col gap-4">
+          {section.texteFormulaire && <p class="text-gray-600">{section.texteFormulaire}</p>}
+          {section.email && <a href={`mailto:${section.email}`} class="flex items-center gap-2 font-semibold hover:text-[var(--color-primary)]">📧 {section.email}</a>}
+          {section.telephone && <a href={`tel:${section.telephone}`} class="flex items-center gap-2 font-semibold hover:text-[var(--color-primary)]">📞 {section.telephone}</a>}
+          {section.adresse && <p class="text-gray-600 flex items-start gap-2">📍 <span>{section.adresse}</span></p>}
+        </div>
+        <form class="flex flex-col gap-4" name="contact" method="POST" data-netlify="true">
+          <input type="hidden" name="form-name" value="contact" />
+          <input type="text" name="nom" placeholder="Votre nom" required class="border rounded-lg px-4 py-3 focus:outline-none focus:ring-2" style="--tw-ring-color: var(--color-primary)" />
+          <input type="email" name="email" placeholder="Votre email" required class="border rounded-lg px-4 py-3 focus:outline-none focus:ring-2" />
+          <textarea name="message" placeholder="Votre message" rows="5" required class="border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 resize-none"></textarea>
+          <button type="submit" class="btn-primary text-center">Envoyer</button>
+        </form>
+      </div>
+    </section>
+  )
+
+  if (section._type === 'sectionBenevoles') return (
+    <section class="py-16 px-4 max-w-4xl mx-auto">
+      <div class="grid md:grid-cols-2 gap-10 items-center">
+        <div>
+          {section.titre && <h2 class="section-title mb-6">{section.titre}</h2>}
+          {section.description && <p class="text-gray-600 mb-6 leading-relaxed">{section.description}</p>}
+          {section.lienInscription && (
+            <a href={section.lienInscription} class="btn-primary" target="_blank">
+              Je deviens bénévole
+            </a>
+          )}
+        </div>
+        {section.image && (
+          <img
+            src={urlFor(section.image).width(700).url()}
+            alt="Bénévoles"
+            class="rounded-2xl shadow-lg object-cover w-full h-72"
+          />
+        )}
+      </div>
+    </section>
+  )
+
+  return null
+})}

@@ -1,0 +1,71 @@
+---
+import { urlFor } from '../lib/sanity'
+const { site, nav } = Astro.props
+const logoUrl = site?.logo ? urlFor(site.logo).height(60).url() : null
+const items = nav?.items || []
+---
+<header class="fixed top-0 w-full z-50 bg-white/95 backdrop-blur shadow-sm">
+  <div class="max-w-7xl mx-auto px-4 flex items-center justify-between h-16">
+
+    <!-- Logo -->
+    <a href="/" class="flex items-center gap-2 shrink-0">
+      {logoUrl
+        ? <img src={logoUrl} alt={site?.name} class="h-10 w-auto object-contain" />
+        : <span class="font-black text-xl uppercase" style="color: var(--color-primary)">{site?.name}</span>
+      }
+    </a>
+
+    <!-- Nav desktop -->
+    <nav class="hidden lg:flex items-center gap-1">
+      {items.map((item) => (
+        <div class="relative group">
+          <a
+            href={item.sousMenu?.length ? '#' : `/${item.slug}`}
+            class="px-3 py-2 text-sm font-bold uppercase tracking-wide hover:text-[var(--color-primary)] transition-colors flex items-center gap-1"
+          >
+            {item.label}
+            {item.sousMenu?.length > 0 && <span class="text-xs">▾</span>}
+          </a>
+          {item.sousMenu?.length > 0 && (
+            <div class="absolute top-full left-0 hidden group-hover:block bg-white shadow-lg rounded-lg py-2 min-w-[180px]">
+              {item.sousMenu.map((sub) => (
+                <a href={`/${sub.slug}`} class="block px-4 py-2 text-sm hover:bg-gray-50 hover:text-[var(--color-primary)] transition-colors">
+                  {sub.label}
+                </a>
+              ))}
+            </div>
+          )}
+        </div>
+      ))}
+    </nav>
+
+    <!-- Burger mobile -->
+    <button id="menu-toggle" class="lg:hidden p-2 rounded-md" aria-label="Menu">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Menu mobile -->
+  <div id="mobile-menu" class="hidden lg:hidden bg-white border-t">
+    {items.map((item) => (
+      <div>
+        <a href={`/${item.slug || '#'}`} class="block px-4 py-3 font-bold uppercase text-sm border-b hover:text-[var(--color-primary)]">
+          {item.label}
+        </a>
+        {item.sousMenu?.map((sub) => (
+          <a href={`/${sub.slug}`} class="block px-8 py-2 text-sm text-gray-600 border-b hover:text-[var(--color-primary)]">
+            {sub.label}
+          </a>
+        ))}
+      </div>
+    ))}
+  </div>
+</header>
+
+<script>
+  const toggle = document.getElementById('menu-toggle')
+  const menu = document.getElementById('mobile-menu')
+  toggle?.addEventListener('click', () => menu?.classList.toggle('hidden'))
+</script>

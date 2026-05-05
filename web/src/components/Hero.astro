@@ -1,0 +1,36 @@
+---
+import { urlFor } from '../lib/sanity'
+const { site } = Astro.props
+const bgUrl = site?.heroImage ? urlFor(site.heroImage).width(1920).url() : null
+---
+<section
+  class="relative min-h-screen flex items-center justify-center text-white text-center pt-16"
+  style={bgUrl ? `background-image: url('${bgUrl}'); background-size: cover; background-position: center;` : 'background-color: var(--color-secondary)'}
+>
+  <!-- Overlay -->
+  <div class="absolute inset-0 bg-black/50"></div>
+
+  <div class="relative z-10 px-4 max-w-4xl mx-auto flex flex-col items-center gap-6">
+    {site?.heroDate && (
+      <p class="text-lg md:text-xl font-semibold uppercase tracking-widest opacity-90">
+        {site.heroDate}
+      </p>
+    )}
+    <h1 class="text-5xl md:text-7xl font-black uppercase leading-tight drop-shadow-lg">
+      {site?.heroTitre || site?.name}
+    </h1>
+    <div class="w-24 h-1 rounded" style="background-color: var(--color-primary)"></div>
+    {site?.heroCTA && site?.heroCTAUrl && (
+      <a href={site.heroCTAUrl} class="btn-primary text-lg mt-4" target="_blank" rel="noopener">
+        {site.heroCTA}
+      </a>
+    )}
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce opacity-70">
+    <svg class="w-8 h-8" fill="none" stroke="white" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+    </svg>
+  </div>
+</section>

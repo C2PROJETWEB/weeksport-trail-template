@@ -1,0 +1,20 @@
+---
+import { urlFor } from '../lib/sanity'
+const { site } = Astro.props
+const logoUrl = site?.logo ? urlFor(site.logo).height(50).url() : null
+const year = new Date().getFullYear()
+---
+<footer class="text-white py-12 mt-16" style="background-color: var(--color-secondary)">
+  <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-6">
+    <div class="flex flex-col items-center md:items-start gap-2">
+      {logoUrl
+        ? <img src={logoUrl} alt={site?.name} class="h-10 w-auto object-contain brightness-0 invert" />
+        : <span class="font-black text-xl uppercase">{site?.name}</span>
+      }
+      <p class="text-sm text-white/60">© {year} {site?.name}. Tous droits réservés.</p>
+    </div>
+    <p class="text-sm text-white/50">
+      Site réalisé par <a href="https://www.weeksport.fr" class="underline hover:text-white transition-colors">WEEK&SPORT</a>
+    </p>
+  </div>
+</footer>
