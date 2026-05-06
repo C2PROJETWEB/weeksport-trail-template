@@ -12,7 +12,7 @@ html { scroll-behavior: smooth; }
 
 body {
   font-family: 'Inter', system-ui, sans-serif;
-  background: #0d0d0d;
+  background: #13121a;
   color: #f0f0f0;
   overflow-x: hidden;
 }
@@ -94,5 +94,5 @@ body {
 
 /* Scrollbar */
 ::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: #0d0d0d; }
+::-webkit-scrollbar-track { background: #13121a; }
 ::-webkit-scrollbar-thumb { background: var(--color-primary); }
