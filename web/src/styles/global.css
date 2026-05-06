@@ -12,8 +12,8 @@ html { scroll-behavior: smooth; }
 
 body {
   font-family: 'Inter', system-ui, sans-serif;
-  background: #1e1c2e;
-  color: #f0f0f0;
+  background: #ffffff;
+  color: #111111;
   overflow-x: hidden;
 }
 
@@ -50,7 +50,7 @@ body {
 .section-title {
   font-family: 'Bebas Neue', sans-serif;
   @apply text-4xl md:text-6xl leading-none mb-6;
-  color: white;
+  color: #111111;
 }
 .section-title span {
   color: var(--color-primary);
@@ -80,8 +80,8 @@ body {
 /* Cards épreuves */
 .epreuve-card {
   @apply relative overflow-hidden transition-all duration-500;
-  background: #27253a;
-  border: 1px solid rgba(255,255,255,0.06);
+  background: #f8f7fc;
+  border: 1px solid rgba(0,0,0,0.06);
 }
 .epreuve-card:hover {
   border-color: var(--color-primary);
@@ -94,5 +94,5 @@ body {
 
 /* Scrollbar */
 ::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: #1e1c2e; }
+::-webkit-scrollbar-track { background: #ffffff; }
 ::-webkit-scrollbar-thumb { background: var(--color-primary); }
