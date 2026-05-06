@@ -24,13 +24,6 @@ if (!page) return Astro.redirect('/404')
 ---
 <BaseLayout site={site} nav={nav} title={`${page.title} — ${site?.name}`}>
   <div class="pt-20">
-    <!-- En-tête de page -->
-    <div class="py-16 text-white text-center" style="background-color: var(--color-secondary)">
-      <div class="max-w-4xl mx-auto px-4">
-        <h1 class="text-4xl md:text-5xl font-black uppercase">{page.title}</h1>
-        <div class="w-16 h-1 rounded mx-auto mt-4" style="background-color: var(--color-primary)"></div>
-      </div>
-    </div>
     <Sections sections={page.sections || []} />
   </div>
 </BaseLayout>
