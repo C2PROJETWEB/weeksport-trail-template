@@ -77,115 +77,127 @@ sections.forEach((section: any, i: number) => {
   if (section._type === 'sectionEpreuves') {
     const epreuves = section.epreuves || []
 
-    // Page d'épreuve individuelle : layout Vercors (tabs + stats bar + 2 colonnes)
+    // Page d'épreuve individuelle : galerie + carte + navigation en bas
     if (epreuves.length === 1) {
       const e = epreuves[0]
-      const imgSrc = e.image ? urlFor(e.image).width(900).height(1100).url() : (e.imageUrl || null)
+      const imgSrc = e.image ? urlFor(e.image).width(1400).height(800).url() : (e.imageUrl || null)
       const linkedTexte = section._linkedTexte
       return (
         <section>
 
-          {/* ── Onglets des épreuves ── */}
-          {raceTabs && raceTabs.length > 0 && (
-            <nav
-              class="sticky top-20 z-30 border-b border-white/10 overflow-x-auto"
-              style="background: rgba(15,14,22,0.97); backdrop-filter: blur(12px)"
-            >
-              <div class="flex min-w-max px-6 md:px-12">
-                {raceTabs.map((tab: any) => (
-                  <a
-                    href={`/${tab.slug}`}
-                    class={[
-                      'px-5 py-4 text-xs font-bold uppercase tracking-widest whitespace-nowrap border-b-2 transition-all duration-200',
-                      currentSlug === tab.slug
-                        ? 'border-[var(--color-primary)] text-[var(--color-primary)]'
-                        : 'border-transparent text-white/40 hover:text-white/70 hover:border-white/20'
-                    ].join(' ')}
-                  >
-                    {tab.label}
-                  </a>
-                ))}
+          {/* ── Fil d'Ariane ── */}
+          <div class="max-w-7xl mx-auto px-6 md:px-12 pt-10 pb-0">
+            <a href="/les-epreuves" class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-white/30 hover:text-[var(--color-primary)] transition-colors">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+              </svg>
+              Les Épreuves
+            </a>
+          </div>
+
+          {/* ── Hero : photo + titre + stats ── */}
+          <div class="relative mt-6 overflow-hidden" style="height: 58vh; min-height: 420px">
+            {imgSrc && (
+              <img src={imgSrc} alt={e.nom} class="w-full h-full object-cover" loading="eager" />
+            )}
+            <div class="absolute inset-0" style="background: linear-gradient(to top, rgba(20,18,32,0.97) 0%, rgba(0,0,0,0.45) 55%, rgba(0,0,0,0.1) 100%)" />
+            <div class="absolute bottom-0 left-0 right-0 px-6 md:px-12 pb-10">
+              <div class="max-w-7xl mx-auto">
+                <h1 class="font-display text-5xl md:text-7xl lg:text-8xl uppercase text-white leading-none mb-5">{e.nom}</h1>
+                <div class="flex flex-wrap items-center gap-3">
+                  {e.distance && (
+                    <span class="inline-flex items-center gap-2 text-sm font-black uppercase tracking-wider px-4 py-2.5"
+                      style="color: var(--color-primary); background: rgba(0,0,0,0.7); border: 1px solid var(--color-primary)">
+                      {e.distance}
+                    </span>
+                  )}
+                  {e.denivele && (
+                    <span class="inline-flex items-center gap-2 text-sm font-black uppercase tracking-wider px-4 py-2.5 text-white"
+                      style="background: rgba(0,0,0,0.7); border: 1px solid rgba(255,255,255,0.2)">
+                      ↑ {e.denivele}
+                    </span>
+                  )}
+                  {e.depart && (
+                    <span class="inline-flex items-center gap-2 text-sm font-black uppercase tracking-wider px-4 py-2.5 text-white"
+                      style="background: rgba(0,0,0,0.7); border: 1px solid rgba(255,255,255,0.2)">
+                      ⏱ Départ {e.depart}
+                    </span>
+                  )}
+                  {e.lienInscription && (
+                    <a href={e.lienInscription} target="_blank" rel="noopener" class="btn-primary ml-2">
+                      S'inscrire
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                    </a>
+                  )}
+                </div>
               </div>
-            </nav>
+            </div>
+          </div>
+
+          {/* ── Description ── */}
+          {linkedTexte?.contenu && (
+            <div class="max-w-4xl mx-auto px-6 md:px-12 py-16">
+              <div
+                class="prose prose-invert prose-lg max-w-none prose-headings:font-display prose-headings:tracking-wide prose-a:text-[var(--color-primary)] prose-p:text-white/70 prose-strong:text-white prose-li:text-white/70"
+                set:html={toHTML(linkedTexte.contenu)}
+              />
+            </div>
           )}
 
-          {/* ── Titre de l'épreuve ── */}
-          <div class="px-6 md:px-12 pt-14 pb-8 max-w-7xl mx-auto">
-            <h1 class="font-display text-5xl md:text-7xl lg:text-8xl uppercase text-white leading-none">{e.nom}</h1>
-            <div class="w-16 h-1 mt-5" style="background: var(--color-primary)" />
-          </div>
-
-          {/* ── Barre de stats ── */}
-          <div style="background: var(--color-primary)">
-            <div class="max-w-7xl mx-auto px-6 md:px-12 py-5 flex items-center flex-wrap gap-y-3">
-
-              {/* Distance */}
-              <div class="pr-6 md:pr-10">
-                <span class="font-display text-4xl md:text-5xl font-black italic text-white leading-none">{e.distance}</span>
+          {/* ── Galerie photos ── */}
+          {e.photos?.length > 0 && (
+            <div class="max-w-7xl mx-auto px-6 md:px-12 pb-16">
+              <span class="section-label mb-6 block">Photos</span>
+              <div class="grid grid-cols-2 gap-3">
+                {(e.photos as string[]).slice(0, 4).map((photoUrl: string) => (
+                  <div class="overflow-hidden">
+                    <img src={photoUrl} alt="" class="w-full h-64 md:h-80 object-cover transition-transform duration-700 hover:scale-105" loading="lazy" />
+                  </div>
+                ))}
               </div>
-
-              {/* Heure de départ */}
-              {e.depart && (
-                <>
-                  <div class="w-px h-10 bg-white/30 mx-4 hidden md:block" />
-                  <div class="px-2 md:px-6">
-                    <div class="text-xs font-bold uppercase tracking-widest text-white/60 mb-0.5">Heure de départ</div>
-                    <div class="text-xl font-black text-white">{e.depart}</div>
-                  </div>
-                </>
-              )}
-
-              {/* Dénivelé */}
-              {e.denivele && (
-                <>
-                  <div class="w-px h-10 bg-white/30 mx-4 hidden md:block" />
-                  <div class="px-2 md:px-6">
-                    <div class="text-xs font-bold uppercase tracking-widest text-white/60 mb-0.5">Dénivelé</div>
-                    <div class="text-xl font-black text-white">{e.denivele}</div>
-                  </div>
-                </>
-              )}
-
-              {/* Bouton inscription */}
-              {e.lienInscription && (
-                <div class="md:ml-auto md:pl-6">
-                  <a
-                    href={e.lienInscription}
-                    target="_blank"
-                    rel="noopener"
-                    class="inline-flex items-center gap-2 font-black uppercase tracking-wider text-sm px-6 py-3 transition-colors"
-                    style="background: rgba(0,0,0,0.25); color: white"
-                    onmouseover="this.style.background='rgba(0,0,0,0.45)'"
-                    onmouseout="this.style.background='rgba(0,0,0,0.25)'"
-                  >
-                    S'inscrire
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-                  </a>
-                </div>
-              )}
             </div>
-          </div>
+          )}
 
-          {/* ── Contenu : description gauche + photo droite ── */}
-          <div class="max-w-7xl mx-auto px-6 md:px-12 py-16">
-            <div class={`grid gap-12 items-start ${imgSrc && linkedTexte ? 'lg:grid-cols-[1fr_380px]' : ''}`}>
-
-              {/* Description */}
-              {linkedTexte?.contenu && (
-                <div
-                  class="prose prose-invert prose-lg max-w-none prose-headings:font-display prose-headings:tracking-wide prose-a:text-[var(--color-primary)] prose-p:text-white/70 prose-strong:text-white prose-li:text-white/70"
-                  set:html={toHTML(linkedTexte.contenu)}
+          {/* ── Carte du parcours ── */}
+          {e.openrunnerUrl && (
+            <div class="max-w-7xl mx-auto px-6 md:px-12 pb-16">
+              <span class="section-label mb-6 block">Parcours</span>
+              <div class="overflow-hidden border border-white/10">
+                <iframe
+                  src={e.openrunnerUrl}
+                  width="100%"
+                  height="650"
+                  loading="lazy"
+                  style="border: none; display: block"
+                  title={`Parcours ${e.nom}`}
                 />
-              )}
-
-              {/* Photo */}
-              {imgSrc && (
-                <div class="overflow-hidden lg:sticky lg:top-32">
-                  <img src={imgSrc} alt={e.nom} class="w-full h-auto object-cover" loading="eager" />
-                </div>
-              )}
+              </div>
             </div>
-          </div>
+          )}
+
+          {/* ── Navigation entre épreuves ── */}
+          {raceTabs && raceTabs.length > 0 && (
+            <div class="border-t border-white/10 py-16 px-6 md:px-12">
+              <div class="max-w-7xl mx-auto">
+                <span class="section-label mb-8 block">Toutes les épreuves</span>
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+                  {raceTabs.map((tab: any) => (
+                    <a
+                      href={`/${tab.slug}`}
+                      class="p-5 border transition-all duration-300 text-sm font-bold uppercase tracking-wider block text-center"
+                      style={tab.slug === currentSlug
+                        ? `border-color: var(--color-primary); color: var(--color-primary); background: rgba(var(--color-primary-rgb), 0.08)`
+                        : 'border-color: rgba(255,255,255,0.1); color: rgba(255,255,255,0.4)'}
+                      onmouseover={tab.slug !== currentSlug ? "this.style.borderColor='rgba(255,255,255,0.3)'; this.style.color='white'; this.style.background='rgba(255,255,255,0.04)'" : ''}
+                      onmouseout={tab.slug !== currentSlug ? "this.style.borderColor='rgba(255,255,255,0.1)'; this.style.color='rgba(255,255,255,0.4)'; this.style.background=''" : ''}
+                    >
+                      {tab.label}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
 
         </section>
       )

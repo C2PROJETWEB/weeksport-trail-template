@@ -15,7 +15,9 @@
           "distance": "9 km / 15 km",
           "depart": "18h00 / 19h30",
           "imageUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/06/20-DSC_1243-scaled-1-768x512.jpg",
-          "lienInscription": "https://www.billetweb.fr/randonnees-pedestres-tlv-2026"
+          "lienInscription": "https://www.billetweb.fr/randonnees-pedestres-tlv-2026",
+          "openrunnerUrl": "",
+          "photos": []
         }
       ]
     },

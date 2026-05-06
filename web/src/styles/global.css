@@ -12,7 +12,7 @@ html { scroll-behavior: smooth; }
 
 body {
   font-family: 'Inter', system-ui, sans-serif;
-  background: #13121a;
+  background: #1e1c2e;
   color: #f0f0f0;
   overflow-x: hidden;
 }
@@ -80,7 +80,7 @@ body {
 /* Cards épreuves */
 .epreuve-card {
   @apply relative overflow-hidden transition-all duration-500;
-  background: #1a1a1a;
+  background: #27253a;
   border: 1px solid rgba(255,255,255,0.06);
 }
 .epreuve-card:hover {
@@ -94,5 +94,5 @@ body {
 
 /* Scrollbar */
 ::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: #13121a; }
+::-webkit-scrollbar-track { background: #1e1c2e; }
 ::-webkit-scrollbar-thumb { background: var(--color-primary); }
