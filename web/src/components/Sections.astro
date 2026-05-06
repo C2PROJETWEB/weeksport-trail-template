@@ -1,10 +1,25 @@
 ---
 import { urlFor } from '../lib/sanity'
 import { toHTML } from '@portabletext/to-html'
-const { sections = [] } = Astro.props
+const { sections = [], raceTabs = null, currentSlug = '' } = Astro.props
+
+// Attach the next sectionTexte to a single-epreuve section so we can render them together
+const processed: any[] = []
+const skipped = new Set<number>()
+sections.forEach((section: any, i: number) => {
+  if (section._type === 'sectionEpreuves' && section.epreuves?.length === 1) {
+    const next = sections[i + 1]
+    if (next?._type === 'sectionTexte') {
+      processed.push({ ...section, _linkedTexte: next })
+      skipped.add(i + 1)
+      return
+    }
+  }
+  if (!skipped.has(i)) processed.push(section)
+})
 ---
 
-{sections.map((section) => {
+{processed.map((section: any) => {
 
   // ─── TEXTE ───────────────────────────────────────────────
   if (section._type === 'sectionTexte') return (
@@ -62,53 +77,116 @@ const { sections = [] } = Astro.props
   if (section._type === 'sectionEpreuves') {
     const epreuves = section.epreuves || []
 
-    // Page d'épreuve individuelle : hero pleine largeur
+    // Page d'épreuve individuelle : layout Vercors (tabs + stats bar + 2 colonnes)
     if (epreuves.length === 1) {
       const e = epreuves[0]
-      const imgSrc = e.image ? urlFor(e.image).width(1600).height(900).url() : (e.imageUrl || null)
+      const imgSrc = e.image ? urlFor(e.image).width(900).height(1100).url() : (e.imageUrl || null)
+      const linkedTexte = section._linkedTexte
       return (
         <section>
-          {imgSrc && (
-            <div class="relative h-[60vh] min-h-[420px] overflow-hidden">
-              <img src={imgSrc} alt={e.nom} class="w-full h-full object-cover" loading="eager" />
-              <div class="absolute inset-0" style="background: linear-gradient(to top, #0d0d0d 5%, rgba(13,13,13,0.5) 50%, rgba(0,0,0,0.15) 100%)" />
-              <div class="absolute bottom-0 left-0 right-0 px-6 pb-8 md:px-12 md:pb-12">
-                <div class="max-w-5xl mx-auto">
-                  <h1 class="font-display text-4xl md:text-6xl font-black uppercase text-white mb-5 drop-shadow">{e.nom}</h1>
-                  <div class="flex flex-wrap gap-3">
-                    {e.distance && (
-                      <span class="inline-flex items-center gap-2 text-sm font-black uppercase tracking-wider px-4 py-2.5" style="color: var(--color-primary); background: rgba(0,0,0,0.7); border: 1px solid var(--color-primary)">
-                        <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
-                        {e.distance}
-                      </span>
-                    )}
-                    {e.denivele && (
-                      <span class="inline-flex items-center gap-2 text-sm font-black uppercase tracking-wider px-4 py-2.5 text-white border border-white/30" style="background: rgba(0,0,0,0.7)">
-                        <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7M12 3v18"/></svg>
-                        {e.denivele}
-                      </span>
-                    )}
-                    {e.depart && (
-                      <span class="inline-flex items-center gap-2 text-sm font-black uppercase tracking-wider px-4 py-2.5 text-white border border-white/30" style="background: rgba(0,0,0,0.7)">
-                        <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        Départ {e.depart}
-                      </span>
-                    )}
+
+          {/* ── Onglets des épreuves ── */}
+          {raceTabs && raceTabs.length > 0 && (
+            <nav
+              class="sticky top-20 z-30 border-b border-white/10 overflow-x-auto"
+              style="background: rgba(15,14,22,0.97); backdrop-filter: blur(12px)"
+            >
+              <div class="flex min-w-max px-6 md:px-12">
+                {raceTabs.map((tab: any) => (
+                  <a
+                    href={`/${tab.slug}`}
+                    class={[
+                      'px-5 py-4 text-xs font-bold uppercase tracking-widest whitespace-nowrap border-b-2 transition-all duration-200',
+                      currentSlug === tab.slug
+                        ? 'border-[var(--color-primary)] text-[var(--color-primary)]'
+                        : 'border-transparent text-white/40 hover:text-white/70 hover:border-white/20'
+                    ].join(' ')}
+                  >
+                    {tab.label}
+                  </a>
+                ))}
+              </div>
+            </nav>
+          )}
+
+          {/* ── Titre de l'épreuve ── */}
+          <div class="px-6 md:px-12 pt-14 pb-8 max-w-7xl mx-auto">
+            <h1 class="font-display text-5xl md:text-7xl lg:text-8xl uppercase text-white leading-none">{e.nom}</h1>
+            <div class="w-16 h-1 mt-5" style="background: var(--color-primary)" />
+          </div>
+
+          {/* ── Barre de stats ── */}
+          <div style="background: var(--color-primary)">
+            <div class="max-w-7xl mx-auto px-6 md:px-12 py-5 flex items-center flex-wrap gap-y-3">
+
+              {/* Distance */}
+              <div class="pr-6 md:pr-10">
+                <span class="font-display text-4xl md:text-5xl font-black italic text-white leading-none">{e.distance}</span>
+              </div>
+
+              {/* Heure de départ */}
+              {e.depart && (
+                <>
+                  <div class="w-px h-10 bg-white/30 mx-4 hidden md:block" />
+                  <div class="px-2 md:px-6">
+                    <div class="text-xs font-bold uppercase tracking-widest text-white/60 mb-0.5">Heure de départ</div>
+                    <div class="text-xl font-black text-white">{e.depart}</div>
                   </div>
+                </>
+              )}
+
+              {/* Dénivelé */}
+              {e.denivele && (
+                <>
+                  <div class="w-px h-10 bg-white/30 mx-4 hidden md:block" />
+                  <div class="px-2 md:px-6">
+                    <div class="text-xs font-bold uppercase tracking-widest text-white/60 mb-0.5">Dénivelé</div>
+                    <div class="text-xl font-black text-white">{e.denivele}</div>
+                  </div>
+                </>
+              )}
+
+              {/* Bouton inscription */}
+              {e.lienInscription && (
+                <div class="md:ml-auto md:pl-6">
+                  <a
+                    href={e.lienInscription}
+                    target="_blank"
+                    rel="noopener"
+                    class="inline-flex items-center gap-2 font-black uppercase tracking-wider text-sm px-6 py-3 transition-colors"
+                    style="background: rgba(0,0,0,0.25); color: white"
+                    onmouseover="this.style.background='rgba(0,0,0,0.45)'"
+                    onmouseout="this.style.background='rgba(0,0,0,0.25)'"
+                  >
+                    S'inscrire
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                  </a>
                 </div>
-              </div>
+              )}
             </div>
-          )}
-          {e.lienInscription && (
-            <div class="px-6 pt-8 pb-2 border-b border-white/5 md:px-12">
-              <div class="max-w-5xl mx-auto">
-                <a href={e.lienInscription} class="btn-primary" target="_blank" rel="noopener">
-                  S'inscrire
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-                </a>
-              </div>
+          </div>
+
+          {/* ── Contenu : description gauche + photo droite ── */}
+          <div class="max-w-7xl mx-auto px-6 md:px-12 py-16">
+            <div class={`grid gap-12 items-start ${imgSrc && linkedTexte ? 'lg:grid-cols-[1fr_380px]' : ''}`}>
+
+              {/* Description */}
+              {linkedTexte?.contenu && (
+                <div
+                  class="prose prose-invert prose-lg max-w-none prose-headings:font-display prose-headings:tracking-wide prose-a:text-[var(--color-primary)] prose-p:text-white/70 prose-strong:text-white prose-li:text-white/70"
+                  set:html={toHTML(linkedTexte.contenu)}
+                />
+              )}
+
+              {/* Photo */}
+              {imgSrc && (
+                <div class="overflow-hidden lg:sticky lg:top-32">
+                  <img src={imgSrc} alt={e.nom} class="w-full h-auto object-cover" loading="eager" />
+                </div>
+              )}
             </div>
-          )}
+          </div>
+
         </section>
       )
     }

@@ -21,6 +21,12 @@ const [site, nav, page] = await Promise.all([
 ])
 
 if (!page) return Astro.redirect('/404')
+
+// Race tabs: find the nav submenu that contains this page's slug
+const raceGroupItem = nav?.items?.find((item: any) =>
+  item.sousMenu?.some((sub: any) => sub.slug === slug)
+)
+const raceTabs = raceGroupItem?.sousMenu || null
 ---
 <BaseLayout site={site} nav={nav} title={`${page.title} — ${site?.name}`}>
   <div class="pt-20">
@@ -40,6 +46,6 @@ if (!page) return Astro.redirect('/404')
         </div>
       </div>
     )}
-    <Sections sections={page.sections || []} />
+    <Sections sections={page.sections || []} raceTabs={raceTabs} currentSlug={slug} />
   </div>
 </BaseLayout>
