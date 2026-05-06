@@ -2,6 +2,7 @@ export default {
   name: 'site',
   title: 'Site',
   type: 'document',
+  liveEdit: true,
   fields: [
     {
       name: 'name',

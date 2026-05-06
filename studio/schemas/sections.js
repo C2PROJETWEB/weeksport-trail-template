@@ -1,3 +1,23 @@
+export const blocBouton = {
+  type: 'object',
+  name: 'blocBouton',
+  title: 'Bouton',
+  fields: [
+    { name: 'label', title: 'Texte du bouton', type: 'string', validation: Rule => Rule.required() },
+    { name: 'url', title: 'URL', type: 'url', validation: Rule => Rule.required() },
+    {
+      name: 'style', title: 'Style', type: 'string',
+      options: { list: [{ title: 'Primaire (fond coloré)', value: 'primary' }, { title: 'Contour', value: 'outline' }], layout: 'radio' },
+      initialValue: 'primary'
+    },
+    { name: 'externe', title: 'Ouvrir dans un nouvel onglet', type: 'boolean', initialValue: false }
+  ],
+  preview: {
+    select: { title: 'label', subtitle: 'url' },
+    prepare({ title, subtitle }) { return { title: `Bouton — ${title || ''}`, subtitle } }
+  }
+}
+
 export const sectionTexte = {
   name: 'sectionTexte',
   title: 'Bloc texte / contenu',
@@ -31,7 +51,8 @@ export const sectionTexte = {
             ]
           }
         },
-        { type: 'image', options: { hotspot: true } }
+        { type: 'image', options: { hotspot: true } },
+        blocBouton
       ]
     }
   ],
@@ -300,20 +321,23 @@ export const sectionProgramme = {
       name: 'contenu',
       title: 'Contenu du programme',
       type: 'array',
-      of: [{
-        type: 'block',
-        styles: [
-          { title: 'Normal', value: 'normal' },
-          { title: 'H2', value: 'h2' },
-          { title: 'H3', value: 'h3' }
-        ],
-        marks: {
-          decorators: [
-            { title: 'Gras', value: 'strong' },
-            { title: 'Italique', value: 'em' }
-          ]
-        }
-      }]
+      of: [
+        {
+          type: 'block',
+          styles: [
+            { title: 'Normal', value: 'normal' },
+            { title: 'H2', value: 'h2' },
+            { title: 'H3', value: 'h3' }
+          ],
+          marks: {
+            decorators: [
+              { title: 'Gras', value: 'strong' },
+              { title: 'Italique', value: 'em' }
+            ]
+          }
+        },
+        blocBouton
+      ]
     },
     { name: 'image', title: 'Image de fond (upload)', type: 'image', options: { hotspot: true } },
     { name: 'imageUrl', title: 'Image de fond URL externe', type: 'url', description: 'Si pas d\'upload Sanity' }

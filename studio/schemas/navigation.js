@@ -2,6 +2,7 @@ export default {
   name: 'navigation',
   title: 'Menu de navigation',
   type: 'document',
+  liveEdit: true,
   fields: [
     {
       name: 'site',

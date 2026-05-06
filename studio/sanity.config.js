@@ -30,7 +30,7 @@ export default defineConfig({
                   .title('Trail du Lac de Villerest')
                   .items([
 
-                    S.listItem().title('⚙️  Logo · Couleurs · Bouton inscription').child(
+                    S.listItem().title('⚙️  Réglages du site').child(
                       S.document().schemaType('site').documentId('site-villerest').title('Réglages du site')
                     ),
                     S.listItem().title('☰  Menu de navigation').child(
@@ -40,37 +40,25 @@ export default defineConfig({
 
                     S.divider(),
 
-                    S.listItem().title('── Les Épreuves ──').child(
-                      S.list().title('Épreuves').items([
-                        pageLien(S, 'page-villerest-run-night',          '🌙  Run Night 9 km'),
-                        pageLien(S, 'page-villerest-echappee-nocturne',  '🦉  Échappée Nocturne 11 km'),
-                        pageLien(S, 'page-villerest-tour-du-lac',        '🏃  Tour du Lac 23 km'),
-                        pageLien(S, 'page-villerest-grand-duc',          '🏔️  Grand Duc 43 km'),
-                        pageLien(S, 'page-villerest-course-enfants',     '🧒  Course Enfants'),
-                        pageLien(S, 'page-villerest-randonnees',         '🥾  Randonnées'),
-                      ])
-                    ),
+                    pageLien(S, 'page-villerest-run-night',          '🌙  Run Night 9 km'),
+                    pageLien(S, 'page-villerest-echappee-nocturne',  '🦉  Échappée Nocturne 11 km'),
+                    pageLien(S, 'page-villerest-tour-du-lac',        '🏃  Tour du Lac 42 km'),
+                    pageLien(S, 'page-villerest-grand-duc',          '🏔️  Grand Duc 30 km'),
+                    pageLien(S, 'page-villerest-course-enfants',     '🧒  Course Enfants'),
+                    pageLien(S, 'page-villerest-randonnees',         '🥾  Randonnées'),
 
                     S.divider(),
 
-                    S.listItem().title('── Informations ──').child(
-                      S.list().title('Informations').items([
-                        pageLien(S, 'page-villerest-programme',   '📅  Programme'),
-                        pageLien(S, 'page-villerest-reglement',   '📋  Règlement'),
-                        pageLien(S, 'page-villerest-repas',       '🍽️  Repas'),
-                        pageLien(S, 'page-villerest-hebergement', '🛏️  Hébergement'),
-                        pageLien(S, 'page-villerest-benevoles',   '🙋  Bénévoles'),
-                      ])
-                    ),
+                    pageLien(S, 'page-villerest-programme',   '📅  Programme'),
+                    pageLien(S, 'page-villerest-reglement',   '📋  Règlement'),
+                    pageLien(S, 'page-villerest-repas',       '🍽️  Repas'),
+                    pageLien(S, 'page-villerest-hebergement', '🛏️  Hébergement'),
+                    pageLien(S, 'page-villerest-benevoles',   '🙋  Bénévoles'),
 
                     S.divider(),
 
-                    S.listItem().title('── Résultats & Médias ──').child(
-                      S.list().title('Résultats & Médias').items([
-                        pageLien(S, 'page-villerest-resultats', '🏆  Résultats'),
-                        pageLien(S, 'page-villerest-photos',    '📷  Photos'),
-                      ])
-                    ),
+                    pageLien(S, 'page-villerest-resultats', '🏆  Résultats'),
+                    pageLien(S, 'page-villerest-photos',    '📷  Photos'),
 
                     S.divider(),
 
@@ -126,4 +114,6 @@ export default defineConfig({
   schema: {
     types: schemaTypes,
   },
+
+  tools: (prev) => prev.filter((tool) => tool.name !== 'releases'),
 })

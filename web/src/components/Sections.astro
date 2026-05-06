@@ -3,6 +3,18 @@ import { urlFor } from '../lib/sanity'
 import { toHTML } from '@portabletext/to-html'
 const { sections = [], raceTabs = null, currentSlug = '' } = Astro.props
 
+const toHTMLOptions = {
+  components: {
+    types: {
+      blocBouton: ({ value }: any) => {
+        const cls = value.style === 'outline' ? 'btn-outline' : 'btn-primary'
+        const target = value.externe ? ' target="_blank" rel="noopener"' : ''
+        return `<div class="not-prose mt-6"><a href="${value.url || '#'}" class="${cls}"${target}>${value.label || 'Bouton'}</a></div>`
+      }
+    }
+  }
+}
+
 // Attach the next sectionTexte to a single-epreuve section so we can render them together
 const processed: any[] = []
 const skipped = new Set<number>()
@@ -33,7 +45,7 @@ sections.forEach((section: any, i: number) => {
         )}
         {section.contenu && (
           <div class="prose prose-gray prose-lg max-w-none prose-headings:font-display prose-headings:tracking-wide prose-a:text-[var(--color-primary)] prose-headings:text-gray-900 prose-p:text-gray-600"
-            set:html={toHTML(section.contenu)} />
+            set:html={toHTML(section.contenu, toHTMLOptions)} />
         )}
       </div>
     </section>
@@ -139,7 +151,7 @@ sections.forEach((section: any, i: number) => {
             <div class="max-w-4xl mx-auto px-6 md:px-12 py-16">
               <div
                 class="prose prose-gray prose-lg max-w-none prose-headings:font-display prose-headings:tracking-wide prose-a:text-[var(--color-primary)] prose-p:text-gray-600 prose-headings:text-gray-900 prose-strong:text-gray-900 prose-li:text-gray-600"
-                set:html={toHTML(linkedTexte.contenu)}
+                set:html={toHTML(linkedTexte.contenu, toHTMLOptions)}
               />
             </div>
           )}
@@ -277,14 +289,7 @@ sections.forEach((section: any, i: number) => {
       ? urlFor(section.image).width(1920).url()
       : (section.imageUrl || null)
     return (
-      <section id="programme" class="relative py-32 px-6 overflow-hidden">
-        {bgImg && (
-          <div
-            class="absolute inset-0 bg-cover bg-center"
-            style={`background-image: url('${bgImg}')`}
-          />
-        )}
-        <div class="absolute inset-0 bg-black/75" />
+      <section id="programme" class="relative py-32 px-6 bg-white">
         <div class="absolute left-0 top-0 bottom-0 w-1 overflow-hidden">
           <div class="w-full h-full" style="background: linear-gradient(to bottom, transparent, var(--color-primary), transparent)" />
         </div>
@@ -296,8 +301,8 @@ sections.forEach((section: any, i: number) => {
           </div>
           {section.contenu && (
             <div
-              class="prose prose-invert prose-lg max-w-none prose-headings:font-display prose-headings:tracking-wide prose-a:text-[var(--color-primary)] prose-p:text-white/70 prose-strong:text-white"
-              set:html={toHTML(section.contenu)}
+              class="prose prose-lg max-w-none prose-headings:font-display prose-headings:tracking-wide prose-a:text-[var(--color-primary)] prose-p:text-gray-600 prose-strong:text-gray-900"
+              set:html={toHTML(section.contenu, toHTMLOptions)}
             />
           )}
         </div>
