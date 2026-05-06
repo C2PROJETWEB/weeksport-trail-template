@@ -3,72 +3,110 @@ import { urlFor } from '../lib/sanity'
 const { site, nav } = Astro.props
 const logoUrl = site?.logo ? urlFor(site.logo).height(60).url() : (site?.logoUrl || null)
 const year = new Date().getFullYear()
+
+// Extraire les épreuves et les autres liens nav
+const racesItem = nav?.items?.find((item: any) => item.sousMenu?.length > 0)
+const races = racesItem?.sousMenu || []
+const otherItems = nav?.items?.filter((item: any) => !item.sousMenu?.length) || []
 ---
-<footer style="background: #0d0b12; border-top: 1px solid rgba(255,255,255,0.06)">
-  <div class="max-w-7xl mx-auto px-6 md:px-12 py-16">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+<footer style="background: #1a1828">
 
-      <!-- Col 1 : Logo + tagline -->
-      <div class="flex flex-col gap-4">
-        {logoUrl
-          ? <img src={logoUrl} alt={site?.name} class="h-14 w-auto object-contain" />
-          : <span class="font-display text-3xl tracking-wider text-white">{site?.name}</span>
-        }
-        <p class="text-sm text-white/40 leading-relaxed max-w-xs">
-          Trail nocturne au cœur du Lac de Villerest — une aventure entre forêts, sentiers et reflets de lumière.
-        </p>
-        <div class="w-10 h-0.5 mt-1" style="background-color: var(--color-primary)"></div>
-      </div>
+  <!-- ── Bloc principal ── -->
+  <div class="max-w-7xl mx-auto px-6 md:px-12 pt-16 pb-12">
+    <div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-16">
 
-      <!-- Col 2 : Liens rapides -->
+      <!-- Colonne gauche : épreuves en avant -->
       <div>
-        <h4 class="text-xs font-bold uppercase tracking-[0.25em] mb-5" style="color: var(--color-primary)">Navigation</h4>
-        <ul class="flex flex-col gap-2">
-          {nav?.items?.map((item: any) => (
+        <h3 class="text-xs font-bold uppercase tracking-[0.3em] mb-1" style="color: var(--color-primary)">Les Épreuves</h3>
+        <div class="w-8 h-px mb-8" style="background: var(--color-primary)"></div>
+        <ul class="divide-y" style="border-color: rgba(255,255,255,0.06)">
+          {races.map((race: any) => (
             <li>
               <a
-                href={`/${item.slug}`}
-                class="text-sm text-white/50 hover:text-white transition-colors"
-              >{item.label}</a>
+                href={`/${race.slug}`}
+                class="group flex items-center justify-between py-4 transition-colors"
+                style="color: rgba(255,255,255,0.5)"
+                onmouseover="this.style.color='white'"
+                onmouseout="this.style.color='rgba(255,255,255,0.5)'"
+              >
+                <span class="font-display text-2xl md:text-3xl uppercase tracking-wide leading-none">{race.label}</span>
+                <svg class="w-5 h-5 shrink-0 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                </svg>
+              </a>
             </li>
           ))}
         </ul>
-      </div>
-
-      <!-- Col 3 : Contact + réseaux -->
-      <div>
-        <h4 class="text-xs font-bold uppercase tracking-[0.25em] mb-5" style="color: var(--color-primary)">Contact</h4>
-        <ul class="flex flex-col gap-3 text-sm text-white/50">
-          <li>
-            <a href="/contact" class="hover:text-white transition-colors">Formulaire de contact</a>
-          </li>
-          <li>
-            <a href="https://www.chronopuces.fr/trail-du-lac-de-villerest-2026" target="_blank" rel="noopener"
-              class="hover:text-white transition-colors">
-              Inscriptions — chronopuces.fr
+        {site?.heroCTAUrl && (
+          <div class="mt-8">
+            <a href={site.heroCTAUrl} class="btn-primary" target="_blank" rel="noopener">
+              {site.heroCTA || "S'inscrire"}
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
             </a>
-          </li>
-          <li class="text-white/30 pt-2">Village Trail · Salle de la Papeterie<br/>Villerest, Loire</li>
-        </ul>
+          </div>
+        )}
       </div>
 
+      <!-- Colonne droite : logo + infos -->
+      <div class="flex flex-col gap-10">
+
+        <!-- Logo + tagline -->
+        <div class="flex flex-col gap-4">
+          {logoUrl
+            ? <img src={logoUrl} alt={site?.name} class="h-14 w-auto object-contain" />
+            : <span class="font-display text-3xl tracking-wider text-white">{site?.name}</span>
+          }
+          <p class="text-sm leading-relaxed" style="color: rgba(255,255,255,0.35)">
+            Trail nocturne au cœur du Lac de Villerest — une aventure entre forêts, sentiers et reflets de lumière.
+          </p>
+        </div>
+
+        <!-- Navigation secondaire -->
+        <div>
+          <h4 class="text-xs font-bold uppercase tracking-[0.25em] mb-4" style="color: var(--color-primary)">Navigation</h4>
+          <ul class="flex flex-col gap-2">
+            {otherItems.map((item: any) => (
+              <li>
+                <a href={`/${item.slug}`} class="text-sm transition-colors" style="color: rgba(255,255,255,0.4)"
+                  onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">
+                  {item.label}
+                </a>
+              </li>
+            ))}
+            <li>
+              <a href="/contact" class="text-sm transition-colors" style="color: rgba(255,255,255,0.4)"
+                onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">
+                Contact
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Adresse -->
+        <p class="text-xs leading-relaxed" style="color: rgba(255,255,255,0.25)">
+          Village Trail · Salle de la Papeterie<br/>Villerest, Loire
+        </p>
+
+      </div>
     </div>
   </div>
 
-  <!-- Bottom bar -->
+  <!-- ── Bottom bar ── -->
   <div style="border-top: 1px solid rgba(255,255,255,0.05)">
     <div class="max-w-7xl mx-auto px-6 md:px-12 py-5 flex flex-col md:flex-row items-center justify-between gap-3">
-      <p class="text-xs text-white/20 tracking-widest uppercase">
+      <p class="text-xs uppercase tracking-widest" style="color: rgba(255,255,255,0.2)">
         &copy; {year} Trail du Lac de Villerest — Tous droits réservés
       </p>
-      <p class="text-xs text-white/20 tracking-widest uppercase">
+      <p class="text-xs uppercase tracking-widest" style="color: rgba(255,255,255,0.2)">
         Une création originale&nbsp;
         <a href="https://www.c2projetweb.fr" target="_blank" rel="noopener"
-          class="font-semibold hover:text-white transition-colors"
-          style="color: var(--color-primary)">
+          class="font-semibold transition-colors"
+          style="color: var(--color-primary)"
+          onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
           C2 Projet Web
         </a>
       </p>
     </div>
   </div>
+
 </footer>
