@@ -1,0 +1,38 @@
+{
+  "_type": "page",
+  "_id": "page-villerest-echappee-nocturne",
+  "site": { "_type": "reference", "_ref": "site-villerest" },
+  "title": "L'Échappée Nocturne 15 km",
+  "slug": { "_type": "slug", "current": "echappee-nocturne" },
+  "sections": [
+    {
+      "_type": "sectionEpreuves",
+      "_key": "epreuve",
+      "epreuves": [
+        {
+          "_key": "e1",
+          "nom": "L'Échappée Nocturne 15 km",
+          "distance": "15 km",
+          "denivele": "+350 m",
+          "depart": "18h00",
+          "imageUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/06/480577800_122241446552029668_8104256141153589286_n-768x512.jpg",
+          "lienInscription": "https://www.chronopuces.fr/trail-du-lac-de-villerest-2026"
+        }
+      ]
+    },
+    {
+      "_type": "sectionTexte",
+      "_key": "content",
+      "contenu": [
+        {
+          "_type": "block", "_key": "b1", "style": "normal",
+          "children": [{ "_type": "span", "_key": "s1", "text": "Un parcours rythmé, accessible mais stimulant, entre bois, chemins roulants et ambiance frontale. Le format phare du Trail du Lac avec ses monotraces, crêtes et descentes techniques. Parfait pour une première course de nuit ou un défi en duo." }]
+        },
+        {
+          "_type": "block", "_key": "b2", "style": "normal",
+          "children": [{ "_type": "span", "_key": "s2", "text": "Disponible également en format Duo. Frontale obligatoire. Les inscriptions se font via chronopuces.fr/trail-du-lac-de-villerest-2026." }]
+        }
+      ]
+    }
+  ]
+}

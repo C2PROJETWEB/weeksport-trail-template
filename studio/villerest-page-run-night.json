@@ -1,0 +1,38 @@
+{
+  "_type": "page",
+  "_id": "page-villerest-run-night",
+  "site": { "_type": "reference", "_ref": "site-villerest" },
+  "title": "La Run Night 9 km",
+  "slug": { "_type": "slug", "current": "run-night" },
+  "sections": [
+    {
+      "_type": "sectionEpreuves",
+      "_key": "epreuve",
+      "epreuves": [
+        {
+          "_key": "e1",
+          "nom": "La Run Night 9 km",
+          "distance": "9 km",
+          "denivele": "+190 m",
+          "depart": "19h30",
+          "imageUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/06/480459877_122241446324029668_5461854139180595990_n-768x512.jpg",
+          "lienInscription": "https://www.chronopuces.fr/trail-du-lac-de-villerest-2026"
+        }
+      ]
+    },
+    {
+      "_type": "sectionTexte",
+      "_key": "content",
+      "contenu": [
+        {
+          "_type": "block", "_key": "b1", "style": "normal",
+          "children": [{ "_type": "span", "_key": "s1", "text": "Un format court et accessible, parfait pour une première expérience en trail nocturne. Ce parcours vous emmène à la lueur de la frontale, entre chemins boisés et ambiance festive. Idéal pour s'initier au trail de nuit dans une atmosphère conviviale et unique au bord du lac de Villerest." }]
+        },
+        {
+          "_type": "block", "_key": "b2", "style": "normal",
+          "children": [{ "_type": "span", "_key": "s2", "text": "Frontale obligatoire. Les inscriptions se font via chronopuces.fr/trail-du-lac-de-villerest-2026." }]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "_type": "page",
+  "_id": "page-villerest-grand-duc",
+  "site": { "_type": "reference", "_ref": "site-villerest" },
+  "title": "Le Grand-Duc 30 km",
+  "slug": { "_type": "slug", "current": "grand-duc" },
+  "sections": [
+    {
+      "_type": "sectionEpreuves",
+      "_key": "epreuve",
+      "epreuves": [
+        {
+          "_key": "e1",
+          "nom": "Le Grand-Duc 30 km",
+          "distance": "30 km",
+          "denivele": "+650 m",
+          "depart": "16h30",
+          "imageUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/06/480518253_122241446486029668_88800317129125742_n-768x512.jpg",
+          "lienInscription": "https://www.chronopuces.fr/trail-du-lac-de-villerest-2026"
+        }
+      ]
+    },
+    {
+      "_type": "sectionTexte",
+      "_key": "content",
+      "contenu": [
+        {
+          "_type": "block", "_key": "b1", "style": "normal",
+          "children": [{ "_type": "span", "_key": "s1", "text": "Un tracé technique et engagé, entre forêts sombres, singles nerveux et points de vue magiques sur le lac de Villerest. Départ au crépuscule pour une immersion totale dans l'ambiance nocturne. Des vues panoramiques exceptionnelles sur les paysages de la Loire." }]
+        },
+        {
+          "_type": "block", "_key": "b2", "style": "normal",
+          "children": [{ "_type": "span", "_key": "s2", "text": "Index UTMB 20K. Frontale obligatoire. Les inscriptions se font via chronopuces.fr/trail-du-lac-de-villerest-2026." }]
+        }
+      ]
+    }
+  ]
+}

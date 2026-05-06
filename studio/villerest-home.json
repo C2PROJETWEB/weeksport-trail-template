@@ -11,198 +11,82 @@
       "titre": "Trail du Lac de Villerest",
       "contenu": [
         {
-          "_type": "block",
-          "_key": "b1",
-          "style": "normal",
-          "children": [
-            {
-              "_type": "span",
-              "_key": "s1",
-              "text": "Bienvenue sur le Trail du Lac de Villerest, une course nature exceptionnelle sur les bords du lac artificiel de Villerest dans la Loire. Une ambiance unique entre lumière du jour et frontales sous les étoiles, avec des épreuves pour tous les niveaux : trails, courses enfants et randonnées."
-            }
-          ]
+          "_type": "block", "_key": "b1", "style": "normal",
+          "children": [{ "_type": "span", "_key": "s1", "text": "Une nuit, un lac, des milliers de frontales. Le Trail du Lac de Villerest revient pour sa 7ème édition le samedi 7 novembre 2026, au bord du lac artificiel de la Loire. Une course devenue incontournable dans la région, réunissant chaque année plus de 2 000 participants venus chercher des sensations uniques dans la nuit ligérienne." }]
+        },
+        {
+          "_type": "block", "_key": "b2", "style": "normal",
+          "children": [{ "_type": "span", "_key": "s2", "text": "Entre sentiers sauvages, montées exigeantes et descentes techniques, les parcours nocturnes du lac de Villerest offrent un cadre exceptionnel. Du 1 km enfants au 42 km pour les traileurs aguerris, en passant par les randonnées familiales, l'événement propose 6 formats adaptés à tous les niveaux." }]
+        },
+        {
+          "_type": "block", "_key": "b3", "style": "normal",
+          "children": [{ "_type": "span", "_key": "s3", "text": "Après la course, retrouvez-nous pour le podium, les récompenses et la soirée musicale à partir de 20h30. Le Trail du Lac, c'est aussi une fête !" }]
         }
       ]
     },
-
     {
       "_type": "sectionEpreuves",
-      "_key": "epreuves",
-      "titre": "Les Épreuves",
+      "_key": "courses",
       "epreuves": [
         {
           "_key": "e1",
           "nom": "La Run Night 9 km",
           "distance": "9 km",
           "denivele": "+190 m",
-          "description": "Une course nocturne accessible, idéale pour découvrir l'ambiance unique du Trail du Lac. Départ à 19h30.",
-          "imageUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/06/480459877_122241446324029668_5461854139180595990_n-768x512.jpg"
+          "description": "Format nocturne accessible, idéal pour une première expérience en trail de nuit. Départ à 19h30.",
+          "imageUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/06/480459877_122241446324029668_5461854139180595990_n-768x512.jpg",
+          "lienPage": "/run-night"
         },
         {
           "_key": "e2",
           "nom": "L'Échappée Nocturne 15 km",
           "distance": "15 km",
           "denivele": "+350 m",
-          "description": "Un parcours technique au bord du lac dans la nuit, disponible également en format Duo. Départ à 18h00.",
-          "imageUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/06/480577800_122241446552029668_8104256141153589286_n-768x512.jpg"
+          "description": "Le format phare du Trail du Lac. Monotraces, crêtes et ambiance frontale. Solo ou Duo. Départ à 18h00.",
+          "imageUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/06/480577800_122241446552029668_8104256141153589286_n-768x512.jpg",
+          "lienPage": "/echappee-nocturne"
         },
         {
           "_key": "e3",
           "nom": "Le Grand-Duc 30 km",
           "distance": "30 km",
           "denivele": "+650 m",
-          "description": "Le grand tour du lac avec des vues panoramiques exceptionnelles sur les paysages de la Loire. Départ à 16h30.",
-          "imageUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/06/480518253_122241446486029668_88800317129125742_n-768x512.jpg"
+          "description": "Un tracé technique au crépuscule, entre forêts sombres et vues panoramiques. Index UTMB 20K. Départ à 16h30.",
+          "imageUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/06/480518253_122241446486029668_88800317129125742_n-768x512.jpg",
+          "lienPage": "/grand-duc"
         },
         {
           "_key": "e4",
           "nom": "Le Tour du Lac 42 km",
           "distance": "42 km",
           "denivele": "+1250 m",
-          "description": "Le défi ultime pour les traileurs confirmés. Le tour complet du lac de Villerest. Départ à 15h00.",
-          "imageUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/06/480533448_122241446036029668_7113542730657004974_n-768x512.jpg"
+          "description": "Le défi ultime : un tour complet du lac de Villerest. 2 pts ITRA, Index UTMB 50K. Départ à 15h00.",
+          "imageUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/06/480533448_122241446036029668_7113542730657004974_n-768x512.jpg",
+          "lienPage": "/tour-du-lac"
         },
         {
           "_key": "e5",
           "nom": "Course Enfants",
           "distance": "1 km / 2 km",
-          "description": "Pour les 7-11 ans (1 km, départ 16h) et les 12-15 ans (2 km, départ 16h15). Pré-inscription gratuite. Frontale obligatoire, déguisement conseillé !",
-          "imageUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/06/60-DSC_5732-768x512.jpg"
+          "description": "Pour les 7-15 ans. Cadre festif et sécurisé. Déguisement encouragé ! Départs à 16h00 et 16h15.",
+          "imageUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/06/60-DSC_5732-768x512.jpg",
+          "lienPage": "/course-enfants"
         },
         {
           "_key": "e6",
           "nom": "Les Randonnées",
           "distance": "9 km / 15 km",
-          "description": "Accessible à tous dès 6 ans. Partez dans le sillage des coureurs pour découvrir les parcours du Trail du Lac en mode randonnée. Départ à 18h00 ou 19h30.",
-          "imageUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/06/20-DSC_1243-scaled-1-768x512.jpg"
+          "description": "Accessible dès 6 ans, sans chrono, dans le sillage des coureurs. Départs à 18h00 et 19h30.",
+          "imageUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/06/20-DSC_1243-scaled-1-768x512.jpg",
+          "lienPage": "/randonnees"
         }
       ]
     },
-
     {
       "_type": "sectionCompteur",
       "_key": "compteur",
       "titre": "Prochaine édition",
       "dateEpreuve": "2026-11-07T12:00:00.000Z"
-    },
-
-    {
-      "_type": "sectionProgramme",
-      "_key": "programme",
-      "titre": "Le Programme",
-      "imageUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/06/480404509_122241073118029668_5787727259649602823_n.jpg",
-      "contenu": [
-        {
-          "_type": "block",
-          "_key": "p1",
-          "style": "normal",
-          "children": [{ "_type": "span", "_key": "s1", "text": "● 13h00 – Ouverture du Village Trail / retrait des dossards" }]
-        },
-        {
-          "_type": "block",
-          "_key": "p2",
-          "style": "normal",
-          "children": [{ "_type": "span", "_key": "s2", "text": "● 15h00 – Départ Trail 42 km, 1250m D+" }]
-        },
-        {
-          "_type": "block",
-          "_key": "p3",
-          "style": "normal",
-          "children": [{ "_type": "span", "_key": "s3", "text": "● 16h00 – Départ Courses Enfants" }]
-        },
-        {
-          "_type": "block",
-          "_key": "p4",
-          "style": "normal",
-          "children": [{ "_type": "span", "_key": "s4", "text": "● 16h30 – Départ Trail 30 km, 650m D+" }]
-        },
-        {
-          "_type": "block",
-          "_key": "p5",
-          "style": "normal",
-          "children": [{ "_type": "span", "_key": "s5", "text": "● 18h00 – Départ Trail 15 km, 350m D+ / Rando 15 km" }]
-        },
-        {
-          "_type": "block",
-          "_key": "p6",
-          "style": "normal",
-          "children": [{ "_type": "span", "_key": "s6", "text": "● 19h30 – Départ Trail 9 km, 190m D+ / Rando 9 km" }]
-        },
-        {
-          "_type": "block",
-          "_key": "p7",
-          "style": "normal",
-          "children": [{ "_type": "span", "_key": "s7", "text": "● Dès 20h30 – Podium, récompenses et soirée musicale" }]
-        }
-      ]
-    },
-
-    {
-      "_type": "sectionResultats",
-      "_key": "resultats",
-      "titre": "Résultats",
-      "annees": [
-        { "_key": "r1", "annee": "2025", "lien": "https://www.chronopuces.fr/chrono/?id_course=313" },
-        { "_key": "r2", "annee": "2024", "lien": "https://www.chronopuces.fr/chrono/?id_course=265" },
-        { "_key": "r3", "annee": "2023", "lien": "https://www.chronopuces.fr/chrono/?id_course=221" },
-        { "_key": "r4", "annee": "2022", "lien": "https://www.chronopuces.fr/chrono/?id_course=178" },
-        { "_key": "r5", "annee": "2021", "lien": "https://www.chronopuces.fr/chrono/?id_course=123" },
-        { "_key": "r6", "annee": "2019", "lien": "https://www.chronopuces.fr/chrono/?id_course=80" }
-      ]
-    },
-
-    {
-      "_type": "sectionPhotos",
-      "_key": "photos",
-      "titre": "Photos",
-      "annees": [
-        {
-          "_key": "ph1",
-          "annee": "2025",
-          "lien": "https://lightroom.adobe.com/shares/6639a9bb55fd4aedaa898bda43711fa6",
-          "imageUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/06/TRAIL-MARS-4.jpg"
-        },
-        {
-          "_key": "ph2",
-          "annee": "2024",
-          "lien": "https://lightroom.adobe.com/shares/83b762c5f16c4f8d8b1384b0a4264873",
-          "imageUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/06/1-DSC_5800-1-scaled.jpg"
-        }
-      ]
-    },
-
-    {
-      "_type": "sectionPartenaires",
-      "_key": "partenaires",
-      "titre": "Nos Partenaires",
-      "partenaires": [
-        { "_key": "pt1", "nom": "Laroche Gestion Patrimoine", "logoUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/04/LAROCHE.png", "url": "https://laroche-gp.fr/" },
-        { "_key": "pt2", "nom": "Le P'tit Roannais", "logoUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/04/PR.png", "url": "https://www.ptitroannais.fr/" },
-        { "_key": "pt3", "nom": "Media Help", "logoUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/04/MEDIA-HELP.png", "url": "https://www.media-help.com/" },
-        { "_key": "pt4", "nom": "Bureau Vallée", "logoUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/04/BV.png", "url": "https://www.bureau-vallee.fr/" },
-        { "_key": "pt5", "nom": "Décathlon Roanne", "logoUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/04/DECATHLON.png", "url": "https://www.decathlon.fr/store-view/magasin-de-sports-roanne-mably-0070021000210" },
-        { "_key": "pt6", "nom": "C2 Projet Web", "logoUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/04/C2PW-1.png", "url": "https://www.c2projetweb.fr/" },
-        { "_key": "pt7", "nom": "Icode", "logoUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/04/ICODE.png", "url": "https://www.icode.fr/" },
-        { "_key": "pt8", "nom": "Dream Team 42", "logoUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/04/DT.png", "url": "https://dreamteam42.com/" },
-        { "_key": "pt9", "nom": "Intermarché", "logoUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/04/INTERMARCH2.png", "url": "https://www.intermarche.com/" },
-        { "_key": "pt10", "nom": "IKKS Roanne", "logoUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/04/IKKS.png", "url": "https://stores.ikks.com/fr-fr/boutique/ROANNE/ICODE-ROANNE/" }
-      ]
-    },
-
-    {
-      "_type": "sectionBenevoles",
-      "_key": "benevoles",
-      "titre": "Devenir Bénévole",
-      "description": "Les bénévoles sont au cœur de l'organisation et jouent un rôle essentiel dans le succès du Trail du Lac de Villerest depuis sa création. Grâce à leur dévouement, les participants peuvent vivre une expérience exceptionnelle dans des conditions optimales. Envie de rejoindre notre équipe et de partager un moment de convivialité et de sportivité ?",
-      "lienInscription": "https://docs.google.com/forms/d/e/1FAIpQLSeDKKm8z7TXIln73TygVIFX_Mw_VCjVgGMlHHm3krf6HvhhwA/viewform?usp=header",
-      "imageUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/06/1-DSC_5800-1-scaled.jpg"
-    },
-
-    {
-      "_type": "sectionContact",
-      "_key": "contact",
-      "titre": "Contact",
-      "email": "contact@traildulacdevillerest.com"
     }
   ]
 }

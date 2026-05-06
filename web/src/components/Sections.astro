@@ -59,58 +59,122 @@ const { sections = [] } = Astro.props
   )
 
   // ─── ÉPREUVES ─────────────────────────────────────────────
-  if (section._type === 'sectionEpreuves') return (
-    <section id="epreuves" class="py-24 px-6">
-      <div class="max-w-7xl mx-auto">
-        <div class="reveal mb-16">
-          <span class="section-label">{section.titre || 'Les épreuves'}</span>
-          <span class="deco-line"></span>
-          <h2 class="section-title">Les <span>Courses</span></h2>
-        </div>
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {section.epreuves?.map((e, i) => (
-            <div class={`epreuve-card reveal reveal-delay-${Math.min(i+1,4)}`}>
-              {(e.image || e.imageUrl) && (
-                <div class="relative h-52 overflow-hidden">
-                  <img
-                    src={e.image ? urlFor(e.image).width(700).height(500).url() : e.imageUrl}
-                    alt={e.nom}
-                    class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    loading="lazy"
-                  />
-                  <div class="card-overlay absolute inset-0 opacity-0 transition-opacity duration-500" style="background: linear-gradient(to top, rgba(var(--color-primary-rgb),0.3), transparent)" />
+  if (section._type === 'sectionEpreuves') {
+    const epreuves = section.epreuves || []
+
+    // Page d'épreuve individuelle : hero pleine largeur
+    if (epreuves.length === 1) {
+      const e = epreuves[0]
+      const imgSrc = e.image ? urlFor(e.image).width(1600).height(900).url() : (e.imageUrl || null)
+      return (
+        <section>
+          {imgSrc && (
+            <div class="relative h-[60vh] min-h-[420px] overflow-hidden">
+              <img src={imgSrc} alt={e.nom} class="w-full h-full object-cover" loading="eager" />
+              <div class="absolute inset-0" style="background: linear-gradient(to top, #0d0d0d 5%, rgba(13,13,13,0.5) 50%, rgba(0,0,0,0.15) 100%)" />
+              <div class="absolute bottom-0 left-0 right-0 px-6 pb-8 md:px-12 md:pb-12">
+                <div class="max-w-5xl mx-auto">
+                  <h1 class="font-display text-4xl md:text-6xl font-black uppercase text-white mb-5 drop-shadow">{e.nom}</h1>
+                  <div class="flex flex-wrap gap-3">
+                    {e.distance && (
+                      <span class="inline-flex items-center gap-2 text-sm font-black uppercase tracking-wider px-4 py-2.5" style="color: var(--color-primary); background: rgba(0,0,0,0.7); border: 1px solid var(--color-primary)">
+                        <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
+                        {e.distance}
+                      </span>
+                    )}
+                    {e.denivele && (
+                      <span class="inline-flex items-center gap-2 text-sm font-black uppercase tracking-wider px-4 py-2.5 text-white border border-white/30" style="background: rgba(0,0,0,0.7)">
+                        <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7M12 3v18"/></svg>
+                        {e.denivele}
+                      </span>
+                    )}
+                    {e.depart && (
+                      <span class="inline-flex items-center gap-2 text-sm font-black uppercase tracking-wider px-4 py-2.5 text-white border border-white/30" style="background: rgba(0,0,0,0.7)">
+                        <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        Départ {e.depart}
+                      </span>
+                    )}
+                  </div>
                 </div>
-              )}
-              <div class="p-6">
-                <h3 class="font-display text-3xl tracking-wide text-white mb-3">{e.nom}</h3>
-                <div class="flex gap-4 mb-4">
-                  {e.distance && (
-                    <div class="flex items-center gap-1.5 text-sm font-semibold" style="color: var(--color-primary)">
-                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
-                      {e.distance}
-                    </div>
-                  )}
-                  {e.denivele && (
-                    <div class="flex items-center gap-1.5 text-sm font-semibold text-white/50">
-                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7M12 3v18"/></svg>
-                      {e.denivele}
-                    </div>
-                  )}
-                </div>
-                {e.description && <p class="text-sm text-white/50 leading-relaxed mb-5">{e.description}</p>}
-                {e.lienInscription && (
-                  <a href={e.lienInscription} class="btn-primary text-xs py-3 px-5 inline-flex" target="_blank">
-                    S'inscrire
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-                  </a>
-                )}
               </div>
             </div>
-          ))}
+          )}
+          {e.lienInscription && (
+            <div class="px-6 pt-8 pb-2 border-b border-white/5 md:px-12">
+              <div class="max-w-5xl mx-auto">
+                <a href={e.lienInscription} class="btn-primary" target="_blank" rel="noopener">
+                  S'inscrire
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                </a>
+              </div>
+            </div>
+          )}
+        </section>
+      )
+    }
+
+    // Grille multi-épreuves (page d'accueil / les-epreuves)
+    return (
+      <section id="epreuves" class="py-24 px-6">
+        <div class="max-w-7xl mx-auto">
+          <div class="reveal mb-16">
+            <span class="section-label">{section.titre || 'Les épreuves'}</span>
+            <span class="deco-line"></span>
+            <h2 class="section-title">Les <span>Courses</span></h2>
+          </div>
+          <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {epreuves.map((e, i) => (
+              <div class={`epreuve-card reveal reveal-delay-${Math.min(i+1,4)} relative group`}>
+                {e.lienPage && (
+                  <a href={e.lienPage} class="absolute inset-0 z-10" aria-label={`Découvrir ${e.nom}`} />
+                )}
+                {(e.image || e.imageUrl) && (
+                  <div class="relative h-52 overflow-hidden">
+                    <img
+                      src={e.image ? urlFor(e.image).width(700).height(500).url() : e.imageUrl}
+                      alt={e.nom}
+                      class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      loading="lazy"
+                    />
+                    <div class="card-overlay absolute inset-0 opacity-0 transition-opacity duration-500" style="background: linear-gradient(to top, rgba(var(--color-primary-rgb),0.3), transparent)" />
+                  </div>
+                )}
+                <div class="p-6">
+                  <h3 class="font-display text-3xl tracking-wide text-white mb-3">{e.nom}</h3>
+                  <div class="flex gap-4 mb-4">
+                    {e.distance && (
+                      <div class="flex items-center gap-1.5 text-sm font-semibold" style="color: var(--color-primary)">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
+                        {e.distance}
+                      </div>
+                    )}
+                    {e.denivele && (
+                      <div class="flex items-center gap-1.5 text-sm font-semibold text-white/50">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7M12 3v18"/></svg>
+                        {e.denivele}
+                      </div>
+                    )}
+                  </div>
+                  {e.description && <p class="text-sm text-white/50 leading-relaxed mb-5">{e.description}</p>}
+                  {e.lienPage && (
+                    <span class="text-xs font-bold uppercase tracking-widest text-white/30 group-hover:text-[color:var(--color-primary)] transition-colors">
+                      Découvrir →
+                    </span>
+                  )}
+                  {e.lienInscription && !e.lienPage && (
+                    <a href={e.lienInscription} class="btn-primary text-xs py-3 px-5 inline-flex relative z-20" target="_blank" rel="noopener">
+                      S'inscrire
+                      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                    </a>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
-  )
+      </section>
+    )
+  }
 
   // ─── PROGRAMME ────────────────────────────────────────────
   if (section._type === 'sectionProgramme') {

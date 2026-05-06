@@ -1,0 +1,37 @@
+{
+  "_type": "page",
+  "_id": "page-villerest-randonnees",
+  "site": { "_type": "reference", "_ref": "site-villerest" },
+  "title": "Les Randonnées",
+  "slug": { "_type": "slug", "current": "randonnees" },
+  "sections": [
+    {
+      "_type": "sectionEpreuves",
+      "_key": "epreuve",
+      "epreuves": [
+        {
+          "_key": "e1",
+          "nom": "Les Randonnées",
+          "distance": "9 km / 15 km",
+          "depart": "18h00 / 19h30",
+          "imageUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/06/20-DSC_1243-scaled-1-768x512.jpg",
+          "lienInscription": "https://www.billetweb.fr/randonnees-pedestres-tlv-2026"
+        }
+      ]
+    },
+    {
+      "_type": "sectionTexte",
+      "_key": "content",
+      "contenu": [
+        {
+          "_type": "block", "_key": "b1", "style": "normal",
+          "children": [{ "_type": "span", "_key": "s1", "text": "Venez participer à la fête de cette 7ème édition et parcourir les 9 ou 15 km des parcours de trail en mode randonnée. Accessible à tous à partir de 6 ans, sans chronométrage et sans pression. Les randonneurs démarrent dans la foulée des coureurs, le long du lac de Villerest." }]
+        },
+        {
+          "_type": "block", "_key": "b2", "style": "normal",
+          "children": [{ "_type": "span", "_key": "s2", "text": "Inscription sur place possible dans la limite de 300 randonneurs au total (toutes distances confondues). Clôture des inscriptions en ligne : vendredi 6 novembre à 20h." }]
+        }
+      ]
+    }
+  ]
+}

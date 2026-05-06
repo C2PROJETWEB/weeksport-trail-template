@@ -1,0 +1,41 @@
+{
+  "_type": "page",
+  "_id": "page-villerest-course-enfants",
+  "site": { "_type": "reference", "_ref": "site-villerest" },
+  "title": "Course Enfants",
+  "slug": { "_type": "slug", "current": "course-enfants" },
+  "sections": [
+    {
+      "_type": "sectionEpreuves",
+      "_key": "epreuve",
+      "epreuves": [
+        {
+          "_key": "e1",
+          "nom": "Course Enfants",
+          "distance": "1 km / 2 km",
+          "depart": "16h00 / 16h15",
+          "imageUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/06/60-DSC_5732-768x512.jpg",
+          "lienInscription": "https://www.billetweb.fr/courses-enfants-tlv-2026"
+        }
+      ]
+    },
+    {
+      "_type": "sectionTexte",
+      "_key": "content",
+      "contenu": [
+        {
+          "_type": "block", "_key": "b1", "style": "normal",
+          "children": [{ "_type": "span", "_key": "s1", "text": "Parce qu'il n'y a pas d'âge pour vivre l'aventure du trail, les plus jeunes auront eux aussi leur moment de gloire au bord du lac !" }]
+        },
+        {
+          "_type": "block", "_key": "b2", "style": "normal",
+          "children": [{ "_type": "span", "_key": "s2", "text": "7–11 ans : 1 km — Départ 16h00\n12–15 ans : 2 km — Départ 16h15\n\nDeux formats accessibles dans un cadre sécurisé et festif. Départ et arrivée : Salle de la Papeterie. Courses non chronométrées. Frontale obligatoire. Déguisement fortement encouragé !" }]
+        },
+        {
+          "_type": "block", "_key": "b3", "style": "normal",
+          "children": [{ "_type": "span", "_key": "s3", "text": "Pré-inscription gratuite en ligne — participation symbolique de 3€ payable sur place. Questionnaire de santé obligatoire pour les mineurs." }]
+        }
+      ]
+    }
+  ]
+}

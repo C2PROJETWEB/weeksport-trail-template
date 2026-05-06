@@ -1,0 +1,38 @@
+{
+  "_type": "page",
+  "_id": "page-villerest-tour-du-lac",
+  "site": { "_type": "reference", "_ref": "site-villerest" },
+  "title": "Le Tour du Lac 42 km",
+  "slug": { "_type": "slug", "current": "tour-du-lac" },
+  "sections": [
+    {
+      "_type": "sectionEpreuves",
+      "_key": "epreuve",
+      "epreuves": [
+        {
+          "_key": "e1",
+          "nom": "Le Tour du Lac 42 km",
+          "distance": "42 km",
+          "denivele": "+1250 m",
+          "depart": "15h00",
+          "imageUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/06/480533448_122241446036029668_7113542730657004974_n-768x512.jpg",
+          "lienInscription": "https://www.chronopuces.fr/trail-du-lac-de-villerest-2026"
+        }
+      ]
+    },
+    {
+      "_type": "sectionTexte",
+      "_key": "content",
+      "contenu": [
+        {
+          "_type": "block", "_key": "b1", "style": "normal",
+          "children": [{ "_type": "span", "_key": "s1", "text": "Un parcours d'exception pour les traileurs aguerris. Un tour complet du lac au coucher du soleil, entre sentiers sauvages, montées exigeantes et vues spectaculaires sur le lac de Villerest. Le défi ultime : rejoindre le point de départ après un tour complet du lac de nuit, frontale allumée." }]
+        },
+        {
+          "_type": "block", "_key": "b2", "style": "normal",
+          "children": [{ "_type": "span", "_key": "s2", "text": "2 points ITRA — Index UTMB 50K. Un défi grandeur nature à vivre pleinement avant la SaintéLyon. Frontale obligatoire. Les inscriptions se font via chronopuces.fr/trail-du-lac-de-villerest-2026." }]
+        }
+      ]
+    }
+  ]
+}
