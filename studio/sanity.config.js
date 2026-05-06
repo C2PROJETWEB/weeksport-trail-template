@@ -1,8 +1,6 @@
 import { defineConfig } from 'sanity'
 import { structureTool } from 'sanity/structure'
 import { schemaTypes } from './schemas/index'
-import { StudioNavbar } from './src/components/StudioNavbar'
-import { WelcomeDashboard } from './src/components/WelcomeDashboard'
 
 export default defineConfig({
   name: 'weeksport-admin',
@@ -11,25 +9,12 @@ export default defineConfig({
   projectId: process.env.SANITY_PROJECT_ID || 'd2tkdmxe',
   dataset: 'production',
 
-  studio: {
-    components: {
-      navbar: StudioNavbar,
-    }
-  },
-
   plugins: [
     structureTool({
       structure: (S) =>
         S.list()
           .title('Gestion des événements')
           .items([
-            S.listItem()
-              .title('🏠 Tableau de bord')
-              .child(
-                S.component(WelcomeDashboard)
-                  .title('Tableau de bord')
-              ),
-            S.divider(),
             S.listItem()
               .title('🏃 Trail du Lac de Villerest')
               .child(
