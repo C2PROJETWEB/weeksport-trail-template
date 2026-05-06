@@ -38,9 +38,9 @@ sections.forEach((section: any, i: number) => {
     <section class="py-24 px-6 max-w-4xl mx-auto">
       <div class="reveal">
         {section.titre && (
-          <div>
-            <span class="section-label">{section.titre}</span>
+          <div class="mb-10">
             <span class="deco-line"></span>
+            <h2 class="section-title mt-4">{section.titre}</h2>
           </div>
         )}
         {section.contenu && (
