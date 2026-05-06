@@ -1,0 +1,58 @@
+{
+  "_type": "page",
+  "_id": "page-villerest-hebergement",
+  "site": { "_type": "reference", "_ref": "site-villerest" },
+  "title": "Hébergement & Covoiturage",
+  "slug": { "_type": "slug", "current": "hebergement" },
+  "sections": [
+    {
+      "_type": "sectionTexte",
+      "_key": "content",
+      "titre": "Hébergement & Covoiturage",
+      "contenu": [
+        {
+          "_type": "block", "_key": "b1", "style": "h3",
+          "children": [{ "_type": "span", "_key": "s1", "text": "Accès & Stationnement" }]
+        },
+        {
+          "_type": "block", "_key": "b2", "style": "normal",
+          "children": [{ "_type": "span", "_key": "s2", "text": "Le Village Trail est situé à la Salle de la Papeterie, au bord du lac de Villerest. De grands parkings entourent la salle — des zones de stationnement seront indiquées sur place pour faciliter votre arrivée." }]
+        },
+        {
+          "_type": "block", "_key": "b3", "style": "h3",
+          "children": [{ "_type": "span", "_key": "s3", "text": "Covoiturage" }]
+        },
+        {
+          "_type": "block", "_key": "b4", "style": "normal",
+          "children": [{ "_type": "span", "_key": "s4", "text": "Le Trail du Lac de Villerest vous invite à opter pour le covoiturage afin de réduire l'afflux de véhicules vers le point de départ. Si vous recherchez ou proposez un covoiturage, n'hésitez pas à nous contacter." }]
+        },
+        {
+          "_type": "block", "_key": "b5", "style": "h3",
+          "children": [{ "_type": "span", "_key": "s5", "text": "Hébergement" }]
+        },
+        {
+          "_type": "block", "_key": "b6", "style": "normal",
+          "children": [{ "_type": "span", "_key": "s6", "text": "Plongez au cœur de Villerest, village paisible aux portes de Roanne, en séjournant dans des chambres d'hôtes charmantes ou des hébergements sur Airbnb. Entre les rives du lac, les collines du Roannais et les ruelles pleines d'histoire, ce coin de la Loire vous offre une escapade authentique entre nature et patrimoine." }]
+        },
+        {
+          "_type": "block", "_key": "b7", "style": "normal",
+          "children": [{ "_type": "span", "_key": "s7", "text": "À deux pas, Roanne vous ouvre les portes d'une gastronomie renommée — des maisons étoilées aux petits producteurs passionnés. Balades, terroir, rencontres locales et douceur de vivre : Villerest et sa région vous promettent un séjour ressourçant, hors des sentiers battus." }]
+        },
+        {
+          "_type": "block", "_key": "b8", "style": "normal",
+          "children": [
+            { "_type": "span", "_key": "s8a", "text": "Chambres d'hôtes du Pays Roannais : " },
+            { "_type": "span", "_key": "s8b", "text": "gites-de-france-loire.com", "marks": ["link"], "markDefs": [] }
+          ]
+        },
+        {
+          "_type": "block", "_key": "b9", "style": "normal",
+          "children": [
+            { "_type": "span", "_key": "s9a", "text": "Logements Airbnb dans le Roannais : " },
+            { "_type": "span", "_key": "s9b", "text": "airbnb.fr", "marks": ["link"], "markDefs": [] }
+          ]
+        }
+      ]
+    }
+  ]
+}

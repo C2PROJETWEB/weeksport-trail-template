@@ -3,12 +3,34 @@
   "_id": "nav-villerest",
   "site": { "_type": "reference", "_ref": "site-villerest" },
   "items": [
-    { "_type": "navItem", "_key": "nav1", "label": "Les Épreuves", "slug": "#epreuves" },
-    { "_type": "navItem", "_key": "nav2", "label": "Programme", "slug": "#programme" },
-    { "_type": "navItem", "_key": "nav3", "label": "Résultats", "slug": "#resultats" },
-    { "_type": "navItem", "_key": "nav4", "label": "Photos", "slug": "#photos" },
-    { "_type": "navItem", "_key": "nav5", "label": "Partenaires", "slug": "#partenaires" },
-    { "_type": "navItem", "_key": "nav6", "label": "Bénévoles", "slug": "#benevoles" },
-    { "_type": "navItem", "_key": "nav7", "label": "Contact", "slug": "#contact" }
+    {
+      "_type": "navItem", "_key": "nav1",
+      "label": "Les Épreuves",
+      "slug": "les-epreuves",
+      "sousMenu": [
+        { "_type": "object", "_key": "sm1", "label": "La Run Night 9 km", "slug": "run-night" },
+        { "_type": "object", "_key": "sm2", "label": "L'Échappée Nocturne 15 km", "slug": "echappee-nocturne" },
+        { "_type": "object", "_key": "sm3", "label": "Le Grand-Duc 30 km", "slug": "grand-duc" },
+        { "_type": "object", "_key": "sm4", "label": "Le Tour du Lac 42 km", "slug": "tour-du-lac" },
+        { "_type": "object", "_key": "sm5", "label": "Course Enfants", "slug": "course-enfants" },
+        { "_type": "object", "_key": "sm6", "label": "Les Randonnées", "slug": "randonnees" }
+      ]
+    },
+    {
+      "_type": "navItem", "_key": "nav2",
+      "label": "Infos Pratiques",
+      "slug": "programme",
+      "sousMenu": [
+        { "_type": "object", "_key": "sm7", "label": "Programme", "slug": "programme" },
+        { "_type": "object", "_key": "sm8", "label": "Règlement", "slug": "reglement" },
+        { "_type": "object", "_key": "sm9", "label": "Repas", "slug": "repas" },
+        { "_type": "object", "_key": "sm10", "label": "Hébergement", "slug": "hebergement" }
+      ]
+    },
+    { "_type": "navItem", "_key": "nav3", "label": "Résultats", "slug": "resultats" },
+    { "_type": "navItem", "_key": "nav4", "label": "Photos", "slug": "photos" },
+    { "_type": "navItem", "_key": "nav5", "label": "Partenaires", "slug": "partenaires" },
+    { "_type": "navItem", "_key": "nav6", "label": "Bénévoles", "slug": "benevoles" },
+    { "_type": "navItem", "_key": "nav7", "label": "Contact", "slug": "contact" }
   ]
 }

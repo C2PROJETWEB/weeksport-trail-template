@@ -1,0 +1,40 @@
+{
+  "_type": "page",
+  "_id": "page-villerest-repas",
+  "site": { "_type": "reference", "_ref": "site-villerest" },
+  "title": "Repas",
+  "slug": { "_type": "slug", "current": "repas" },
+  "sections": [
+    {
+      "_type": "sectionTexte",
+      "_key": "content",
+      "titre": "Repas & Restauration",
+      "contenu": [
+        {
+          "_type": "block", "_key": "b1", "style": "normal",
+          "children": [{ "_type": "span", "_key": "s1", "text": "Après l'effort, le réconfort ! À l'issue des courses, prolongez la soirée dans une ambiance conviviale au cœur du Trail du Lac de Villerest, en dégustant le traditionnel Saucisson Vigneron de l'US Villerest Football. Une belle façon de célébrer vos efforts, entre rires, musique et bons petits plats !" }]
+        },
+        {
+          "_type": "block", "_key": "b2", "style": "h3",
+          "children": [{ "_type": "span", "_key": "s2", "text": "Repas Box — 10 €" }]
+        },
+        {
+          "_type": "block", "_key": "b3", "style": "normal",
+          "children": [{ "_type": "span", "_key": "s3", "text": "Au choix : Pâtes bolognaises ou Saucisson vigneron & pommes de terre. Inclus pour les participants au 42 km." }]
+        },
+        {
+          "_type": "block", "_key": "b4", "style": "h3",
+          "children": [{ "_type": "span", "_key": "s4", "text": "Pizza — 13 €" }]
+        },
+        {
+          "_type": "block", "_key": "b5", "style": "normal",
+          "children": [{ "_type": "span", "_key": "s5", "text": "Limité à 300 pizzas maximum. Disponible pour les coureurs et leurs accompagnateurs." }]
+        },
+        {
+          "_type": "block", "_key": "b6", "style": "normal",
+          "children": [{ "_type": "span", "_key": "s6", "text": "Restauration et buvette sur place toute la soirée. Réservation recommandée lors de votre inscription sur chronopuces.fr/trail-du-lac-de-villerest-2026." }]
+        }
+      ]
+    }
+  ]
+}
