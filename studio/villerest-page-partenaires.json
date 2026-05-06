@@ -1,0 +1,36 @@
+{
+  "_type": "page",
+  "_id": "page-villerest-partenaires",
+  "site": { "_type": "reference", "_ref": "site-villerest" },
+  "title": "Partenaires",
+  "slug": { "_type": "slug", "current": "partenaires" },
+  "sections": [
+    {
+      "_type": "sectionPartenaires",
+      "_key": "partenaires-evenement",
+      "titre": "Partenaires de l'Événement",
+      "groupe": "evenement",
+      "description": "Le Trail du Lac de Villerest existe grâce à l'engagement de ses partenaires. Merci à eux !",
+      "partenaires": [
+        { "_key": "pt1", "nom": "Laroche Gestion Patrimoine", "logoUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/04/LAROCHE.png", "url": "https://laroche-gp.fr/" },
+        { "_key": "pt2", "nom": "Le P'tit Roannais", "logoUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/04/PR.png", "url": "https://www.ptitroannais.fr/" },
+        { "_key": "pt3", "nom": "Bureau Vallée", "logoUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/04/BV.png", "url": "https://www.bureau-vallee.fr/" },
+        { "_key": "pt4", "nom": "Décathlon Roanne", "logoUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/04/DECATHLON.png", "url": "https://www.decathlon.fr/store-view/magasin-de-sports-roanne-mably-0070021000210" },
+        { "_key": "pt5", "nom": "Dream Team 42", "logoUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/04/DT.png", "url": "https://dreamteam42.com/" },
+        { "_key": "pt6", "nom": "Intermarché", "logoUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/04/INTERMARCH2.png", "url": "https://www.intermarche.com/" },
+        { "_key": "pt7", "nom": "IKKS Roanne", "logoUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/04/IKKS.png", "url": "https://stores.ikks.com/fr-fr/boutique/ROANNE/ICODE-ROANNE/" }
+      ]
+    },
+    {
+      "_type": "sectionPartenaires",
+      "_key": "partenaires-agence",
+      "titre": "Partenaires de l'Agence",
+      "groupe": "agence",
+      "partenaires": [
+        { "_key": "pa1", "nom": "C2 Projet Web", "logoUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/04/C2PW-1.png", "url": "https://www.c2projetweb.fr/" },
+        { "_key": "pa2", "nom": "Icode", "logoUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/04/ICODE.png", "url": "https://www.icode.fr/" },
+        { "_key": "pa3", "nom": "Media Help", "logoUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/04/MEDIA-HELP.png", "url": "https://www.media-help.com/" }
+      ]
+    }
+  ]
+}
