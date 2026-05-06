@@ -149,11 +149,16 @@ sections.forEach((section: any, i: number) => {
             <div class="max-w-7xl mx-auto px-6 md:px-12 pb-16">
               <span class="section-label mb-6 block">Photos</span>
               <div class="grid grid-cols-2 gap-3">
-                {(e.photos as string[]).slice(0, 4).map((photoUrl: string) => (
-                  <div class="overflow-hidden">
-                    <img src={photoUrl} alt="" class="w-full h-64 md:h-80 object-cover transition-transform duration-700 hover:scale-105" loading="lazy" />
-                  </div>
-                ))}
+                {(e.photos as any[]).slice(0, 4).map((photo: any) => {
+                  const src = typeof photo === 'string'
+                    ? photo
+                    : (photo.image ? urlFor(photo.image).width(900).height(600).url() : photo.url)
+                  return src ? (
+                    <div class="overflow-hidden">
+                      <img src={src} alt="" class="w-full h-64 md:h-80 object-cover transition-transform duration-700 hover:scale-105" loading="lazy" />
+                    </div>
+                  ) : null
+                })}
               </div>
             </div>
           )}
