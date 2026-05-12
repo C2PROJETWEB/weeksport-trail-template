@@ -62,7 +62,7 @@ export default {
       title: "Photo d'en-tête",
       type: 'image',
       options: { hotspot: true },
-      description: 'Photo principale affichée en haut du site'
+      description: 'Photo principale affichée en haut du site (utilisée aussi comme poster si vidéo)'
     },
     {
       name: 'heroImageUrl',
@@ -70,6 +70,12 @@ export default {
       type: 'url',
       description: 'Utilisé si pas d\'image uploadée',
       hidden: adminOnly,
+    },
+    {
+      name: 'heroVideoUrl',
+      title: "Vidéo d'en-tête (URL)",
+      type: 'url',
+      description: 'URL directe vers un fichier MP4 (ex: https://monsite.com/video.mp4). Si renseignée, remplace la photo.',
     },
     {
       name: 'heroTitre',

@@ -1,98 +1,121 @@
 ---
 import { urlFor } from '../lib/sanity'
 const { site } = Astro.props
-const bgUrl = site?.heroImage
+
+const imgUrl = site?.heroImage
   ? urlFor(site.heroImage).width(1920).url()
   : (site?.heroImageUrl || null)
----
-<section class="relative min-h-screen flex items-end pb-24 overflow-hidden">
 
-  <!-- Image de fond -->
-  {bgUrl && (
+const videoUrl = site?.heroVideoUrl || null
+---
+<section class="relative min-h-screen flex items-center justify-center overflow-hidden">
+
+  <!-- ── Fond vidéo ── -->
+  {videoUrl && (
+    <video
+      class="absolute inset-0 w-full h-full object-cover"
+      autoplay muted loop playsinline
+      poster={imgUrl || undefined}
+      id="hero-video"
+    >
+      <source src={videoUrl} type="video/mp4" />
+    </video>
+  )}
+
+  <!-- ── Fond photo (si pas de vidéo) ── -->
+  {!videoUrl && imgUrl && (
     <div
-      class="absolute inset-0 bg-cover bg-center scale-105"
-      style={`background-image: url('${bgUrl}')`}
+      class="absolute inset-0 bg-cover bg-center"
+      style={`background-image: url('${imgUrl}'); transform: scale(1.06)`}
       id="hero-bg"
     />
   )}
-  {!bgUrl && <div class="absolute inset-0" style="background: var(--color-secondary)" />}
+  {!videoUrl && !imgUrl && (
+    <div class="absolute inset-0" style="background: var(--color-secondary)" />
+  )}
 
-  <!-- Overlays -->
-  <div class="absolute inset-0 bg-gradient-to-t from-[#0d0d0d] via-[#0d0d0d]/60 to-transparent" />
-  <div class="absolute inset-0 bg-gradient-to-r from-[#0d0d0d]/80 via-transparent to-transparent" />
+  <!-- ── Overlays ── -->
+  <div class="absolute inset-0" style="background: linear-gradient(to bottom, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.55) 50%, rgba(13,13,13,0.85) 100%)"></div>
 
-  <!-- Ligne déco animée -->
+  <!-- ── Ligne déco gauche ── -->
   <div class="absolute left-0 top-0 bottom-0 w-1 overflow-hidden">
-    <div class="w-full h-full animate-pulse" style="background: linear-gradient(to bottom, transparent, var(--color-primary), transparent)" />
+    <div class="w-full h-full animate-pulse" style="background: linear-gradient(to bottom, transparent, var(--color-primary), transparent)"></div>
   </div>
 
-  <!-- Contenu -->
-  <div class="relative z-10 max-w-7xl mx-auto px-6 w-full">
-    <div class="max-w-3xl">
+  <!-- ── Contenu centré ── -->
+  <div class="relative z-10 w-full text-center px-6 py-32">
 
-      {site?.heroDate && (
-        <div class="flex items-center gap-3 mb-6" id="hero-date">
-          <div class="w-8 h-px" style="background: var(--color-primary)"></div>
-          <span class="text-xs font-bold uppercase tracking-[0.3em]" style="color: var(--color-primary)">
-            {site.heroDate}
-          </span>
-        </div>
-      )}
+    {site?.heroDate && (
+      <div class="flex items-center justify-center gap-3 mb-8" id="hero-date">
+        <div class="h-px w-10" style="background: var(--color-primary)"></div>
+        <span class="text-xs font-bold uppercase tracking-[0.35em]" style="color: var(--color-primary)">
+          {site.heroDate}
+        </span>
+        <div class="h-px w-10" style="background: var(--color-primary)"></div>
+      </div>
+    )}
 
-      <h1
-        class="font-display leading-none mb-8 text-white"
-        style="font-size: clamp(3.5rem, 10vw, 9rem)"
-        id="hero-title"
-      >
-        {site?.heroTitre || site?.name}
-      </h1>
+    <h1
+      class="font-display leading-none text-white mb-10"
+      style="font-size: clamp(3rem, 9vw, 8.5rem); text-shadow: 0 4px 40px rgba(0,0,0,0.5)"
+      id="hero-title"
+    >
+      {site?.heroTitre || site?.name}
+    </h1>
 
-      {site?.heroCTA && site?.heroCTAUrl && (
-        <div class="flex items-center gap-4 flex-wrap" id="hero-cta">
-          <a href={site.heroCTAUrl} class="btn-primary" target="_blank" rel="noopener">
-            {site.heroCTA}
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-            </svg>
-          </a>
-          <a href="#programme" class="btn-outline">
-            Découvrir
-          </a>
-        </div>
-      )}
+    {site?.heroCTA && site?.heroCTAUrl && (
+      <div class="flex items-center justify-center gap-4 flex-wrap" id="hero-cta">
+        <a href={site.heroCTAUrl} class="btn-primary" target="_blank" rel="noopener">
+          {site.heroCTA}
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+          </svg>
+        </a>
+        <a href="#epreuves" class="btn-outline">
+          Découvrir
+        </a>
+      </div>
+    )}
 
+  </div>
+
+  <!-- ── Scroll indicator ── -->
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-30">
+    <div class="w-px h-12 overflow-hidden">
+      <div class="w-full h-full" style="background: white; animation: slideDown 1.6s ease-in-out infinite"></div>
     </div>
+    <span class="text-[10px] uppercase tracking-widest font-bold text-white">Scroll</span>
   </div>
 
-  <!-- Scroll indicator -->
-  <div class="absolute bottom-8 right-8 flex flex-col items-center gap-2 opacity-40">
-    <span class="text-xs uppercase tracking-widest font-bold rotate-90 mb-4">Scroll</span>
-    <div class="w-px h-16 overflow-hidden">
-      <div class="w-full h-full animate-bounce" style="background: white" />
-    </div>
-  </div>
 </section>
 
+<style>
+  @keyframes slideDown {
+    0%   { transform: translateY(-100%); opacity: 0 }
+    30%  { opacity: 1 }
+    100% { transform: translateY(100%); opacity: 0 }
+  }
+</style>
+
 <script>
-  // Parallax léger sur le hero
+  // Parallax uniquement sur la photo (pas la vidéo)
   const bg = document.getElementById('hero-bg')
-  window.addEventListener('scroll', () => {
-    if (bg) bg.style.transform = `scale(1.05) translateY(${window.scrollY * 0.3}px)`
-  })
+  if (bg) {
+    window.addEventListener('scroll', () => {
+      bg.style.transform = `scale(1.06) translateY(${window.scrollY * 0.25}px)`
+    }, { passive: true })
+  }
 
   // Animations d'entrée
-  const els = ['#hero-date', '#hero-title', '#hero-cta']
-  els.forEach((sel, i) => {
-    const el = document.querySelector(sel)
-    if (el) {
-      Object.assign((el as HTMLElement).style, { opacity: '0', transform: 'translateY(30px)' })
-      setTimeout(() => {
-        Object.assign((el as HTMLElement).style, {
-          transition: 'opacity 0.8s ease, transform 0.8s ease',
-          opacity: '1',
-          transform: 'none'
-        })
-      }, 200 + i * 150)
-    }
+  ;['#hero-date', '#hero-title', '#hero-cta'].forEach((sel, i) => {
+    const el = document.querySelector(sel) as HTMLElement | null
+    if (!el) return
+    el.style.opacity = '0'
+    el.style.transform = 'translateY(28px)'
+    setTimeout(() => {
+      el.style.transition = 'opacity 0.9s ease, transform 0.9s ease'
+      el.style.opacity = '1'
+      el.style.transform = 'none'
+    }, 150 + i * 160)
   })
 </script>
