@@ -1,5 +1,5 @@
 ---
-import { urlFor } from '../lib/sanity'
+import { urlFor, fileUrl } from '../lib/sanity'
 import { toHTML } from '@portabletext/to-html'
 const { sections = [], raceTabs = null, currentSlug = '' } = Astro.props
 
@@ -78,6 +78,22 @@ sections.forEach((section: any, i: number) => {
                     ))}
                   </div>
                 )}
+                {section.documents?.length > 0 && (
+                  <div class="mt-6 space-y-2">
+                    {(section.documents as any[]).map((doc: any) => {
+                      const url = doc.asset ? fileUrl(doc.asset) : null
+                      if (!url) return null
+                      return (
+                        <a href={url} target="_blank" rel="noopener"
+                          class="flex items-center gap-3 px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 hover:bg-gray-100 hover:border-gray-300 transition group text-sm font-medium text-gray-700">
+                          <span class="text-xl shrink-0">📎</span>
+                          <span class="flex-1 truncate">{doc.nom || 'Document'}</span>
+                          <span class="text-xs text-gray-400 group-hover:text-gray-600 shrink-0">Télécharger ↓</span>
+                        </a>
+                      )
+                    })}
+                  </div>
+                )}
               </div>
             </div>
           ) : (
@@ -102,6 +118,22 @@ sections.forEach((section: any, i: number) => {
                     <a href={btn.url||'#'} class={btn.style==='outline'?'btn-outline':'btn-primary'}
                       target={btn.externe?'_blank':'_self'} rel={btn.externe?'noopener noreferrer':''}>{btn.label}</a>
                   ))}
+                </div>
+              )}
+              {section.documents?.length > 0 && (
+                <div class="mt-8 space-y-2">
+                  {(section.documents as any[]).map((doc: any) => {
+                    const url = doc.asset ? fileUrl(doc.asset) : null
+                    if (!url) return null
+                    return (
+                      <a href={url} target="_blank" rel="noopener"
+                        class="flex items-center gap-3 px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 hover:bg-gray-100 hover:border-gray-300 transition group text-sm font-medium text-gray-700">
+                        <span class="text-xl shrink-0">📎</span>
+                        <span class="flex-1 truncate">{doc.nom || 'Document'}</span>
+                        <span class="text-xs text-gray-400 group-hover:text-gray-600 shrink-0">Télécharger ↓</span>
+                      </a>
+                    )
+                  })}
                 </div>
               )}
             </div>

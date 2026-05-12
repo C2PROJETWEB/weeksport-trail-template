@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { getPages, getPage, savePage, uploadImage, blocksToText, textToBlocks, imageUrl } from '../../lib/sanity.js'
+import { getPages, getPage, savePage, uploadImage, uploadFile, fileUrl, blocksToText, textToBlocks, imageUrl } from '../../lib/sanity.js'
 
 export default function PagesEditor() {
   const [pages, setPages] = useState(null)
@@ -278,6 +278,8 @@ function TextSectionEditor({ section, saving, saved, error, onSave }) {
   const [boutons, setBoutons] = useState(section.boutons || [])
   const [disposition, setDisposition] = useState(section.disposition || 'image_dessous')
   const [uploading, setUploading] = useState(false)
+  const [documents, setDocuments] = useState(section.documents || [])
+  const [docUploading, setDocUploading] = useState(false)
 
   async function handleImageUpload(e) {
     const files = Array.from(e.target.files)
@@ -316,9 +318,35 @@ function TextSectionEditor({ section, saving, saved, error, onSave }) {
     setBoutons(prev => prev.filter((_, idx) => idx !== i))
   }
 
+  async function handleDocUpload(e) {
+    const files = Array.from(e.target.files)
+    if (!files.length) return
+    setDocUploading(true)
+    const newDocs = [...documents]
+    for (const file of files) {
+      const asset = await uploadFile(file)
+      newDocs.push({
+        _type: 'fichier',
+        _key: Math.random().toString(36).slice(2),
+        nom: file.name.replace(/\.[^/.]+$/, ''),
+        asset: { _type: 'reference', _ref: asset._id }
+      })
+    }
+    setDocuments(newDocs)
+    setDocUploading(false)
+  }
+
+  function updateDocNom(i, nom) {
+    setDocuments(prev => prev.map((d, idx) => idx === i ? { ...d, nom } : d))
+  }
+
+  function removeDoc(i) {
+    setDocuments(prev => prev.filter((_, idx) => idx !== i))
+  }
+
   return (
     <Card label={section.titre || 'Bloc texte'} saving={saving} saved={saved} error={error}
-      onSave={() => onSave({ titre, contenu: textToBlocks(contenu), images, boutons, disposition })}>
+      onSave={() => onSave({ titre, contenu: textToBlocks(contenu), images, boutons, disposition, documents })}>
       <Field label="Titre du bloc">
         <input type="text" value={titre} onChange={e => setTitre(e.target.value)} className="input" />
       </Field>
@@ -372,6 +400,36 @@ function TextSectionEditor({ section, saving, saved, error, onSave }) {
         <label className={`flex items-center justify-center gap-2 cursor-pointer border-2 border-dashed border-slate-300 rounded-lg p-3 hover:border-blue-400 hover:bg-blue-50 transition text-sm text-slate-500 ${uploading ? 'opacity-60 pointer-events-none' : ''}`}>
           {uploading ? '⏳ Téléchargement…' : '📷 Ajouter des photos'}
           <input type="file" accept="image/*" multiple className="hidden" onChange={handleImageUpload} />
+        </label>
+      </Field>
+
+      {/* ── Documents ── */}
+      <Field label="📎 Documents à télécharger" hint="PDF, Word, Excel… Les visiteurs pourront les télécharger">
+        {documents.length > 0 && (
+          <div className="space-y-2 mb-2">
+            {documents.map((doc, i) => (
+              <div key={doc._key || i} className="flex gap-2 items-center bg-slate-50 border border-slate-200 rounded-lg p-2">
+                <span className="text-lg shrink-0">{docIcon(doc.asset)}</span>
+                <input
+                  type="text"
+                  value={doc.nom || ''}
+                  onChange={e => updateDocNom(i, e.target.value)}
+                  className="input flex-1 text-sm py-1"
+                  placeholder="Nom affiché"
+                />
+                {doc.asset && (
+                  <a href={fileUrl(doc.asset)} target="_blank" rel="noopener"
+                    className="text-blue-500 text-xs hover:text-blue-700 px-1 shrink-0" title="Voir le fichier">↗</a>
+                )}
+                <button type="button" onClick={() => removeDoc(i)}
+                  className="text-red-400 hover:text-red-600 text-xl leading-none shrink-0">×</button>
+              </div>
+            ))}
+          </div>
+        )}
+        <label className={`flex items-center justify-center gap-2 cursor-pointer border-2 border-dashed border-slate-300 rounded-lg p-3 hover:border-blue-400 hover:bg-blue-50 transition text-sm text-slate-500 ${docUploading ? 'opacity-60 pointer-events-none' : ''}`}>
+          {docUploading ? '⏳ Téléchargement…' : '📎 Ajouter des documents'}
+          <input type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.csv,.txt,.zip" multiple className="hidden" onChange={handleDocUpload} />
         </label>
       </Field>
 
@@ -829,6 +887,17 @@ function Skeleton() {
       {[1,2,3].map(i => <div key={i} className="h-20 bg-slate-200 rounded-xl" />)}
     </div>
   )
+}
+
+function docIcon(ref) {
+  if (!ref) return '📎'
+  const id = (ref._ref || ref || '').toLowerCase()
+  if (id.endsWith('-pdf')) return '📄'
+  if (id.endsWith('-docx') || id.endsWith('-doc')) return '📝'
+  if (id.endsWith('-xlsx') || id.endsWith('-xls') || id.endsWith('-csv')) return '📊'
+  if (id.endsWith('-pptx') || id.endsWith('-ppt')) return '📊'
+  if (id.endsWith('-zip') || id.endsWith('-rar')) return '📦'
+  return '📎'
 }
 
 function DispoIcon({ type }) {

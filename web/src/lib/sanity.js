@@ -11,6 +11,18 @@ export const client = createClient({
 const builder = createImageUrlBuilder(client)
 export const urlFor = (source) => builder.image(source)
 
+export function fileUrl(ref) {
+  if (!ref) return null
+  const id = ref._ref || ref
+  const body = id.replace(/^file-/, '')
+  const lastDash = body.lastIndexOf('-')
+  const hash = body.slice(0, lastDash)
+  const ext = body.slice(lastDash + 1)
+  const projectId = import.meta.env.PUBLIC_SANITY_PROJECT_ID || 'd2tkdmxe'
+  const dataset = import.meta.env.PUBLIC_SANITY_DATASET || 'production'
+  return `https://cdn.sanity.io/files/${projectId}/${dataset}/${hash}.${ext}`
+}
+
 export async function getSite(siteSlug) {
   return client.fetch(
     `*[_type == "site" && slug.current == $slug][0]{

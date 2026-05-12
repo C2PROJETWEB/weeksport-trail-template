@@ -41,6 +41,23 @@ export async function uploadImage(file) {
   return client.assets.upload('image', file, { filename: file.name })
 }
 
+// ── Upload file (PDF, Word, Excel…) ─────────────────────────────────────────
+export async function uploadFile(file) {
+  return client.assets.upload('file', file, { filename: file.name })
+}
+
+// ── URL d'un fichier Sanity ──────────────────────────────────────────────────
+export function fileUrl(ref) {
+  if (!ref) return null
+  const id = ref._ref || ref
+  // format: file-{hash}-{ext}
+  const body = id.replace(/^file-/, '')
+  const lastDash = body.lastIndexOf('-')
+  const hash = body.slice(0, lastDash)
+  const ext = body.slice(lastDash + 1)
+  return `https://cdn.sanity.io/files/d2tkdmxe/production/${hash}.${ext}`
+}
+
 // ── Écriture ────────────────────────────────────────────────────────────────
 export async function saveSite(id, patch) {
   return client.patch(id).set(patch).commit()
