@@ -2,11 +2,13 @@ import { useState } from 'react'
 import SiteEditor from './editors/SiteEditor.jsx'
 import NavEditor from './editors/NavEditor.jsx'
 import PagesEditor from './editors/PagesEditor.jsx'
+import HelpEditor from './editors/HelpEditor.jsx'
 
 const tabs = [
   { id: 'site', label: '🏠 Accueil', desc: 'Photo, titre, date, bouton' },
   { id: 'nav', label: '☰ Menu', desc: 'Navigation du site' },
   { id: 'pages', label: '📄 Pages', desc: 'Textes et contenus' },
+  { id: 'help', label: '❓ Aide', desc: 'Guide d\'utilisation' },
 ]
 
 export default function Dashboard({ onLogout }) {
@@ -55,6 +57,7 @@ export default function Dashboard({ onLogout }) {
         {active === 'site' && <SiteEditor />}
         {active === 'nav' && <NavEditor />}
         {active === 'pages' && <PagesEditor />}
+        {active === 'help' && <HelpEditor />}
       </main>
     </div>
   )
