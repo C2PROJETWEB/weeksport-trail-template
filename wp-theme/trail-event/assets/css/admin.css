@@ -1,0 +1,62 @@
+/* ── Section Builder Admin ──────────────────────────────────────────────── */
+#trail-section-builder { padding: 12px 0; }
+
+.trail-sections-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
+
+.trail-section { background: #fff; border: 1px solid #ddd; border-radius: 6px; overflow: hidden; }
+
+.trail-section-header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px; background: #f6f7f7; border-bottom: 1px solid #ddd; cursor: default;
+}
+.trail-section-header strong { flex: 1; font-size: 13px; }
+.trail-drag-handle { cursor: grab; color: #aaa; font-size: 16px; user-select: none; }
+.trail-section-actions { display: flex; align-items: center; gap: 8px; }
+.trail-toggle-btn { background: none; border: none; cursor: pointer; color: #555; font-size: 14px; padding: 2px 6px; }
+.trail-remove-btn { color: #cc1818 !important; background: none !important; border: none; cursor: pointer; font-size: 12px; padding: 2px 8px; }
+.trail-remove-btn:hover { text-decoration: underline; }
+
+.trail-section-body { padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+.trail-section-body label { font-size: 12px; font-weight: 600; color: #444; display: block; margin-bottom: 2px; }
+.trail-section-body label small { font-weight: 400; color: #777; }
+.trail-section-body input[type=text],
+.trail-section-body input[type=url],
+.trail-section-body input[type=email],
+.trail-section-body input[type=tel],
+.trail-section-body input[type=datetime-local],
+.trail-section-body textarea { width: 100%; padding: 6px 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; background: #fafafa; }
+.trail-section-body textarea { resize: vertical; min-height: 80px; }
+.trail-section-body input:focus,
+.trail-section-body textarea:focus { border-color: #2271b1; outline: none; background: #fff; }
+.trail-section-body hr { border: none; border-top: 1px solid #eee; margin: 4px 0; }
+.trail-section-body .inline { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 400; }
+
+.trail-section-body .two-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+
+/* Épreuves, partenaires etc. */
+.trail-epreuve, .trail-partenaire, .trail-resultat, .trail-album {
+  background: #f9f9f9; border: 1px solid #e5e5e5; border-radius: 5px; padding: 12px; display: flex; flex-direction: column; gap: 8px; position: relative;
+}
+.epreuve-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+.trail-resultat, .trail-album { flex-direction: row; align-items: center; gap: 8px; }
+.trail-partenaire { gap: 6px; }
+
+.trail-btn-remove-ep, .trail-btn-remove-p, .trail-btn-remove-r,
+.trail-btn-remove-a, .trail-btn-remove-photo { background: none; border: none; color: #cc1818; cursor: pointer; font-size: 16px; padding: 0 4px; line-height: 1; }
+
+/* Galerie */
+.galerie-photos-list { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+.galerie-photo { display: flex; flex-direction: column; align-items: center; gap: 4px; background: #f5f5f5; border-radius: 4px; padding: 6px; width: 110px; }
+.galerie-photo input[type=text] { width: 100%; font-size: 11px; }
+
+/* Media field */
+.media-field { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.media-preview { height: 50px; width: auto; border-radius: 4px; object-fit: cover; }
+
+/* Ajouter section */
+.trail-add-section { display: flex; gap: 10px; align-items: center; margin-top: 8px; }
+.trail-add-section select { flex: 1; padding: 6px 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; }
+
+/* Sortable placeholder */
+.ui-sortable-helper { opacity: 0.85; box-shadow: 0 8px 24px rgba(0,0,0,.15); }
+.ui-sortable-placeholder { border: 2px dashed #2271b1; background: #f0f6fc; border-radius: 6px; height: 60px; }
