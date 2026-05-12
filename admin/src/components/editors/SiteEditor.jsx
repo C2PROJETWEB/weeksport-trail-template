@@ -1,0 +1,284 @@
+import { useState, useEffect } from 'react'
+import { getSite, saveSite, uploadImage, imageUrl } from '../../lib/sanity.js'
+
+export default function SiteEditor() {
+  const [site, setSite] = useState(null)
+  const [form, setForm] = useState({})
+  const [saving, setSaving] = useState(false)
+  const [saved, setSaved] = useState(false)
+  const [uploading, setUploading] = useState(false)
+
+  // Événements footer
+  const [evenementsTrail, setEvenementsTrail] = useState([])
+  const [autresEvenements, setAutresEvenements] = useState([])
+  const [savingEvents, setSavingEvents] = useState(false)
+  const [savedEvents, setSavedEvents] = useState(false)
+
+  useEffect(() => {
+    getSite().then(data => {
+      setSite(data)
+      setForm({
+        heroTitre: data?.heroTitre || '',
+        heroDate: data?.heroDate || '',
+        heroCTA: data?.heroCTA || '',
+        heroCTAUrl: data?.heroCTAUrl || '',
+        metaDescription: data?.metaDescription || '',
+      })
+      setEvenementsTrail(data?.evenementsTrail || [])
+      setAutresEvenements(data?.autresEvenements || [])
+    })
+  }, [])
+
+  async function handlePhoto(e) {
+    const file = e.target.files[0]
+    if (!file) return
+    setUploading(true)
+    try {
+      const asset = await uploadImage(file)
+      await saveSite(site._id, { heroImage: { _type: 'image', asset: { _type: 'reference', _ref: asset._id } } })
+      setSite(prev => ({ ...prev, heroImage: { _type: 'image', asset: { _ref: asset._id } } }))
+    } finally {
+      setUploading(false)
+    }
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault()
+    setSaving(true)
+    await saveSite(site._id, form)
+    setSaving(false)
+    setSaved(true)
+    setTimeout(() => setSaved(false), 3000)
+  }
+
+  async function handleSaveEvents() {
+    setSavingEvents(true)
+    try {
+      await saveSite(site._id, { evenementsTrail, autresEvenements })
+      setSavedEvents(true)
+      setTimeout(() => setSavedEvents(false), 3000)
+    } catch (err) {
+      alert('❌ Erreur : ' + err.message)
+    } finally {
+      setSavingEvents(false)
+    }
+  }
+
+  function makeEventHandlers(list, setList) {
+    return {
+      add() {
+        setList(p => [...p, { _key: Math.random().toString(36).slice(2), nom: '', url: '' }])
+      },
+      remove(i) {
+        setList(p => p.filter((_, idx) => idx !== i))
+      },
+      update(i, k, v) {
+        setList(p => p.map((e, idx) => idx === i ? { ...e, [k]: v } : e))
+      },
+      async uploadLogo(i, file) {
+        const asset = await uploadImage(file)
+        setList(p => p.map((e, idx) => idx === i
+          ? { ...e, logo: { _type: 'image', asset: { _type: 'reference', _ref: asset._id } } }
+          : e))
+      }
+    }
+  }
+
+  const trail = makeEventHandlers(evenementsTrail, setEvenementsTrail)
+  const autres = makeEventHandlers(autresEvenements, setAutresEvenements)
+
+  if (!site) return <Skeleton />
+
+  const heroSrc = site.heroImage?.asset ? imageUrl(site.heroImage.asset) : site.heroImageUrl
+
+  return (
+    <div className="space-y-6">
+      <h2 className="text-xl font-bold text-slate-800">Page d'accueil</h2>
+
+      {/* Photo */}
+      <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+        <label className="block text-sm font-semibold text-slate-700 mb-3">Photo d'en-tête</label>
+        {heroSrc && (
+          <img src={heroSrc} alt="En-tête" className="w-full h-48 object-cover rounded-lg mb-4" />
+        )}
+        <label className={`flex items-center justify-center gap-2 cursor-pointer border-2 border-dashed border-slate-300 rounded-lg p-4 hover:border-blue-400 hover:bg-blue-50 transition ${uploading ? 'opacity-60 pointer-events-none' : ''}`}>
+          <span className="text-slate-500 text-sm">{uploading ? '⏳ Téléchargement…' : '📷 Choisir une photo'}</span>
+          <input type="file" accept="image/*" className="hidden" onChange={handlePhoto} />
+        </label>
+      </div>
+
+      {/* Form */}
+      <form onSubmit={handleSubmit} className="bg-white rounded-xl p-6 shadow-sm border border-slate-200 space-y-5">
+        <Field label="Titre principal" hint="Ex: Trail du Lac de Villerest">
+          <input
+            type="text"
+            value={form.heroTitre}
+            onChange={e => setForm(p => ({ ...p, heroTitre: e.target.value }))}
+            className="input"
+          />
+        </Field>
+
+        <Field label="Date de l'événement" hint="Ex: 29 août 2026">
+          <input
+            type="text"
+            value={form.heroDate}
+            onChange={e => setForm(p => ({ ...p, heroDate: e.target.value }))}
+            className="input"
+          />
+        </Field>
+
+        <Field label="Texte du bouton d'inscription" hint="Ex: S'inscrire maintenant">
+          <input
+            type="text"
+            value={form.heroCTA}
+            onChange={e => setForm(p => ({ ...p, heroCTA: e.target.value }))}
+            className="input"
+          />
+        </Field>
+
+        <Field label="Lien du bouton d'inscription" hint="URL complète vers le formulaire d'inscription">
+          <input
+            type="url"
+            value={form.heroCTAUrl}
+            onChange={e => setForm(p => ({ ...p, heroCTAUrl: e.target.value }))}
+            className="input"
+            placeholder="https://..."
+          />
+        </Field>
+
+        <Field label="Description SEO" hint="Texte affiché dans Google (160 caractères max)">
+          <textarea
+            value={form.metaDescription}
+            onChange={e => setForm(p => ({ ...p, metaDescription: e.target.value }))}
+            rows={2}
+            maxLength={160}
+            className="input resize-none"
+          />
+        </Field>
+
+        <SaveBtn saving={saving} saved={saved} />
+      </form>
+
+      {/* ── Événements footer ── */}
+      <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+        <div className="bg-slate-50 border-b border-slate-200 px-6 py-4">
+          <h3 className="font-semibold text-slate-700">🎪 Événements dans le footer</h3>
+          <p className="text-xs text-slate-400 mt-0.5">Logos avec liens affichés en bas de page</p>
+        </div>
+        <div className="p-6 space-y-6">
+
+          {/* Trail */}
+          <div>
+            <p className="text-sm font-semibold text-slate-700 mb-3">Nos événements Trail</p>
+            <div className="space-y-3 mb-3">
+              {evenementsTrail.map((ev, i) => (
+                <EventRow key={ev._key || i} ev={ev}
+                  onNom={v => trail.update(i, 'nom', v)}
+                  onUrl={v => trail.update(i, 'url', v)}
+                  onRemove={() => trail.remove(i)}
+                  onLogo={f => trail.uploadLogo(i, f)} />
+              ))}
+            </div>
+            <button type="button" onClick={trail.add}
+              className="w-full py-2 border-2 border-dashed border-slate-300 rounded-lg text-slate-500 hover:border-blue-400 text-sm transition">
+              + Ajouter un événement trail
+            </button>
+          </div>
+
+          <hr className="border-slate-100" />
+
+          {/* Autres */}
+          <div>
+            <p className="text-sm font-semibold text-slate-700 mb-3">Nos autres événements</p>
+            <div className="space-y-3 mb-3">
+              {autresEvenements.map((ev, i) => (
+                <EventRow key={ev._key || i} ev={ev}
+                  onNom={v => autres.update(i, 'nom', v)}
+                  onUrl={v => autres.update(i, 'url', v)}
+                  onRemove={() => autres.remove(i)}
+                  onLogo={f => autres.uploadLogo(i, f)} />
+              ))}
+            </div>
+            <button type="button" onClick={autres.add}
+              className="w-full py-2 border-2 border-dashed border-slate-300 rounded-lg text-slate-500 hover:border-blue-400 text-sm transition">
+              + Ajouter un autre événement
+            </button>
+          </div>
+
+          <button type="button" onClick={handleSaveEvents} disabled={savingEvents}
+            className={`w-full py-3 rounded-lg font-semibold text-white transition ${
+              savedEvents ? 'bg-green-500' : savingEvents ? 'bg-slate-400' : 'bg-blue-600 hover:bg-blue-700'
+            }`}>
+            {savedEvents ? '✅ Enregistré !' : savingEvents ? 'Enregistrement…' : 'Enregistrer les événements'}
+          </button>
+        </div>
+      </div>
+
+    </div>
+  )
+}
+
+function EventRow({ ev, onNom, onUrl, onRemove, onLogo }) {
+  const [uploading, setUploading] = useState(false)
+  const logoSrc = ev.logo?.asset ? imageUrl(ev.logo.asset) : (ev.logoUrl || null)
+
+  async function handleFile(e) {
+    const file = e.target.files[0]; if (!file) return
+    setUploading(true)
+    await onLogo(file)
+    setUploading(false)
+  }
+
+  return (
+    <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 space-y-2">
+      <div className="flex gap-2 items-center">
+        <input type="text" placeholder="Nom de l'événement" value={ev.nom || ''} onChange={e => onNom(e.target.value)} className="input flex-1" />
+        <button type="button" onClick={onRemove} className="text-red-400 hover:text-red-600 text-xl px-1 shrink-0">×</button>
+      </div>
+      <input type="url" placeholder="https://site-evenement.fr" value={ev.url || ''} onChange={e => onUrl(e.target.value)} className="input" />
+      <div className="flex items-center gap-3">
+        {logoSrc && <img src={logoSrc} className="h-10 w-auto object-contain rounded" />}
+        <label className={`flex items-center gap-1.5 cursor-pointer border border-slate-300 rounded px-3 py-1.5 hover:border-blue-400 text-xs text-slate-500 transition ${uploading ? 'opacity-60 pointer-events-none' : ''}`}>
+          {uploading ? '⏳…' : '🖼️ Logo'}
+          <input type="file" accept="image/*" className="hidden" onChange={handleFile} />
+        </label>
+      </div>
+    </div>
+  )
+}
+
+function Field({ label, hint, children }) {
+  return (
+    <div>
+      <label className="block text-sm font-semibold text-slate-700 mb-1">{label}</label>
+      {hint && <p className="text-xs text-slate-400 mb-2">{hint}</p>}
+      {children}
+    </div>
+  )
+}
+
+function SaveBtn({ saving, saved }) {
+  return (
+    <button
+      type="submit"
+      disabled={saving}
+      className={`w-full py-3 rounded-lg font-semibold text-white transition ${
+        saved ? 'bg-green-500' : saving ? 'bg-slate-400' : 'bg-blue-600 hover:bg-blue-700'
+      }`}
+    >
+      {saved ? '✅ Enregistré !' : saving ? 'Enregistrement…' : 'Enregistrer les modifications'}
+    </button>
+  )
+}
+
+function Skeleton() {
+  return (
+    <div className="space-y-4 animate-pulse">
+      <div className="h-8 bg-slate-200 rounded w-48" />
+      <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200 space-y-4">
+        <div className="h-48 bg-slate-200 rounded-lg" />
+        <div className="h-10 bg-slate-200 rounded" />
+      </div>
+    </div>
+  )
+}

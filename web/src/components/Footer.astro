@@ -91,6 +91,77 @@ const otherItems = nav?.items?.filter((item: any) => !item.sousMenu?.length) || 
     </div>
   </div>
 
+  <!-- ── Événements partenaires ── -->
+  {((site?.evenementsTrail?.length > 0) || (site?.autresEvenements?.length > 0)) && (
+    <div style="border-top: 1px solid rgba(255,255,255,0.07)">
+      <div class="max-w-7xl mx-auto px-6 md:px-12 py-12 grid md:grid-cols-2 gap-10">
+
+        {site?.evenementsTrail?.length > 0 && (
+          <div>
+            <p class="text-xs font-bold uppercase tracking-[0.25em] mb-6" style="color: rgba(255,255,255,0.25)">
+              Nos événements Trail
+            </p>
+            <div class="flex flex-wrap items-center gap-6">
+              {(site.evenementsTrail as any[]).map((ev: any) => {
+                const src = ev.logo ? urlFor(ev.logo).height(80).url() : (ev.logoUrl || null)
+                return src ? (
+                  <a href={ev.url || '#'} target={ev.url ? '_blank' : undefined} rel="noopener"
+                    title={ev.nom || ''}
+                    class="transition-all duration-300 opacity-40 hover:opacity-100"
+                    style="filter: grayscale(100%); hover:filter: grayscale(0%)"
+                    onmouseover="this.style.filter='grayscale(0%)'; this.style.opacity='1'"
+                    onmouseout="this.style.filter='grayscale(100%)'; this.style.opacity='0.4'">
+                    <img src={src} alt={ev.nom || ''} class="h-10 w-auto object-contain max-w-[120px]" loading="lazy" />
+                  </a>
+                ) : (
+                  <a href={ev.url || '#'} target={ev.url ? '_blank' : undefined} rel="noopener"
+                    class="text-sm font-semibold transition-colors"
+                    style="color: rgba(255,255,255,0.3)"
+                    onmouseover="this.style.color='white'"
+                    onmouseout="this.style.color='rgba(255,255,255,0.3)'">
+                    {ev.nom}
+                  </a>
+                )
+              })}
+            </div>
+          </div>
+        )}
+
+        {site?.autresEvenements?.length > 0 && (
+          <div>
+            <p class="text-xs font-bold uppercase tracking-[0.25em] mb-6" style="color: rgba(255,255,255,0.25)">
+              Nos autres événements
+            </p>
+            <div class="flex flex-wrap items-center gap-6">
+              {(site.autresEvenements as any[]).map((ev: any) => {
+                const src = ev.logo ? urlFor(ev.logo).height(80).url() : (ev.logoUrl || null)
+                return src ? (
+                  <a href={ev.url || '#'} target={ev.url ? '_blank' : undefined} rel="noopener"
+                    title={ev.nom || ''}
+                    class="transition-all duration-300 opacity-40 hover:opacity-100"
+                    onmouseover="this.style.filter='grayscale(0%)'; this.style.opacity='1'"
+                    onmouseout="this.style.filter='grayscale(100%)'; this.style.opacity='0.4'"
+                    style="filter: grayscale(100%)">
+                    <img src={src} alt={ev.nom || ''} class="h-10 w-auto object-contain max-w-[120px]" loading="lazy" />
+                  </a>
+                ) : (
+                  <a href={ev.url || '#'} target={ev.url ? '_blank' : undefined} rel="noopener"
+                    class="text-sm font-semibold transition-colors"
+                    style="color: rgba(255,255,255,0.3)"
+                    onmouseover="this.style.color='white'"
+                    onmouseout="this.style.color='rgba(255,255,255,0.3)'">
+                    {ev.nom}
+                  </a>
+                )
+              })}
+            </div>
+          </div>
+        )}
+
+      </div>
+    </div>
+  )}
+
   <!-- ── Bottom bar ── -->
   <div style="border-top: 1px solid rgba(255,255,255,0.05)">
     <div class="max-w-7xl mx-auto px-6 md:px-12 py-5 flex flex-col md:flex-row items-center justify-between gap-3">

@@ -101,6 +101,44 @@ export default {
       type: 'text',
       rows: 2,
       description: 'Texte affiché dans les résultats Google (160 caractères max)'
+    },
+    {
+      name: 'evenementsTrail',
+      title: 'Événements Trail (footer)',
+      type: 'array',
+      description: 'Logos affichés dans le footer — "Nos événements Trail"',
+      of: [{
+        type: 'object',
+        fields: [
+          { name: 'nom', title: 'Nom', type: 'string' },
+          { name: 'logo', title: 'Logo (upload)', type: 'image', options: { hotspot: true } },
+          { name: 'logoUrl', title: 'Logo URL externe', type: 'url', description: 'Si pas d\'upload' },
+          { name: 'url', title: 'Lien vers le site', type: 'url' }
+        ],
+        preview: {
+          select: { title: 'nom', media: 'logo' },
+          prepare({ title, media }) { return { title: title || 'Événement trail', media } }
+        }
+      }]
+    },
+    {
+      name: 'autresEvenements',
+      title: 'Autres événements (footer)',
+      type: 'array',
+      description: 'Logos affichés dans le footer — "Nos autres événements"',
+      of: [{
+        type: 'object',
+        fields: [
+          { name: 'nom', title: 'Nom', type: 'string' },
+          { name: 'logo', title: 'Logo (upload)', type: 'image', options: { hotspot: true } },
+          { name: 'logoUrl', title: 'Logo URL externe', type: 'url', description: 'Si pas d\'upload' },
+          { name: 'url', title: 'Lien vers le site', type: 'url' }
+        ],
+        preview: {
+          select: { title: 'nom', media: 'logo' },
+          prepare({ title, media }) { return { title: title || 'Autre événement', media } }
+        }
+      }]
     }
   ],
   preview: {

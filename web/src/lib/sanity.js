@@ -15,7 +15,9 @@ export async function getSite(siteSlug) {
   return client.fetch(
     `*[_type == "site" && slug.current == $slug][0]{
       name, slug, logo, logoUrl, favicon, couleurPrimaire, couleurSecondaire,
-      heroImage, heroImageUrl, heroTitre, heroDate, heroCTA, heroCTAUrl, metaDescription
+      heroImage, heroImageUrl, heroTitre, heroDate, heroCTA, heroCTAUrl, metaDescription,
+      evenementsTrail[]{ nom, logo, logoUrl, url },
+      autresEvenements[]{ nom, logo, logoUrl, url }
     }`,
     { slug: siteSlug }
   )
