@@ -1,0 +1,15 @@
+{
+  "_type": "page",
+  "_id": "page-villerest-contact",
+  "site": { "_type": "reference", "_ref": "site-villerest" },
+  "title": "Contact",
+  "slug": { "_type": "slug", "current": "contact" },
+  "sections": [
+    {
+      "_type": "sectionContact",
+      "_key": "contact",
+      "titre": "Contact",
+      "email": "contact@traildulacdevillerest.com"
+    }
+  ]
+}

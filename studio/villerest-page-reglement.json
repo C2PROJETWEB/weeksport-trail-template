@@ -1,0 +1,36 @@
+{
+  "_type": "page",
+  "_id": "page-villerest-reglement",
+  "site": { "_type": "reference", "_ref": "site-villerest" },
+  "title": "Règlement",
+  "slug": { "_type": "slug", "current": "reglement" },
+  "sections": [
+    {
+      "_type": "sectionTexte",
+      "_key": "content",
+      "titre": "Règlement des épreuves",
+      "contenu": [
+        {
+          "_type": "block", "_key": "b1", "style": "normal",
+          "children": [{ "_type": "span", "_key": "s1", "text": "Pour garantir la sécurité, l'équité et le plaisir de tous les participants, nous avons établi un règlement clair et précis pour chaque course." }]
+        },
+        {
+          "_type": "block", "_key": "b2", "style": "normal",
+          "children": [{ "_type": "span", "_key": "s2", "text": "Nous vous invitons à lire attentivement les règles suivantes afin de vous préparer au mieux et de profiter pleinement de cette journée exceptionnelle." }]
+        },
+        {
+          "_type": "block", "_key": "b3", "style": "normal",
+          "children": [{ "_type": "span", "_key": "s3", "text": "Ce règlement couvre tous les aspects essentiels, y compris les inscriptions, les équipements obligatoires, le balisage des parcours, les consignes de sécurité, les points de ravitaillement, et les mesures à suivre en cas d'urgence. Il vise à assurer que chaque coureur et randonneur puisse vivre une expérience mémorable et sécurisée." }]
+        },
+        {
+          "_type": "block", "_key": "b4", "style": "normal",
+          "children": [{ "_type": "span", "_key": "s4", "text": "Merci de respecter ces règles et de contribuer à la réussite de cet événement. Nous vous souhaitons une excellente course et un agréable moment en notre compagnie !" }]
+        },
+        {
+          "_type": "block", "_key": "b5", "style": "normal",
+          "children": [{ "_type": "span", "_key": "s5", "text": "📄 Télécharger le règlement complet (PDF) : drive.google.com/file/d/1AKFpJWjROdE8RdwaIPLc_SF7pfbC-SVY/view" }]
+        }
+      ]
+    }
+  ]
+}

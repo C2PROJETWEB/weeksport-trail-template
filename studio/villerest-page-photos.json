@@ -1,0 +1,28 @@
+{
+  "_type": "page",
+  "_id": "page-villerest-photos",
+  "site": { "_type": "reference", "_ref": "site-villerest" },
+  "title": "Photos",
+  "slug": { "_type": "slug", "current": "photos" },
+  "sections": [
+    {
+      "_type": "sectionPhotos",
+      "_key": "photos",
+      "titre": "Photos",
+      "annees": [
+        {
+          "_key": "ph1",
+          "annee": "2025",
+          "lien": "https://lightroom.adobe.com/shares/6639a9bb55fd4aedaa898bda43711fa6",
+          "imageUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/06/96-DSC_5869-3-scaled.jpg"
+        },
+        {
+          "_key": "ph2",
+          "annee": "2024",
+          "lien": "https://lightroom.adobe.com/shares/83b762c5f16c4f8d8b1384b0a4264873",
+          "imageUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/06/27-DSC_5981-3-scaled.jpg"
+        }
+      ]
+    }
+  ]
+}

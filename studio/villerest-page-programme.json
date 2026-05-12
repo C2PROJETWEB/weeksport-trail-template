@@ -1,0 +1,59 @@
+{
+  "_type": "page",
+  "_id": "page-villerest-programme",
+  "site": { "_type": "reference", "_ref": "site-villerest" },
+  "title": "Programme",
+  "slug": { "_type": "slug", "current": "programme" },
+  "sections": [
+    {
+      "_type": "sectionProgramme",
+      "_key": "programme",
+      "titre": "Le Programme",
+      "imageUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/06/480404509_122241073118029668_5787727259649602823_n.jpg",
+      "contenu": [
+        {
+          "_type": "block",
+          "_key": "p1",
+          "style": "normal",
+          "children": [{ "_type": "span", "_key": "s1", "text": "● 13h00 – Ouverture du Village Trail / retrait des dossards" }]
+        },
+        {
+          "_type": "block",
+          "_key": "p2",
+          "style": "normal",
+          "children": [{ "_type": "span", "_key": "s2", "text": "● 15h00 – Départ Trail 42 km, 1250m D+" }]
+        },
+        {
+          "_type": "block",
+          "_key": "p3",
+          "style": "normal",
+          "children": [{ "_type": "span", "_key": "s3", "text": "● 16h00 – Départ Courses Enfants" }]
+        },
+        {
+          "_type": "block",
+          "_key": "p4",
+          "style": "normal",
+          "children": [{ "_type": "span", "_key": "s4", "text": "● 16h30 – Départ Trail 30 km, 650m D+" }]
+        },
+        {
+          "_type": "block",
+          "_key": "p5",
+          "style": "normal",
+          "children": [{ "_type": "span", "_key": "s5", "text": "● 18h00 – Départ Trail 15 km, 350m D+ / Rando 15 km" }]
+        },
+        {
+          "_type": "block",
+          "_key": "p6",
+          "style": "normal",
+          "children": [{ "_type": "span", "_key": "s6", "text": "● 19h30 – Départ Trail 9 km, 190m D+ / Rando 9 km" }]
+        },
+        {
+          "_type": "block",
+          "_key": "p7",
+          "style": "normal",
+          "children": [{ "_type": "span", "_key": "s7", "text": "● Dès 20h30 – Podium, récompenses et soirée musicale" }]
+        }
+      ]
+    }
+  ]
+}

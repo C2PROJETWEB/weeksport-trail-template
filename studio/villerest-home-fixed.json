@@ -1,0 +1,71 @@
+{
+  "_type": "page",
+  "_id": "page-villerest-home",
+  "site": {
+    "_type": "reference",
+    "_ref": "site-villerest"
+  },
+  "titre": "Accueil",
+  "slug": {
+    "_type": "slug",
+    "current": "accueil"
+  },
+  "sections": [
+    {
+      "_type": "sectionTexte",
+      "_key": "intro",
+      "titre": "Le Trail du Lac",
+      "contenu": [
+        {
+          "_type": "block",
+          "_key": "b1",
+          "style": "normal",
+          "children": [
+            {
+              "_type": "span",
+              "_key": "s1",
+              "text": "Bienvenue sur le Trail du Lac de Villerest, une course nature exceptionnelle sur les bords du lac artificiel de Villerest dans la Loire. Profitez de paysages uniques entre forêts et plans d'eau."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_type": "sectionEpreuves",
+      "_key": "epreuves",
+      "titre": "Les Épreuves",
+      "epreuves": [
+        {
+          "_type": "epreuve",
+          "_key": "e1",
+          "nom": "Trail Court",
+          "distance": "12 km",
+          "denivele": "+350 m",
+          "description": "Parcours accessible, idéal pour les débutants et les familles."
+        },
+        {
+          "_type": "epreuve",
+          "_key": "e2",
+          "nom": "Trail Long",
+          "distance": "23 km",
+          "denivele": "+700 m",
+          "description": "Le grand tour du lac avec des vues panoramiques exceptionnelles."
+        },
+        {
+          "_type": "epreuve",
+          "_key": "e3",
+          "nom": "Ultra Trail",
+          "distance": "42 km",
+          "denivele": "+1400 m",
+          "description": "Le défi ultime pour les traileurs confirmés."
+        }
+      ]
+    },
+    {
+      "_type": "sectionContact",
+      "_key": "contact",
+      "titre": "Contact",
+      "email": "contact@traildulacdevillerest.com"
+    }
+  ]
+}

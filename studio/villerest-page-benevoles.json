@@ -1,0 +1,17 @@
+{
+  "_type": "page",
+  "_id": "page-villerest-benevoles",
+  "site": { "_type": "reference", "_ref": "site-villerest" },
+  "title": "Bénévoles",
+  "slug": { "_type": "slug", "current": "benevoles" },
+  "sections": [
+    {
+      "_type": "sectionBenevoles",
+      "_key": "benevoles",
+      "titre": "Devenir Bénévole",
+      "description": "Les bénévoles sont au cœur de l'organisation et jouent un rôle essentiel dans le succès du Trail du Lac de Villerest depuis sa création. Grâce à leur dévouement, les participants peuvent vivre une expérience exceptionnelle dans des conditions optimales. Envie de rejoindre notre équipe et de partager un moment de convivialité et de sportivité ?",
+      "lienInscription": "https://docs.google.com/forms/d/e/1FAIpQLSeDKKm8z7TXIln73TygVIFX_Mw_VCjVgGMlHHm3krf6HvhhwA/viewform?usp=header",
+      "imageUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/06/1-DSC_5800-1-scaled.jpg"
+    }
+  ]
+}

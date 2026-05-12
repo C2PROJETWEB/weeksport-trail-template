@@ -3,13 +3,13 @@
   "_id": "site-villerest",
   "name": "Trail du Lac de Villerest",
   "slug": { "_type": "slug", "current": "villerest" },
-  "couleurPrimaire": "#E63946",
-  "couleurSecondaire": "#1D3557",
+  "couleurPrimaire": "#d69a2c",
+  "couleurSecondaire": "#421168",
   "heroTitre": "Trail du Lac\nde Villerest",
   "heroDate": "7 Novembre 2026",
   "heroCTA": "S'inscrire",
   "heroCTAUrl": "https://www.traildulacdevillerest.com",
-  "heroImageUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/06/TRAIL-MARS-4.jpg",
+  "heroImageUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/06/96-DSC_5869-3-scaled.jpg",
   "logoUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/04/cropped-cropped-LOGO-SANS-FOND-TLV.png",
   "metaDescription": "Trail du Lac de Villerest — Course de trail nature autour du lac de Villerest dans la Loire. 7 Novembre 2026."
 }

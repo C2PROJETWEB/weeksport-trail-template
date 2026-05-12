@@ -1,0 +1,22 @@
+{
+  "_type": "page",
+  "_id": "page-villerest-resultats",
+  "site": { "_type": "reference", "_ref": "site-villerest" },
+  "title": "Résultats",
+  "slug": { "_type": "slug", "current": "resultats" },
+  "sections": [
+    {
+      "_type": "sectionResultats",
+      "_key": "resultats",
+      "titre": "Résultats",
+      "annees": [
+        { "_key": "r1", "annee": "2025", "lien": "https://www.chronopuces.fr/chrono/?id_course=313" },
+        { "_key": "r2", "annee": "2024", "lien": "https://www.chronopuces.fr/chrono/?id_course=265" },
+        { "_key": "r3", "annee": "2023", "lien": "https://www.chronopuces.fr/chrono/?id_course=221" },
+        { "_key": "r4", "annee": "2022", "lien": "https://www.chronopuces.fr/chrono/?id_course=178" },
+        { "_key": "r5", "annee": "2021", "lien": "https://www.chronopuces.fr/chrono/?id_course=123" },
+        { "_key": "r6", "annee": "2019", "lien": "https://www.chronopuces.fr/chrono/?id_course=80" }
+      ]
+    }
+  ]
+}

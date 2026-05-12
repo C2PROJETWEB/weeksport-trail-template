@@ -1,0 +1,62 @@
+{
+  "_type": "page",
+  "_id": "page-villerest-epreuves",
+  "site": { "_type": "reference", "_ref": "site-villerest" },
+  "title": "Les Épreuves",
+  "slug": { "_type": "slug", "current": "les-epreuves" },
+  "sections": [
+    {
+      "_type": "sectionEpreuves",
+      "_key": "epreuves",
+      "titre": "Les Épreuves",
+      "epreuves": [
+        {
+          "_key": "e1",
+          "nom": "La Run Night 9 km",
+          "distance": "9 km",
+          "denivele": "+190 m",
+          "description": "Une course nocturne accessible, idéale pour découvrir l'ambiance unique du Trail du Lac. Départ à 19h30.",
+          "imageUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/06/480459877_122241446324029668_5461854139180595990_n-768x512.jpg"
+        },
+        {
+          "_key": "e2",
+          "nom": "L'Échappée Nocturne 15 km",
+          "distance": "15 km",
+          "denivele": "+350 m",
+          "description": "Un parcours technique au bord du lac dans la nuit, disponible également en format Duo. Départ à 18h00.",
+          "imageUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/06/480577800_122241446552029668_8104256141153589286_n-768x512.jpg"
+        },
+        {
+          "_key": "e3",
+          "nom": "Le Grand-Duc 30 km",
+          "distance": "30 km",
+          "denivele": "+650 m",
+          "description": "Le grand tour du lac avec des vues panoramiques exceptionnelles sur les paysages de la Loire. Départ à 16h30.",
+          "imageUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/06/480518253_122241446486029668_88800317129125742_n-768x512.jpg"
+        },
+        {
+          "_key": "e4",
+          "nom": "Le Tour du Lac 42 km",
+          "distance": "42 km",
+          "denivele": "+1250 m",
+          "description": "Le défi ultime pour les traileurs confirmés. Le tour complet du lac de Villerest. Départ à 15h00.",
+          "imageUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/06/480533448_122241446036029668_7113542730657004974_n-768x512.jpg"
+        },
+        {
+          "_key": "e5",
+          "nom": "Course Enfants",
+          "distance": "1 km / 2 km",
+          "description": "Pour les 7-11 ans (1 km, départ 16h) et les 12-15 ans (2 km, départ 16h15). Pré-inscription gratuite. Frontale obligatoire, déguisement conseillé !",
+          "imageUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/06/60-DSC_5732-768x512.jpg"
+        },
+        {
+          "_key": "e6",
+          "nom": "Les Randonnées",
+          "distance": "9 km / 15 km",
+          "description": "Accessible à tous dès 6 ans. Partez dans le sillage des coureurs pour découvrir les parcours du Trail du Lac en mode randonnée. Départ à 18h00 ou 19h30.",
+          "imageUrl": "https://www.traildulacdevillerest.com/wp-content/uploads/2025/06/20-DSC_1243-scaled-1-768x512.jpg"
+        }
+      ]
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 import { defineConfig } from 'sanity'
 import { structureTool } from 'sanity/structure'
+import { presentationTool } from 'sanity/presentation'
 import { schemaTypes } from './schemas/index'
 
 // Raccourci : lien direct vers une page par son ID
@@ -16,6 +17,13 @@ export default defineConfig({
   dataset: 'production',
 
   plugins: [
+    presentationTool({
+      name: 'presentation',
+      title: '✏️ Éditeur visuel',
+      previewUrl: {
+        origin: 'https://weeksport-villerest.pages.dev',
+      },
+    }),
     structureTool({
       structure: (S) =>
         S.list()
@@ -116,4 +124,19 @@ export default defineConfig({
   },
 
   tools: (prev) => prev.filter((tool) => tool.name !== 'releases'),
+
+  i18n: {
+    bundles: [
+      {
+        locale: 'en-US',
+        namespace: 'sanity',
+        resources: {
+          'release.chip.draft': 'Faire des modifications',
+          'release.navbar.drafts': 'Faire des modifications',
+          'release.chip.global.drafts': 'Faire des modifications',
+          'buttons.draft.text': 'Faire des modifications',
+        },
+      },
+    ],
+  },
 })
