@@ -2,6 +2,7 @@
 import '../styles/global.css'
 import Header from '../components/Header.astro'
 import Footer from '../components/Footer.astro'
+import { urlFor } from '../lib/sanity'
 
 const { site, nav, title, description } = Astro.props
 const primaryColor = site?.couleurPrimaire || '#E63946'
@@ -12,6 +13,11 @@ const hex = primaryColor.replace('#','')
 const r = parseInt(hex.substring(0,2),16)
 const g = parseInt(hex.substring(2,4),16)
 const b = parseInt(hex.substring(4,6),16)
+
+// Favicon
+const faviconUrl = site?.favicon
+  ? urlFor(site.favicon).width(64).url()
+  : '/favicon.ico'
 ---
 <!DOCTYPE html>
 <html lang="fr">
@@ -20,6 +26,8 @@ const b = parseInt(hex.substring(4,6),16)
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{title || site?.name}</title>
   <meta name="description" content={description || site?.metaDescription || ''} />
+  <link rel="icon" href={faviconUrl} />
+  <link rel="shortcut icon" href={faviconUrl} />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <style define:vars={{ primaryColor, secondaryColor, primaryRgb: `${r}, ${g}, ${b}` }}>

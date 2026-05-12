@@ -7,6 +7,8 @@ export default function SiteEditor() {
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const [uploading, setUploading] = useState(false)
+  const [faviconUploading, setFaviconUploading] = useState(false)
+  const [logoUploading, setLogoUploading] = useState(false)
 
   // Organisateur
   const [organisateur, setOrganisateur] = useState({})
@@ -34,6 +36,32 @@ export default function SiteEditor() {
       setAutresEvenements(data?.autresEvenements || [])
     })
   }, [])
+
+  async function handleFavicon(e) {
+    const file = e.target.files[0]
+    if (!file) return
+    setFaviconUploading(true)
+    try {
+      const asset = await uploadImage(file)
+      await saveSite(site._id, { favicon: { _type: 'image', asset: { _type: 'reference', _ref: asset._id } } })
+      setSite(prev => ({ ...prev, favicon: { _type: 'image', asset: { _ref: asset._id } } }))
+    } finally {
+      setFaviconUploading(false)
+    }
+  }
+
+  async function handleLogo(e) {
+    const file = e.target.files[0]
+    if (!file) return
+    setLogoUploading(true)
+    try {
+      const asset = await uploadImage(file)
+      await saveSite(site._id, { logo: { _type: 'image', asset: { _type: 'reference', _ref: asset._id } } })
+      setSite(prev => ({ ...prev, logo: { _type: 'image', asset: { _ref: asset._id } } }))
+    } finally {
+      setLogoUploading(false)
+    }
+  }
 
   async function handlePhoto(e) {
     const file = e.target.files[0]
@@ -96,10 +124,50 @@ export default function SiteEditor() {
   if (!site) return <Skeleton />
 
   const heroSrc = site.heroImage?.asset ? imageUrl(site.heroImage.asset) : site.heroImageUrl
+  const logoSrc = site.logo?.asset ? imageUrl(site.logo.asset) : site.logoUrl
+  const faviconSrc = site.favicon?.asset ? imageUrl(site.favicon.asset) : null
 
   return (
     <div className="space-y-6">
       <h2 className="text-xl font-bold text-slate-800">Page d'accueil</h2>
+
+      {/* Logo + Favicon */}
+      <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+        <h3 className="text-sm font-semibold text-slate-700 mb-4">🎨 Identité visuelle</h3>
+        <div className="grid grid-cols-2 gap-6">
+
+          {/* Logo */}
+          <div>
+            <p className="text-xs font-semibold text-slate-600 mb-1">Logo du site</p>
+            <p className="text-xs text-slate-400 mb-3">Affiché dans le header et le footer</p>
+            {logoSrc && (
+              <div className="mb-3 p-3 bg-slate-800 rounded-lg flex items-center justify-center h-16">
+                <img src={logoSrc} alt="Logo" className="h-10 w-auto object-contain" />
+              </div>
+            )}
+            <label className={`flex items-center justify-center gap-2 cursor-pointer border-2 border-dashed border-slate-300 rounded-lg p-3 hover:border-blue-400 hover:bg-blue-50 transition text-sm text-slate-500 ${logoUploading ? 'opacity-60 pointer-events-none' : ''}`}>
+              {logoUploading ? '⏳ Upload…' : logoSrc ? '🔄 Changer' : '🖼️ Uploader'}
+              <input type="file" accept="image/*" className="hidden" onChange={handleLogo} />
+            </label>
+          </div>
+
+          {/* Favicon */}
+          <div>
+            <p className="text-xs font-semibold text-slate-600 mb-1">Favicon</p>
+            <p className="text-xs text-slate-400 mb-3">Icône dans l'onglet du navigateur</p>
+            {faviconSrc && (
+              <div className="mb-3 p-3 bg-slate-100 rounded-lg flex items-center justify-center h-16">
+                <img src={faviconSrc} alt="Favicon" className="h-10 w-10 object-contain" />
+              </div>
+            )}
+            <label className={`flex items-center justify-center gap-2 cursor-pointer border-2 border-dashed border-slate-300 rounded-lg p-3 hover:border-blue-400 hover:bg-blue-50 transition text-sm text-slate-500 ${faviconUploading ? 'opacity-60 pointer-events-none' : ''}`}>
+              {faviconUploading ? '⏳ Upload…' : faviconSrc ? '🔄 Changer' : '⭐ Uploader'}
+              <input type="file" accept="image/*,.ico" className="hidden" onChange={handleFavicon} />
+            </label>
+          </div>
+
+        </div>
+      </div>
 
       {/* Photo + Vidéo */}
       <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200 space-y-5">
