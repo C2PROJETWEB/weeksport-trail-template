@@ -603,13 +603,21 @@ function ResultatsSectionEditor({ section, saving, saved, error, onSave }) {
       <Field label="Titre"><input type="text" value={titre} onChange={e=>setTitre(e.target.value)} className="input" /></Field>
       <div className="space-y-3">
         {annees.map((a,i) => (
-          <div key={i} className="flex gap-3 items-center bg-slate-50 p-3 rounded-lg border border-slate-200">
-            <input type="text" placeholder="Année" value={a.annee||''} onChange={e=>update(i,'annee',e.target.value)} className="input w-24" />
-            <input type="url" placeholder="Lien vers les résultats" value={a.lien||''} onChange={e=>update(i,'lien',e.target.value)} className="input flex-1" />
-            <button type="button" onClick={() => setAnnees(p=>p.filter((_,idx)=>idx!==i))} className="text-red-400 hover:text-red-600 text-lg">×</button>
+          <div key={a._key||i} className="bg-slate-50 p-3 rounded-lg border border-slate-200 space-y-2">
+            <div className="flex gap-3 items-center">
+              <input type="text" placeholder="Année (ex: 2025)" value={a.annee||''} onChange={e=>update(i,'annee',e.target.value)} className="input w-28 font-bold" />
+              <button type="button" onClick={() => setAnnees(p=>p.filter((_,idx)=>idx!==i))} className="ml-auto text-red-400 hover:text-red-600 text-lg px-1">×</button>
+            </div>
+            <input
+              type="text"
+              placeholder="https://lien-vers-les-résultats.fr"
+              value={a.lien||''}
+              onChange={e=>update(i,'lien',e.target.value)}
+              className="input font-mono text-sm"
+            />
           </div>
         ))}
-        <button type="button" onClick={() => setAnnees(p=>[...p,{_key:Math.random().toString(36).slice(2),annee:'',lien:''}])}
+        <button type="button" onClick={() => setAnnees(p=>[...p,{_key:Math.random().toString(36).slice(2), _type:'anneeResultat', annee:'', lien:''}])}
           className="w-full py-2 border-2 border-dashed border-slate-300 rounded-lg text-slate-500 hover:border-blue-400 text-sm transition">
           + Ajouter une année
         </button>
@@ -634,12 +642,12 @@ function PhotosSectionEditor({ section, saving, saved, error, onSave }) {
       <Field label="Titre"><input type="text" value={titre} onChange={e=>setTitre(e.target.value)} className="input" /></Field>
       <div className="space-y-3">
         {annees.map((a,i) => (
-          <div key={i} className="bg-slate-50 p-3 rounded-lg border border-slate-200 space-y-2">
+          <div key={a._key||i} className="bg-slate-50 p-3 rounded-lg border border-slate-200 space-y-2">
             <div className="flex gap-3 items-center">
-              <input type="text" placeholder="Année" value={a.annee||''} onChange={e=>update(i,'annee',e.target.value)} className="input w-24" />
-              <input type="url" placeholder="Lien vers l'album" value={a.lien||''} onChange={e=>update(i,'lien',e.target.value)} className="input flex-1" />
-              <button type="button" onClick={() => setAnnees(p=>p.filter((_,idx)=>idx!==i))} className="text-red-400 hover:text-red-600 text-lg">×</button>
+              <input type="text" placeholder="Année (ex: 2025)" value={a.annee||''} onChange={e=>update(i,'annee',e.target.value)} className="input w-28 font-bold" />
+              <button type="button" onClick={() => setAnnees(p=>p.filter((_,idx)=>idx!==i))} className="ml-auto text-red-400 hover:text-red-600 text-lg">×</button>
             </div>
+            <input type="text" placeholder="https://lien-vers-l-album.fr" value={a.lien||''} onChange={e=>update(i,'lien',e.target.value)} className="input font-mono text-sm" />
             {a.image?.asset && <img src={imageUrl(a.image.asset)} className="w-full h-20 object-cover rounded" />}
             <label className="flex items-center gap-2 cursor-pointer border-2 border-dashed border-slate-300 rounded p-2 hover:border-blue-400 text-xs text-slate-500 transition">
               📷 Photo d'aperçu
