@@ -380,8 +380,6 @@ export default function SiteEditor() {
         </div>
       </div>
 
-    </div>
-
       {/* ── Documents partagés ── */}
       <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
         <div className="bg-slate-50 border-b border-slate-200 px-6 py-4">
