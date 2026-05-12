@@ -45,6 +45,6 @@ const heroBgUrl = page?.heroImage?.asset
         </div>
       </div>
     )}
-    <Sections sections={page.sections || []} raceTabs={raceTabs} currentSlug={slug} />
+    <Sections sections={page.sections || []} raceTabs={raceTabs} currentSlug={slug} documentsGlobaux={site?.documentsGlobaux || []} />
   </div>
 </BaseLayout>

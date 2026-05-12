@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { getPages, getPage, savePage, uploadImage, uploadFile, fileUrl, blocksToText, textToBlocks, imageUrl } from '../../lib/sanity.js'
+import { getPages, getPage, getSite, savePage, uploadImage, uploadFile, fileUrl, blocksToText, textToBlocks, imageUrl } from '../../lib/sanity.js'
 
 export default function PagesEditor() {
   const [pages, setPages] = useState(null)
@@ -319,6 +319,11 @@ function TextSectionEditor({ section, saving, saved, error, onSave }) {
   const [uploading, setUploading] = useState(false)
   const [documents, setDocuments] = useState(section.documents || [])
   const [docUploading, setDocUploading] = useState(false)
+  const [globalDocs, setGlobalDocs] = useState([])
+
+  useEffect(() => {
+    getSite().then(data => setGlobalDocs(data?.documentsGlobaux || []))
+  }, [])
 
   async function handleImageUpload(e) {
     const files = Array.from(e.target.files)
@@ -395,6 +400,21 @@ function TextSectionEditor({ section, saving, saved, error, onSave }) {
 
   function removeDoc(i) {
     setDocuments(prev => prev.filter((_, idx) => idx !== i))
+  }
+
+  function toggleGlobalDoc(doc) {
+    const idx = documents.findIndex(d => d._globalRef === doc._key)
+    if (idx >= 0) {
+      setDocuments(prev => prev.filter((_, i) => i !== idx))
+    } else {
+      setDocuments(prev => [...prev, {
+        _type: 'fichier',
+        _key: Math.random().toString(36).slice(2),
+        nom: doc.nom,
+        asset: doc.fichier?.asset,
+        _globalRef: doc._key
+      }])
+    }
   }
 
   return (
@@ -484,6 +504,32 @@ function TextSectionEditor({ section, saving, saved, error, onSave }) {
           {docUploading ? '⏳ Téléchargement…' : '📎 Ajouter des documents'}
           <input type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.csv,.txt,.zip" multiple className="hidden" onChange={handleDocUpload} />
         </label>
+
+        {globalDocs.length > 0 && (
+          <div className="border border-slate-200 rounded-lg overflow-hidden mt-1">
+            <div className="bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-600 border-b border-slate-200">
+              📚 Depuis la bibliothèque partagée
+            </div>
+            <div className="divide-y divide-slate-100">
+              {globalDocs.map(doc => {
+                const checked = documents.some(d => d._globalRef === doc._key)
+                return (
+                  <label key={doc._key} className="flex items-center gap-3 px-3 py-2 cursor-pointer hover:bg-blue-50 transition">
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      onChange={() => toggleGlobalDoc(doc)}
+                      className="w-4 h-4 rounded accent-blue-600"
+                    />
+                    <span className="text-sm text-slate-700">
+                      {docIcon(doc.fichier?.asset)} {doc.nom || 'Document'}
+                    </span>
+                  </label>
+                )
+              })}
+            </div>
+          </div>
+        )}
       </Field>
 
       {/* ── Boutons ── */}

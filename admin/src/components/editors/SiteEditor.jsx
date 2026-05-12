@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { getSite, saveSite, uploadImage, imageUrl } from '../../lib/sanity.js'
+import { getSite, saveSite, uploadImage, uploadFile, fileUrl, imageUrl } from '../../lib/sanity.js'
 
 export default function SiteEditor() {
   const [site, setSite] = useState(null)
@@ -20,6 +20,12 @@ export default function SiteEditor() {
   const [savingEvents, setSavingEvents] = useState(false)
   const [savedEvents, setSavedEvents] = useState(false)
 
+  // Documents partagés
+  const [documentsGlobaux, setDocumentsGlobaux] = useState([])
+  const [docGlobalUploading, setDocGlobalUploading] = useState(false)
+  const [savingDocs, setSavingDocs] = useState(false)
+  const [savedDocs, setSavedDocs] = useState(false)
+
   useEffect(() => {
     getSite().then(data => {
       setSite(data)
@@ -34,6 +40,7 @@ export default function SiteEditor() {
       setOrganisateur(data?.organisateur || {})
       setEvenementsTrail(data?.evenementsTrail || [])
       setAutresEvenements(data?.autresEvenements || [])
+      setDocumentsGlobaux(data?.documentsGlobaux || [])
     })
   }, [])
 
@@ -95,6 +102,43 @@ export default function SiteEditor() {
       alert('❌ Erreur : ' + err.message)
     } finally {
       setSavingEvents(false)
+    }
+  }
+
+  async function handleGlobalDocUpload(e) {
+    const files = Array.from(e.target.files)
+    if (!files.length) return
+    setDocGlobalUploading(true)
+    try {
+      const newDocs = [...documentsGlobaux]
+      for (const file of files) {
+        const asset = await uploadFile(file)
+        newDocs.push({
+          _type: 'object',
+          _key: Math.random().toString(36).slice(2),
+          nom: file.name.replace(/\.[^/.]+$/, ''),
+          fichier: { _type: 'file', asset: { _type: 'reference', _ref: asset._id } }
+        })
+      }
+      setDocumentsGlobaux(newDocs)
+      await saveSite(site._id, { documentsGlobaux: newDocs })
+    } catch (err) {
+      alert('❌ Erreur upload : ' + (err.message || 'Vérifiez votre connexion'))
+    } finally {
+      setDocGlobalUploading(false)
+    }
+  }
+
+  async function handleSaveDocs() {
+    setSavingDocs(true)
+    try {
+      await saveSite(site._id, { documentsGlobaux })
+      setSavedDocs(true)
+      setTimeout(() => setSavedDocs(false), 3000)
+    } catch (err) {
+      alert('❌ Erreur : ' + err.message)
+    } finally {
+      setSavingDocs(false)
     }
   }
 
@@ -337,7 +381,67 @@ export default function SiteEditor() {
       </div>
 
     </div>
+
+      {/* ── Documents partagés ── */}
+      <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+        <div className="bg-slate-50 border-b border-slate-200 px-6 py-4">
+          <h3 className="font-semibold text-slate-700">📎 Documents partagés</h3>
+          <p className="text-xs text-slate-400 mt-0.5">Uploadez vos documents ici une seule fois, puis sélectionnez-les sur chaque page</p>
+        </div>
+        <div className="p-6 space-y-3">
+          {documentsGlobaux.length > 0 && (
+            <div className="space-y-2">
+              {documentsGlobaux.map((doc, i) => (
+                <div key={doc._key || i} className="flex gap-2 items-center bg-slate-50 border border-slate-200 rounded-lg p-2">
+                  <span className="text-lg shrink-0">{docIcon(doc.fichier?.asset)}</span>
+                  <input
+                    type="text"
+                    value={doc.nom || ''}
+                    onChange={e => setDocumentsGlobaux(prev => prev.map((d, idx) => idx === i ? { ...d, nom: e.target.value } : d))}
+                    className="input flex-1 text-sm py-1"
+                    placeholder="Nom affiché"
+                  />
+                  {doc.fichier?.asset && (
+                    <a href={fileUrl(doc.fichier.asset)} target="_blank" rel="noopener"
+                      className="text-blue-500 text-xs hover:text-blue-700 px-1 shrink-0" title="Voir le fichier">↗</a>
+                  )}
+                  <button type="button"
+                    onClick={() => setDocumentsGlobaux(prev => prev.filter((_, idx) => idx !== i))}
+                    className="text-red-400 hover:text-red-600 text-xl leading-none shrink-0">×</button>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <label className={`flex items-center justify-center gap-2 cursor-pointer border-2 border-dashed border-slate-300 rounded-lg p-3 hover:border-blue-400 hover:bg-blue-50 transition text-sm text-slate-500 ${docGlobalUploading ? 'opacity-60 pointer-events-none' : ''}`}>
+            {docGlobalUploading ? '⏳ Téléchargement…' : '📎 Ajouter des documents'}
+            <input type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.csv,.txt,.zip" multiple className="hidden" onChange={handleGlobalDocUpload} />
+          </label>
+
+          {documentsGlobaux.length > 0 && (
+            <button type="button" onClick={handleSaveDocs} disabled={savingDocs}
+              className={`w-full py-3 rounded-lg font-semibold text-white transition ${
+                savedDocs ? 'bg-green-500' : savingDocs ? 'bg-slate-400' : 'bg-blue-600 hover:bg-blue-700'
+              }`}>
+              {savedDocs ? '✅ Enregistré !' : savingDocs ? 'Enregistrement…' : 'Enregistrer les noms'}
+            </button>
+          )}
+        </div>
+      </div>
+
+    </div>
   )
+}
+
+function docIcon(ref) {
+  if (!ref) return '📎'
+  const id = (ref._ref || ref || '').toLowerCase()
+  if (id.endsWith('-pdf')) return '📄'
+  if (id.endsWith('-docx') || id.endsWith('-doc')) return '📝'
+  if (id.endsWith('-xlsx') || id.endsWith('-xls') || id.endsWith('-csv')) return '📊'
+  if (id.endsWith('-pptx') || id.endsWith('-ppt')) return '📊'
+  if (id.endsWith('-zip') || id.endsWith('-rar')) return '📦'
+  return '📎'
 }
 
 function EventRow({ ev, onNom, onUrl, onRemove, onLogo }) {

@@ -158,6 +158,23 @@ export default {
         }
       }]
     }
+    {
+      name: 'documentsGlobaux',
+      title: 'Documents partagés',
+      type: 'array',
+      description: 'Documents téléchargeables disponibles pour toutes les pages',
+      of: [{
+        type: 'object',
+        fields: [
+          { name: 'nom', title: 'Nom affiché', type: 'string', validation: Rule => Rule.required() },
+          { name: 'fichier', title: 'Fichier', type: 'file' }
+        ],
+        preview: {
+          select: { title: 'nom' },
+          prepare({ title }) { return { title: title || 'Document' } }
+        }
+      }]
+    }
   ],
   preview: {
     select: { title: 'name', media: 'logo' }

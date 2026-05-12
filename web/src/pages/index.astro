@@ -13,5 +13,5 @@ const [site, nav, homePage] = await Promise.all([
 ---
 <BaseLayout site={site} nav={nav}>
   <Hero site={site} />
-  {homePage?.sections && <Sections sections={homePage.sections} />}
+  {homePage?.sections && <Sections sections={homePage.sections} documentsGlobaux={site?.documentsGlobaux || []} />}
 </BaseLayout>

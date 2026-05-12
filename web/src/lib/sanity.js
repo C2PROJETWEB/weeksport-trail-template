@@ -30,7 +30,8 @@ export async function getSite(siteSlug) {
       heroImage, heroImageUrl, heroVideoUrl, heroTitre, heroDate, heroCTA, heroCTAUrl, metaDescription,
       organisateur{ nom, logo, logoUrl, lien },
       evenementsTrail[]{ nom, logo, logoUrl, url },
-      autresEvenements[]{ nom, logo, logoUrl, url }
+      autresEvenements[]{ nom, logo, logoUrl, url },
+      documentsGlobaux[]{ _key, nom, "asset": fichier.asset }
     }`,
     { slug: siteSlug }
   )

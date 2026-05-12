@@ -1,7 +1,18 @@
 ---
 import { urlFor, fileUrl } from '../lib/sanity'
 import { toHTML } from '@portabletext/to-html'
-const { sections = [], raceTabs = null, currentSlug = '' } = Astro.props
+const { sections = [], raceTabs = null, currentSlug = '', documentsGlobaux = [] } = Astro.props
+
+// Résout les docs d'une section (locaux + références bibliothèque)
+function resolveDocs(sectionDocs: any[]) {
+  return (sectionDocs || []).map((doc: any) => {
+    if (doc._globalRef) {
+      const global = documentsGlobaux.find((d: any) => d._key === doc._globalRef)
+      return global ? { ...doc, ...global } : doc
+    }
+    return doc
+  }).filter((d: any) => d?.asset)
+}
 
 const toHTMLOptions = {
   components: {
@@ -60,7 +71,7 @@ sections.forEach((section: any, i: number) => {
 
           {/* ── Côte à côte ── */}
           {isSide && firstImg ? (
-            <div class={`flex flex-col gap-10 items-center md:flex-row${dispo === 'image_gauche' ? '' : '-reverse'}`}>
+            <div class={`flex flex-col gap-10 items-center ${dispo === 'image_gauche' ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
               <div class="w-full md:w-1/2 shrink-0">
                 <figure class="overflow-hidden rounded-xl shadow-md group">
                   <img src={urlFor(firstImg).width(900).height(620).url()} alt={firstImg.caption||''}
@@ -78,11 +89,10 @@ sections.forEach((section: any, i: number) => {
                     ))}
                   </div>
                 )}
-                {section.documents?.length > 0 && (
+                {resolveDocs(section.documents).length > 0 && (
                   <div class="mt-6 space-y-2">
-                    {(section.documents as any[]).map((doc: any) => {
-                      const url = doc.asset ? fileUrl(doc.asset) : null
-                      if (!url) return null
+                    {resolveDocs(section.documents).map((doc: any) => {
+                      const url = fileUrl(doc.asset)
                       return (
                         <a href={url} target="_blank" rel="noopener"
                           class="flex items-center gap-3 px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 hover:bg-gray-100 hover:border-gray-300 transition group text-sm font-medium text-gray-700">
