@@ -45,7 +45,8 @@ export default {
         { type: 'sectionBenevoles' },
         { type: 'sectionCompteur' },
         { type: 'sectionProgramme' },
-        { type: 'sectionPhotos' }
+        { type: 'sectionPhotos' },
+        { type: 'sectionPub' }
       ]
     }
   ],

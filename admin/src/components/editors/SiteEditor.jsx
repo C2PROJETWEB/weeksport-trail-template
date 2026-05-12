@@ -8,6 +8,10 @@ export default function SiteEditor() {
   const [saved, setSaved] = useState(false)
   const [uploading, setUploading] = useState(false)
 
+  // Organisateur
+  const [organisateur, setOrganisateur] = useState({})
+  const [orgLogoUploading, setOrgLogoUploading] = useState(false)
+
   // Événements footer
   const [evenementsTrail, setEvenementsTrail] = useState([])
   const [autresEvenements, setAutresEvenements] = useState([])
@@ -25,6 +29,7 @@ export default function SiteEditor() {
         heroCTAUrl: data?.heroCTAUrl || '',
         metaDescription: data?.metaDescription || '',
       })
+      setOrganisateur(data?.organisateur || {})
       setEvenementsTrail(data?.evenementsTrail || [])
       setAutresEvenements(data?.autresEvenements || [])
     })
@@ -55,7 +60,7 @@ export default function SiteEditor() {
   async function handleSaveEvents() {
     setSavingEvents(true)
     try {
-      await saveSite(site._id, { evenementsTrail, autresEvenements })
+      await saveSite(site._id, { organisateur, evenementsTrail, autresEvenements })
       setSavedEvents(true)
       setTimeout(() => setSavedEvents(false), 3000)
     } catch (err) {
@@ -190,6 +195,31 @@ export default function SiteEditor() {
           <p className="text-xs text-slate-400 mt-0.5">Logos avec liens affichés en bas de page</p>
         </div>
         <div className="p-6 space-y-6">
+
+          {/* Organisateur */}
+          <div>
+            <p className="text-sm font-semibold text-slate-700 mb-3">🏢 Organisateur</p>
+            <p className="text-xs text-slate-400 mb-3">Affiché dans le footer : "Un événement organisé par…"</p>
+            <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 space-y-2">
+              <input type="text" placeholder="Nom (ex: Weekandsport)" value={organisateur.nom || ''} onChange={e => setOrganisateur(p => ({ ...p, nom: e.target.value }))} className="input" />
+              <input type="url" placeholder="Lien vers le site (https://…)" value={organisateur.lien || ''} onChange={e => setOrganisateur(p => ({ ...p, lien: e.target.value }))} className="input" />
+              {organisateur.logo?.asset && (
+                <img src={imageUrl(organisateur.logo.asset)} className="h-14 object-contain rounded" />
+              )}
+              <label className={`flex items-center gap-2 cursor-pointer border-2 border-dashed border-slate-300 rounded p-2 hover:border-blue-400 text-xs text-slate-500 transition ${orgLogoUploading ? 'opacity-60 pointer-events-none' : ''}`}>
+                {orgLogoUploading ? '⏳…' : organisateur.logo?.asset ? '🔄 Changer le logo' : '🖼️ Uploader le logo'}
+                <input type="file" accept="image/*" className="hidden" onChange={async e => {
+                  const file = e.target.files[0]; if (!file) return
+                  setOrgLogoUploading(true)
+                  const asset = await uploadImage(file)
+                  setOrganisateur(p => ({ ...p, logo: { _type: 'image', asset: { _type: 'reference', _ref: asset._id } } }))
+                  setOrgLogoUploading(false)
+                }} />
+              </label>
+            </div>
+          </div>
+
+          <hr className="border-slate-100" />
 
           {/* Trail */}
           <div>

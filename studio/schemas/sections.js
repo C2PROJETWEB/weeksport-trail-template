@@ -380,6 +380,38 @@ export const sectionProgramme = {
   preview: { prepare() { return { title: 'Programme' } } }
 }
 
+export const sectionPub = {
+  name: 'sectionPub',
+  title: 'Espace publicitaire',
+  type: 'object',
+  fields: [
+    { name: 'titre', title: 'Titre (optionnel)', type: 'string', description: 'Ex: Nos annonceurs, Sponsor officiel…' },
+    {
+      name: 'pubs',
+      title: 'Bannières',
+      type: 'array',
+      description: '1 bannière = pleine largeur · 2-3 bannières = côte à côte',
+      of: [{
+        type: 'object',
+        fields: [
+          { name: 'image', title: 'Image (upload)', type: 'image', options: { hotspot: true } },
+          { name: 'imageUrl', title: 'Image URL externe', type: 'url', description: 'Si pas d\'upload' },
+          { name: 'lien', title: 'Lien (clic sur la bannière)', type: 'url' },
+          { name: 'alt', title: 'Texte alternatif', type: 'string', description: 'Nom du sponsor pour l\'accessibilité' }
+        ],
+        preview: {
+          select: { title: 'alt', media: 'image', url: 'imageUrl' },
+          prepare({ title, media, url }) { return { title: title || 'Bannière pub', media } }
+        }
+      }]
+    }
+  ],
+  preview: {
+    select: { titre: 'titre' },
+    prepare({ titre }) { return { title: `Pub — ${titre || 'Espace publicitaire'}` } }
+  }
+}
+
 export const sectionPhotos = {
   name: 'sectionPhotos',
   title: 'Photos par année',

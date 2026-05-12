@@ -606,6 +606,42 @@ sections.forEach((section: any, i: number) => {
     </section>
   )
 
+  // ─── PUBLICITÉ ───────────────────────────────────────────
+  if (section._type === 'sectionPub') {
+    const pubs = section.pubs || []
+    if (!pubs.length) return null
+    const cols = pubs.length === 1 ? 'grid-cols-1' : pubs.length === 2 ? 'grid-cols-2' : 'grid-cols-3'
+    return (
+      <section class="py-10 px-6 bg-white border-y border-gray-100">
+        <div class="max-w-7xl mx-auto">
+          {section.titre && (
+            <p class="text-xs font-bold uppercase tracking-[0.3em] text-gray-300 mb-5 text-center">{section.titre}</p>
+          )}
+          <div class={`grid ${cols} gap-4`}>
+            {(pubs as any[]).map((pub: any) => {
+              const src = pub.image ? urlFor(pub.image).width(1200).url() : (pub.imageUrl || null)
+              return src ? (
+                <a
+                  href={pub.lien || '#'}
+                  target={pub.lien ? '_blank' : undefined}
+                  rel="noopener"
+                  class="block overflow-hidden rounded group"
+                >
+                  <img
+                    src={src}
+                    alt={pub.alt || ''}
+                    class="w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                    loading="lazy"
+                  />
+                </a>
+              ) : null
+            })}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
   return null
 })}
 

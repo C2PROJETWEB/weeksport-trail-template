@@ -1,7 +1,7 @@
 import site from './site'
 import navigation from './navigation'
 import page from './page'
-import { blocBouton, sectionTexte, sectionGalerie, sectionPartenaires, sectionEpreuves, sectionResultats, sectionContact, sectionBenevoles, sectionCompteur, sectionProgramme, sectionPhotos } from './sections'
+import { blocBouton, sectionTexte, sectionGalerie, sectionPartenaires, sectionEpreuves, sectionResultats, sectionContact, sectionBenevoles, sectionCompteur, sectionProgramme, sectionPhotos, sectionPub } from './sections'
 
 export const schemaTypes = [
   site,
@@ -17,5 +17,6 @@ export const schemaTypes = [
   sectionBenevoles,
   sectionCompteur,
   sectionProgramme,
-  sectionPhotos
+  sectionPhotos,
+  sectionPub
 ]

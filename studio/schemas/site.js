@@ -109,6 +109,18 @@ export default {
       description: 'Texte affiché dans les résultats Google (160 caractères max)'
     },
     {
+      name: 'organisateur',
+      title: 'Organisateur (footer)',
+      type: 'object',
+      description: 'Affiché dans le footer : "Un événement organisé par…"',
+      fields: [
+        { name: 'nom', title: 'Nom', type: 'string', initialValue: 'Weekandsport' },
+        { name: 'logo', title: 'Logo (upload)', type: 'image', options: { hotspot: true } },
+        { name: 'logoUrl', title: 'Logo URL externe', type: 'url', description: 'Si pas d\'upload' },
+        { name: 'lien', title: 'Lien vers le site', type: 'url' }
+      ]
+    },
+    {
       name: 'evenementsTrail',
       title: 'Événements Trail (footer)',
       type: 'array',

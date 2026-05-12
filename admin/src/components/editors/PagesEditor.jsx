@@ -121,6 +121,8 @@ function SectionEditor({ section, saving, saved, error, onSave }) {
       return <PhotosSectionEditor {...props} />
     case 'sectionPartenaires':
       return <PartenairesSectionEditor {...props} />
+    case 'sectionPub':
+      return <PubSectionEditor {...props} />
     default:
       return null
   }
@@ -521,6 +523,89 @@ function PartenairesSectionEditor({ section, saving, saved, error, onSave }) {
           + Ajouter un partenaire
         </button>
       </div>
+    </Card>
+  )
+}
+
+// ── Section Pub ────────────────────────────────────────────────────────────
+function PubSectionEditor({ section, saving, saved, error, onSave }) {
+  const [titre, setTitre] = useState(section.titre || '')
+  const [pubs, setPubs] = useState(section.pubs || [])
+  const [uploading, setUploading] = useState(null) // index en cours
+
+  function addPub() {
+    setPubs(p => [...p, { _key: Math.random().toString(36).slice(2), alt: '', lien: '' }])
+  }
+
+  function removePub(i) {
+    setPubs(p => p.filter((_, idx) => idx !== i))
+  }
+
+  function updatePub(i, k, v) {
+    setPubs(p => p.map((pub, idx) => idx === i ? { ...pub, [k]: v } : pub))
+  }
+
+  async function handleUpload(i, file) {
+    setUploading(i)
+    const asset = await uploadImage(file)
+    setPubs(p => p.map((pub, idx) => idx === i
+      ? { ...pub, image: { _type: 'image', asset: { _type: 'reference', _ref: asset._id } } }
+      : pub))
+    setUploading(null)
+  }
+
+  return (
+    <Card label={section.titre || 'Espace publicitaire'} saving={saving} saved={saved} error={error}
+      onSave={() => onSave({ titre, pubs })}>
+      <Field label="Titre de section" hint="Optionnel — ex: Nos annonceurs">
+        <input type="text" value={titre} onChange={e => setTitre(e.target.value)} className="input" placeholder="Laisser vide pour ne pas afficher de titre" />
+      </Field>
+      <Field label="Bannières publicitaires" hint="1 bannière = pleine largeur · 2 ou 3 = côte à côte">
+        <div className="space-y-3 mb-3">
+          {pubs.map((pub, i) => {
+            const src = pub.image?.asset ? imageUrl(pub.image.asset) : (pub.imageUrl || null)
+            return (
+              <div key={pub._key || i} className="bg-slate-50 border border-slate-200 rounded-lg p-3 space-y-2">
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Bannière {i + 1}</span>
+                  <button type="button" onClick={() => removePub(i)} className="text-red-400 hover:text-red-600 text-xl leading-none">×</button>
+                </div>
+
+                {/* Aperçu image */}
+                {src && (
+                  <img src={src} className="w-full max-h-28 object-cover rounded" />
+                )}
+
+                {/* Upload */}
+                <label className={`flex items-center gap-2 cursor-pointer border-2 border-dashed border-slate-300 rounded p-2 hover:border-blue-400 text-xs text-slate-500 transition ${uploading === i ? 'opacity-60 pointer-events-none' : ''}`}>
+                  {uploading === i ? '⏳ Téléchargement…' : src ? '🔄 Changer l\'image' : '📷 Uploader la bannière'}
+                  <input type="file" accept="image/*" className="hidden" onChange={e => e.target.files[0] && handleUpload(i, e.target.files[0])} />
+                </label>
+
+                {/* Ou URL externe */}
+                {!pub.image?.asset && (
+                  <input type="url" placeholder="Ou URL externe de l'image…" value={pub.imageUrl || ''} onChange={e => updatePub(i, 'imageUrl', e.target.value)} className="input text-xs" />
+                )}
+
+                {/* Lien */}
+                <input type="url" placeholder="Lien (clic sur la bannière) — https://…" value={pub.lien || ''} onChange={e => updatePub(i, 'lien', e.target.value)} className="input" />
+
+                {/* Alt */}
+                <input type="text" placeholder="Nom du sponsor (pour accessibilité)" value={pub.alt || ''} onChange={e => updatePub(i, 'alt', e.target.value)} className="input" />
+              </div>
+            )
+          })}
+        </div>
+        {pubs.length < 3 && (
+          <button type="button" onClick={addPub}
+            className="w-full py-2.5 border-2 border-dashed border-slate-300 rounded-lg text-slate-500 hover:border-blue-400 text-sm transition">
+            + Ajouter une bannière {pubs.length > 0 ? `(${pubs.length}/3)` : ''}
+          </button>
+        )}
+        {pubs.length === 3 && (
+          <p className="text-xs text-slate-400 text-center">Maximum 3 bannières atteint</p>
+        )}
+      </Field>
     </Card>
   )
 }

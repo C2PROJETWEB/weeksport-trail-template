@@ -16,6 +16,7 @@ export async function getSite(siteSlug) {
     `*[_type == "site" && slug.current == $slug][0]{
       name, slug, logo, logoUrl, favicon, couleurPrimaire, couleurSecondaire,
       heroImage, heroImageUrl, heroVideoUrl, heroTitre, heroDate, heroCTA, heroCTAUrl, metaDescription,
+      organisateur{ nom, logo, logoUrl, lien },
       evenementsTrail[]{ nom, logo, logoUrl, url },
       autresEvenements[]{ nom, logo, logoUrl, url }
     }`,
