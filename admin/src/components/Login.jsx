@@ -1,10 +1,27 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { client, imageUrl, SITE_SLUG } from '../lib/sanity.js'
 
 const PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD || 'weeksport2026'
 
 export default function Login({ onLogin }) {
   const [pw, setPw] = useState('')
   const [error, setError] = useState(false)
+  const [orgLogo, setOrgLogo] = useState(null)
+  const [orgNom, setOrgNom] = useState('WEEK&SPORT')
+
+  useEffect(() => {
+    client.fetch(
+      `*[_type == "site" && slug.current == $slug][0]{ organisateur }`,
+      { slug: SITE_SLUG }
+    ).then(data => {
+      if (data?.organisateur?.logo?.asset) {
+        setOrgLogo(imageUrl(data.organisateur.logo.asset))
+      } else if (data?.organisateur?.logoUrl) {
+        setOrgLogo(data.organisateur.logoUrl)
+      }
+      if (data?.organisateur?.nom) setOrgNom(data.organisateur.nom)
+    }).catch(() => {})
+  }, [])
 
   function submit(e) {
     e.preventDefault()
@@ -15,8 +32,10 @@ export default function Login({ onLogin }) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-2xl p-10 w-full max-w-sm text-center">
-        <div className="text-5xl mb-4">🏔️</div>
-        <h1 className="text-2xl font-bold text-slate-800 mb-1">WEEK&SPORT</h1>
+        {orgLogo
+          ? <img src={orgLogo} alt={orgNom} className="h-16 w-auto object-contain mx-auto mb-6" style={{ filter: 'brightness(0)' }} />
+          : <><div className="text-5xl mb-4">🏔️</div><h1 className="text-2xl font-bold text-slate-800 mb-1">{orgNom}</h1></>
+        }
         <p className="text-slate-500 text-sm mb-8">Espace d'administration</p>
 
         <form onSubmit={submit} className="space-y-4">
