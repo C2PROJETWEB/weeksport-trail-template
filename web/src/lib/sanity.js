@@ -6,10 +6,6 @@ export const client = createClient({
   dataset: import.meta.env.PUBLIC_SANITY_DATASET || 'production',
   apiVersion: '2024-01-01',
   useCdn: false,
-  stega: {
-    enabled: true,
-    studioUrl: 'https://weeksport-cms.sanity.studio',
-  },
 })
 
 const builder = createImageUrlBuilder(client)

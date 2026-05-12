@@ -45,12 +45,5 @@ const b = parseInt(hex.substring(4,6),16)
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el))
   </script>
 
-  <script>
-    // Éditeur visuel Sanity — actif uniquement dans le Studio (iframe)
-    import { enableVisualEditing } from '@sanity/visual-editing'
-    if (window.parent !== window) {
-      enableVisualEditing()
-    }
-  </script>
 </body>
 </html>
