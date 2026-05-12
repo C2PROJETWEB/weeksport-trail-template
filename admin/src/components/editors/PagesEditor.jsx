@@ -76,6 +76,7 @@ function PageEditor({ id, title, onBack }) {
   const [saveError, setSaveError] = useState(null)
   const [addOpen, setAddOpen] = useState(false)
   const [structureSaving, setStructureSaving] = useState(false)
+  const [heroUploading, setHeroUploading] = useState(false)
 
   useEffect(() => {
     getPage(id).then(data => {
@@ -83,6 +84,22 @@ function PageEditor({ id, title, onBack }) {
       setSections(data?.sections || [])
     })
   }, [id])
+
+  async function handleHeroUpload(e) {
+    const file = e.target.files[0]
+    if (!file) return
+    setHeroUploading(true)
+    try {
+      const asset = await uploadImage(file)
+      const heroImage = { _type: 'image', asset: { _type: 'reference', _ref: asset._id } }
+      await savePage(id, { heroImage })
+      setPage(prev => ({ ...prev, heroImage: { _type: 'image', asset: { _ref: asset._id } } }))
+    } catch (err) {
+      alert('❌ Erreur upload : ' + (err.message || 'Vérifiez votre connexion'))
+    } finally {
+      setHeroUploading(false)
+    }
+  }
 
   // Sauvegarde d'une section éditée
   async function saveSection(idx, patch) {
@@ -150,6 +167,28 @@ function PageEditor({ id, title, onBack }) {
         </button>
         <h2 className="text-xl font-bold text-slate-800">{title}</h2>
         {structureSaving && <span className="text-xs text-slate-400 ml-auto">💾 Sauvegarde…</span>}
+      </div>
+
+      {/* Image à la une de la page */}
+      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+        <div className="bg-slate-50 border-b border-slate-200 px-4 py-3 flex items-center justify-between">
+          <div>
+            <h3 className="font-semibold text-slate-700 text-sm">🖼️ Image d'en-tête de la page</h3>
+            <p className="text-xs text-slate-400 mt-0.5">Bandeau affiché en haut de cette page (optionnel — sinon l'image du site est utilisée)</p>
+          </div>
+          {page?.heroImage?.asset && (
+            <span className="text-xs text-green-600 font-medium">✅ Définie</span>
+          )}
+        </div>
+        <div className="p-4">
+          {page?.heroImage?.asset && (
+            <img src={imageUrl(page.heroImage.asset)} className="w-full h-28 object-cover rounded-lg mb-3" alt="En-tête" />
+          )}
+          <label className={`flex items-center justify-center gap-2 cursor-pointer border-2 border-dashed border-slate-300 rounded-lg p-3 hover:border-blue-400 hover:bg-blue-50 transition text-sm text-slate-500 ${heroUploading ? 'opacity-60 pointer-events-none' : ''}`}>
+            {heroUploading ? '⏳ Téléchargement…' : page?.heroImage?.asset ? '🔄 Changer l\'image' : '📷 Choisir une image'}
+            <input type="file" accept="image/*" className="hidden" onChange={handleHeroUpload} />
+          </label>
+        </div>
       </div>
 
       {sections.length === 0 && !addOpen && (
@@ -285,17 +324,24 @@ function TextSectionEditor({ section, saving, saved, error, onSave }) {
     const files = Array.from(e.target.files)
     if (!files.length) return
     setUploading(true)
-    const newImages = [...images]
-    for (const file of files) {
-      const asset = await uploadImage(file)
-      newImages.push({
-        _type: 'image',
-        _key: Math.random().toString(36).slice(2),
-        asset: { _type: 'reference', _ref: asset._id }
-      })
+    try {
+      const newImages = [...images]
+      for (const file of files) {
+        const asset = await uploadImage(file)
+        newImages.push({
+          _type: 'image',
+          _key: Math.random().toString(36).slice(2),
+          asset: { _type: 'reference', _ref: asset._id }
+        })
+      }
+      setImages(newImages)
+      // Auto-save immédiatement après upload
+      onSave({ titre, contenu: textToBlocks(contenu), images: newImages, boutons, disposition, documents })
+    } catch (err) {
+      alert('❌ Erreur upload photo : ' + (err.message || 'Vérifiez votre connexion'))
+    } finally {
+      setUploading(false)
     }
-    setImages(newImages)
-    setUploading(false)
   }
 
   function removeImage(i) {
@@ -322,18 +368,25 @@ function TextSectionEditor({ section, saving, saved, error, onSave }) {
     const files = Array.from(e.target.files)
     if (!files.length) return
     setDocUploading(true)
-    const newDocs = [...documents]
-    for (const file of files) {
-      const asset = await uploadFile(file)
-      newDocs.push({
-        _type: 'fichier',
-        _key: Math.random().toString(36).slice(2),
-        nom: file.name.replace(/\.[^/.]+$/, ''),
-        asset: { _type: 'reference', _ref: asset._id }
-      })
+    try {
+      const newDocs = [...documents]
+      for (const file of files) {
+        const asset = await uploadFile(file)
+        newDocs.push({
+          _type: 'fichier',
+          _key: Math.random().toString(36).slice(2),
+          nom: file.name.replace(/\.[^/.]+$/, ''),
+          asset: { _type: 'reference', _ref: asset._id }
+        })
+      }
+      setDocuments(newDocs)
+      // Auto-save immédiatement après upload
+      onSave({ titre, contenu: textToBlocks(contenu), images, boutons, disposition, documents: newDocs })
+    } catch (err) {
+      alert('❌ Erreur upload document : ' + (err.message || 'Vérifiez votre connexion'))
+    } finally {
+      setDocUploading(false)
     }
-    setDocuments(newDocs)
-    setDocUploading(false)
   }
 
   function updateDocNom(i, nom) {

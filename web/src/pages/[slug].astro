@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
 import Sections from '../components/Sections.astro'
-import { getSite, getNavigation, getPage } from '../lib/sanity'
+import { getSite, getNavigation, getPage, urlFor } from '../lib/sanity'
 
 const { slug } = Astro.params
 const siteSlug = import.meta.env.PUBLIC_SITE_SLUG
@@ -19,14 +19,21 @@ const raceGroupItem = nav?.items?.find((item: any) =>
   item.sousMenu?.some((sub: any) => sub.slug === slug)
 )
 const raceTabs = raceGroupItem?.sousMenu || null
+
+// Hero image: page-specific > site uploaded > site URL
+const heroBgUrl = page?.heroImage?.asset
+  ? urlFor(page.heroImage).width(1920).url()
+  : site?.heroImage?.asset
+    ? urlFor(site.heroImage).width(1920).url()
+    : (site?.heroImageUrl || null)
 ---
 <BaseLayout site={site} nav={nav} title={`${page.title} — ${site?.name}`}>
   <div class="pt-20">
     {page.sections?.[0]?._type !== 'sectionEpreuves' && (
       <div class="relative py-20 overflow-hidden">
-        {site?.heroImageUrl && (
+        {heroBgUrl && (
           <div class="absolute inset-0 bg-cover bg-center bg-no-repeat"
-            style={`background-image: url('${site.heroImageUrl}')`} />
+            style={`background-image: url('${heroBgUrl}')`} />
         )}
         <div class="absolute inset-0"
           style="background: linear-gradient(135deg, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.6) 100%)" />

@@ -46,7 +46,7 @@ export async function getNavigation(siteSlug) {
 export async function getPage(siteSlug, pageSlug) {
   return client.fetch(
     `*[_type == "page" && site->slug.current == $siteSlug && slug.current == $pageSlug][0]{
-      title, slug, sections
+      title, slug, heroImage, sections
     }`,
     { siteSlug, pageSlug }
   )

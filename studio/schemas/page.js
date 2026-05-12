@@ -32,6 +32,13 @@ export default {
       readOnly: adminOnly,
     },
     {
+      name: 'heroImage',
+      title: 'Image d\'en-tête (optionnel)',
+      type: 'image',
+      description: 'Bandeau affiché en haut de cette page. Si absent, l\'image du site est utilisée.',
+      options: { hotspot: true }
+    },
+    {
       name: 'sections',
       title: 'Contenu de la page',
       type: 'array',
