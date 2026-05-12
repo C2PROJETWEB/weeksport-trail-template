@@ -250,12 +250,29 @@ sections.forEach((section: any, i: number) => {
           </div>
 
           {/* ── Description ── */}
-          {linkedTexte?.contenu && (
+          {(linkedTexte?.contenu || resolveDocs(linkedTexte?.documents).length > 0) && (
             <div class="max-w-4xl mx-auto px-6 md:px-12 py-16">
-              <div
-                class="prose prose-gray prose-lg max-w-none prose-headings:font-display prose-headings:tracking-wide prose-a:text-[var(--color-primary)] prose-p:text-gray-600 prose-headings:text-gray-900 prose-strong:text-gray-900 prose-li:text-gray-600"
-                set:html={toHTML(linkedTexte.contenu, toHTMLOptions)}
-              />
+              {linkedTexte?.contenu && (
+                <div
+                  class="prose prose-gray prose-lg max-w-none prose-headings:font-display prose-headings:tracking-wide prose-a:text-[var(--color-primary)] prose-p:text-gray-600 prose-headings:text-gray-900 prose-strong:text-gray-900 prose-li:text-gray-600"
+                  set:html={toHTML(linkedTexte.contenu, toHTMLOptions)}
+                />
+              )}
+              {resolveDocs(linkedTexte?.documents).length > 0 && (
+                <div class="mt-8 space-y-2">
+                  {resolveDocs(linkedTexte.documents).map((doc: any) => {
+                    const url = fileUrl(doc.asset)
+                    return url ? (
+                      <a href={url} target="_blank" rel="noopener"
+                        class="flex items-center gap-3 px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 hover:bg-gray-100 hover:border-gray-300 transition group text-sm font-medium text-gray-700">
+                        <span class="text-xl shrink-0">📎</span>
+                        <span class="flex-1 truncate">{doc.nom || 'Document'}</span>
+                        <span class="text-xs text-gray-400 group-hover:text-gray-600 shrink-0">Télécharger ↓</span>
+                      </a>
+                    ) : null
+                  })}
+                </div>
+              )}
             </div>
           )}
 
@@ -407,6 +424,21 @@ sections.forEach((section: any, i: number) => {
               class="prose prose-lg max-w-none prose-headings:font-display prose-headings:tracking-wide prose-a:text-[var(--color-primary)] prose-p:text-gray-600 prose-strong:text-gray-900"
               set:html={toHTML(section.contenu, toHTMLOptions)}
             />
+          )}
+          {resolveDocs(section.documents).length > 0 && (
+            <div class="mt-8 space-y-2">
+              {resolveDocs(section.documents).map((doc: any) => {
+                const url = fileUrl(doc.asset)
+                return url ? (
+                  <a href={url} target="_blank" rel="noopener"
+                    class="flex items-center gap-3 px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 hover:bg-gray-100 hover:border-gray-300 transition group text-sm font-medium text-gray-700">
+                    <span class="text-xl shrink-0">📎</span>
+                    <span class="flex-1 truncate">{doc.nom || 'Document'}</span>
+                    <span class="text-xs text-gray-400 group-hover:text-gray-600 shrink-0">Télécharger ↓</span>
+                  </a>
+                ) : null
+              })}
+            </div>
           )}
         </div>
       </section>
