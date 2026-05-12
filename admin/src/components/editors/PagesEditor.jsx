@@ -263,11 +263,20 @@ function SectionEditor({ section, saving, saved, error, onSave }) {
 }
 
 // ── Section Texte ──────────────────────────────────────────────────────────
+const DISPOSITIONS = [
+  { value: 'texte_seul',    label: 'Texte seul',       icon: <DispoIcon type="texte_seul" /> },
+  { value: 'image_droite',  label: 'Image à droite',   icon: <DispoIcon type="image_droite" /> },
+  { value: 'image_gauche',  label: 'Image à gauche',   icon: <DispoIcon type="image_gauche" /> },
+  { value: 'image_dessus',  label: 'Image au-dessus',  icon: <DispoIcon type="image_dessus" /> },
+  { value: 'image_dessous', label: 'Image en dessous', icon: <DispoIcon type="image_dessous" /> },
+]
+
 function TextSectionEditor({ section, saving, saved, error, onSave }) {
   const [titre, setTitre] = useState(section.titre || '')
   const [contenu, setContenu] = useState(() => blocksToText(section.contenu))
   const [images, setImages] = useState(section.images || [])
   const [boutons, setBoutons] = useState(section.boutons || [])
+  const [disposition, setDisposition] = useState(section.disposition || 'image_dessous')
   const [uploading, setUploading] = useState(false)
 
   async function handleImageUpload(e) {
@@ -309,9 +318,33 @@ function TextSectionEditor({ section, saving, saved, error, onSave }) {
 
   return (
     <Card label={section.titre || 'Bloc texte'} saving={saving} saved={saved} error={error}
-      onSave={() => onSave({ titre, contenu: textToBlocks(contenu), images, boutons })}>
+      onSave={() => onSave({ titre, contenu: textToBlocks(contenu), images, boutons, disposition })}>
       <Field label="Titre du bloc">
         <input type="text" value={titre} onChange={e => setTitre(e.target.value)} className="input" />
+      </Field>
+
+      {/* ── Disposition ── */}
+      <Field label="📐 Disposition" hint="Comment le texte et l'image sont organisés">
+        <div className="grid grid-cols-5 gap-2">
+          {DISPOSITIONS.map(d => (
+            <button
+              key={d.value}
+              type="button"
+              onClick={() => setDisposition(d.value)}
+              className={`flex flex-col items-center gap-1.5 p-2 rounded-lg border-2 transition text-xs font-medium ${
+                disposition === d.value
+                  ? 'border-blue-500 bg-blue-50 text-blue-700'
+                  : 'border-slate-200 text-slate-500 hover:border-slate-300'
+              }`}
+            >
+              {d.icon}
+              <span className="leading-tight text-center">{d.label}</span>
+            </button>
+          ))}
+        </div>
+        {(disposition === 'image_droite' || disposition === 'image_gauche') && (
+          <p className="text-xs text-amber-600 mt-2">⚠ Seule la première image sera affichée côte à côte avec le texte.</p>
+        )}
       </Field>
       <Field label="Contenu" hint="Pour aller à la ligne, appuyez sur Entrée deux fois">
         <textarea value={contenu} onChange={e => setContenu(e.target.value)} rows={8} className="input resize-y" />
@@ -788,4 +821,39 @@ function Skeleton() {
       {[1,2,3].map(i => <div key={i} className="h-20 bg-slate-200 rounded-xl" />)}
     </div>
   )
+}
+
+function DispoIcon({ type }) {
+  const s = { bg: 'bg-slate-300', txt: 'bg-slate-500' }
+  const base = 'w-full h-8 rounded flex overflow-hidden gap-0.5'
+  if (type === 'texte_seul') return (
+    <div className={base + ' flex-col gap-0.5 p-0.5'}>
+      {[1,2,3].map(i => <div key={i} className={`${s.txt} rounded h-1.5 w-full`} />)}
+    </div>
+  )
+  if (type === 'image_droite') return (
+    <div className={base + ' p-0.5 items-center'}>
+      <div className="flex-1 flex flex-col gap-0.5">{[1,2,3].map(i=><div key={i} className={`${s.txt} rounded h-1.5`}/>)}</div>
+      <div className={`${s.bg} rounded w-1/3 h-full`}/>
+    </div>
+  )
+  if (type === 'image_gauche') return (
+    <div className={base + ' p-0.5 items-center'}>
+      <div className={`${s.bg} rounded w-1/3 h-full`}/>
+      <div className="flex-1 flex flex-col gap-0.5">{[1,2,3].map(i=><div key={i} className={`${s.txt} rounded h-1.5`}/>)}</div>
+    </div>
+  )
+  if (type === 'image_dessus') return (
+    <div className={base + ' flex-col p-0.5'}>
+      <div className={`${s.bg} rounded h-3 w-full`}/>
+      <div className="flex flex-col gap-0.5 flex-1 justify-center">{[1,2].map(i=><div key={i} className={`${s.txt} rounded h-1.5`}/>)}</div>
+    </div>
+  )
+  if (type === 'image_dessous') return (
+    <div className={base + ' flex-col p-0.5'}>
+      <div className="flex flex-col gap-0.5 flex-1 justify-center">{[1,2].map(i=><div key={i} className={`${s.txt} rounded h-1.5`}/>)}</div>
+      <div className={`${s.bg} rounded h-3 w-full`}/>
+    </div>
+  )
+  return null
 }

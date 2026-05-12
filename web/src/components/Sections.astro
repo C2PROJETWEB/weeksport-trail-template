@@ -34,51 +34,83 @@ sections.forEach((section: any, i: number) => {
 {processed.map((section: any) => {
 
   // ─── TEXTE ───────────────────────────────────────────────
-  if (section._type === 'sectionTexte') return (
-    <section class="py-24 px-6 max-w-4xl mx-auto">
-      <div class="reveal">
-        {section.titre && (
-          <div class="mb-10">
-            <span class="deco-line"></span>
-            <h2 class="section-title mt-4">{section.titre}</h2>
-          </div>
-        )}
-        {section.contenu && (
-          <div class="prose prose-gray prose-lg max-w-none prose-headings:font-display prose-headings:tracking-wide prose-a:text-[var(--color-primary)] prose-headings:text-gray-900 prose-p:text-gray-600"
-            set:html={toHTML(section.contenu, toHTMLOptions)} />
-        )}
-        {section.images?.length > 0 && (
-          <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-10">
-            {(section.images as any[]).map((img: any) => (
-              <figure class="overflow-hidden rounded group">
-                <img
-                  src={urlFor(img).width(800).height(560).url()}
-                  alt={img.caption || ''}
-                  class="w-full h-52 object-cover transition-transform duration-500 group-hover:scale-105"
-                  loading="lazy"
-                />
-                {img.caption && <figcaption class="text-xs text-gray-400 mt-1 px-1">{img.caption}</figcaption>}
-              </figure>
-            ))}
-          </div>
-        )}
-        {section.boutons?.length > 0 && (
-          <div class="flex flex-wrap gap-3 mt-8">
-            {(section.boutons as any[]).map((btn: any) => (
-              <a
-                href={btn.url || '#'}
-                class={btn.style === 'outline' ? 'btn-outline' : 'btn-primary'}
-                target={btn.externe ? '_blank' : '_self'}
-                rel={btn.externe ? 'noopener noreferrer' : ''}
-              >
-                {btn.label}
-              </a>
-            ))}
-          </div>
-        )}
-      </div>
-    </section>
-  )
+  if (section._type === 'sectionTexte') {
+    const dispo: string = section.disposition || 'image_dessous'
+    const imgs: any[] = section.images || []
+    const hasImages = imgs.length > 0
+    const firstImg = imgs[0] || null
+    const isSide = dispo === 'image_droite' || dispo === 'image_gauche'
+    const html = section.contenu ? toHTML(section.contenu, toHTMLOptions) : ''
+    return (
+      <section class="py-24 px-6 max-w-5xl mx-auto">
+        <div class="reveal">
+
+          {/* ── Image au-dessus ── */}
+          {dispo === 'image_dessus' && hasImages && (
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-10">
+              {imgs.map((img: any) => (
+                <figure class="overflow-hidden rounded group">
+                  <img src={urlFor(img).width(800).height(560).url()} alt={img.caption||''}
+                    class="w-full h-52 object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy"/>
+                  {img.caption && <figcaption class="text-xs text-gray-400 mt-1 px-1">{img.caption}</figcaption>}
+                </figure>
+              ))}
+            </div>
+          )}
+
+          {/* ── Côte à côte ── */}
+          {isSide && firstImg ? (
+            <div class={`flex flex-col gap-10 items-center md:flex-row${dispo === 'image_gauche' ? '' : '-reverse'}`}>
+              <div class="w-full md:w-1/2 shrink-0">
+                <figure class="overflow-hidden rounded-xl shadow-md group">
+                  <img src={urlFor(firstImg).width(900).height(620).url()} alt={firstImg.caption||''}
+                    class="w-full h-72 md:h-96 object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy"/>
+                </figure>
+              </div>
+              <div class="w-full md:w-1/2">
+                {section.titre && <div class="mb-8"><span class="deco-line"></span><h2 class="section-title mt-4">{section.titre}</h2></div>}
+                {html && <div class="prose prose-gray prose-lg max-w-none prose-headings:font-display prose-headings:tracking-wide prose-a:text-[var(--color-primary)] prose-headings:text-gray-900 prose-p:text-gray-600" set:html={html}/>}
+                {section.boutons?.length > 0 && (
+                  <div class="flex flex-wrap gap-3 mt-8">
+                    {(section.boutons as any[]).map((btn: any) => (
+                      <a href={btn.url||'#'} class={btn.style==='outline'?'btn-outline':'btn-primary'}
+                        target={btn.externe?'_blank':'_self'} rel={btn.externe?'noopener noreferrer':''}>{btn.label}</a>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          ) : (
+            /* ── Texte seul / dessus / dessous ── */
+            <div class="max-w-4xl mx-auto">
+              {section.titre && <div class="mb-10"><span class="deco-line"></span><h2 class="section-title mt-4">{section.titre}</h2></div>}
+              {html && <div class="prose prose-gray prose-lg max-w-none prose-headings:font-display prose-headings:tracking-wide prose-a:text-[var(--color-primary)] prose-headings:text-gray-900 prose-p:text-gray-600" set:html={html}/>}
+              {dispo === 'image_dessous' && hasImages && (
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-10">
+                  {imgs.map((img: any) => (
+                    <figure class="overflow-hidden rounded group">
+                      <img src={urlFor(img).width(800).height(560).url()} alt={img.caption||''}
+                        class="w-full h-52 object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy"/>
+                      {img.caption && <figcaption class="text-xs text-gray-400 mt-1 px-1">{img.caption}</figcaption>}
+                    </figure>
+                  ))}
+                </div>
+              )}
+              {section.boutons?.length > 0 && (
+                <div class="flex flex-wrap gap-3 mt-8">
+                  {(section.boutons as any[]).map((btn: any) => (
+                    <a href={btn.url||'#'} class={btn.style==='outline'?'btn-outline':'btn-primary'}
+                      target={btn.externe?'_blank':'_self'} rel={btn.externe?'noopener noreferrer':''}>{btn.label}</a>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+        </div>
+      </section>
+    )
+  }
 
   // ─── COMPTE À REBOURS ────────────────────────────────────
   if (section._type === 'sectionCompteur') return (
