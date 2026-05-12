@@ -35,12 +35,47 @@ export default function PagesEditor() {
   )
 }
 
+// ── Types de sections disponibles ─────────────────────────────────────────
+const SECTION_TYPES = [
+  { type: 'sectionTexte',      label: '📝 Bloc texte' },
+  { type: 'sectionGalerie',    label: '🖼️ Galerie photos' },
+  { type: 'sectionCompteur',   label: '⏱️ Compte à rebours' },
+  { type: 'sectionEpreuves',   label: '🏃 Épreuves' },
+  { type: 'sectionResultats',  label: '🏆 Résultats' },
+  { type: 'sectionPartenaires',label: '🤝 Partenaires' },
+  { type: 'sectionBenevoles',  label: '🙋 Bénévoles' },
+  { type: 'sectionContact',    label: '✉️ Contact' },
+  { type: 'sectionProgramme',  label: '📅 Programme' },
+  { type: 'sectionPhotos',     label: '📸 Albums photos' },
+  { type: 'sectionPub',        label: '📢 Espace pub' },
+]
+
+function defaultSection(type) {
+  const key = Math.random().toString(36).slice(2)
+  const map = {
+    sectionTexte:       { titre: '', contenu: [], images: [], boutons: [] },
+    sectionGalerie:     { titre: '', photos: [] },
+    sectionCompteur:    { titre: 'Prochaine édition' },
+    sectionEpreuves:    { titre: 'Les épreuves', epreuves: [] },
+    sectionResultats:   { titre: 'Résultats', annees: [] },
+    sectionPartenaires: { titre: 'Nos partenaires', groupe: 'evenement', partenaires: [] },
+    sectionBenevoles:   { titre: 'Devenir bénévole' },
+    sectionContact:     { titre: 'Contactez-nous' },
+    sectionProgramme:   { titre: 'Le Programme', contenu: [] },
+    sectionPhotos:      { titre: 'Photos', annees: [] },
+    sectionPub:         { titre: '', pubs: [] },
+  }
+  return { _type: type, _key: key, ...(map[type] || {}) }
+}
+
 function PageEditor({ id, title, onBack }) {
   const [page, setPage] = useState(null)
   const [sections, setSections] = useState([])
   const [saving, setSaving] = useState(null)
   const [saved, setSaved] = useState(null)
   const [saveError, setSaveError] = useState(null)
+  const [addOpen, setAddOpen] = useState(false)
+  const [structureSaving, setStructureSaving] = useState(false)
 
   useEffect(() => {
     getPage(id).then(data => {
@@ -49,6 +84,7 @@ function PageEditor({ id, title, onBack }) {
     })
   }, [id])
 
+  // Sauvegarde d'une section éditée
   async function saveSection(idx, patch) {
     setSaving(idx)
     setSaveError(null)
@@ -68,33 +104,131 @@ function PageEditor({ id, title, onBack }) {
     }
   }
 
+  // Sauvegarde de la structure (ajout / suppression / déplacement)
+  async function saveStructure(updated) {
+    setStructureSaving(true)
+    try {
+      await savePage(id, { sections: updated })
+    } catch (err) {
+      alert('❌ Erreur : ' + err.message)
+    } finally {
+      setStructureSaving(false)
+    }
+  }
+
+  async function addSection(type) {
+    const updated = [...sections, defaultSection(type)]
+    setSections(updated)
+    setAddOpen(false)
+    await saveStructure(updated)
+  }
+
+  async function removeSection(idx) {
+    if (!window.confirm('Supprimer cette section ? Cette action est irréversible.')) return
+    const updated = sections.filter((_, i) => i !== idx)
+    setSections(updated)
+    await saveStructure(updated)
+  }
+
+  async function moveSection(idx, dir) {
+    const target = idx + dir
+    if (target < 0 || target >= sections.length) return
+    const updated = [...sections]
+    ;[updated[idx], updated[target]] = [updated[target], updated[idx]]
+    setSections(updated)
+    await saveStructure(updated)
+  }
+
   if (!page) return <Skeleton />
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
+      {/* Header */}
       <div className="flex items-center gap-3">
         <button onClick={onBack} className="text-slate-500 hover:text-slate-800 transition text-sm flex items-center gap-1">
           ← Retour
         </button>
         <h2 className="text-xl font-bold text-slate-800">{title}</h2>
+        {structureSaving && <span className="text-xs text-slate-400 ml-auto">💾 Sauvegarde…</span>}
       </div>
 
-      {sections.length === 0 && (
-        <p className="text-slate-500 text-sm bg-white rounded-xl p-6 border border-slate-200">
-          Aucun contenu sur cette page pour le moment.
+      {sections.length === 0 && !addOpen && (
+        <p className="text-slate-400 text-sm bg-white rounded-xl p-8 border border-slate-200 text-center">
+          Aucune section — ajoutez-en une ci-dessous
         </p>
       )}
 
-      {sections.map((section, idx) => (
-        <SectionEditor
-          key={section._key || idx}
-          section={section}
-          saving={saving === idx}
-          saved={saved === idx}
-          error={saveError === idx}
-          onSave={patch => saveSection(idx, patch)}
-        />
-      ))}
+      {/* Sections avec barre de contrôle */}
+      {sections.map((section, idx) => {
+        const typeInfo = SECTION_TYPES.find(t => t.type === section._type)
+        return (
+          <div key={section._key || idx} className="rounded-xl overflow-hidden shadow-sm border border-slate-200">
+            {/* Barre de contrôle */}
+            <div className="flex items-center justify-between px-4 py-2 bg-slate-700">
+              <span className="text-xs font-semibold text-slate-300 uppercase tracking-wide">
+                {typeInfo?.label || section._type}
+              </span>
+              <div className="flex items-center gap-0.5">
+                <button
+                  onClick={() => moveSection(idx, -1)}
+                  disabled={idx === 0}
+                  title="Monter"
+                  className="w-7 h-7 flex items-center justify-center rounded text-slate-400 hover:text-white hover:bg-slate-600 disabled:opacity-20 transition text-sm"
+                >↑</button>
+                <button
+                  onClick={() => moveSection(idx, 1)}
+                  disabled={idx === sections.length - 1}
+                  title="Descendre"
+                  className="w-7 h-7 flex items-center justify-center rounded text-slate-400 hover:text-white hover:bg-slate-600 disabled:opacity-20 transition text-sm"
+                >↓</button>
+                <button
+                  onClick={() => removeSection(idx)}
+                  title="Supprimer cette section"
+                  className="w-7 h-7 flex items-center justify-center rounded text-red-400 hover:text-red-300 hover:bg-red-900/30 transition text-sm ml-1"
+                >✕</button>
+              </div>
+            </div>
+            {/* Éditeur — on retire le border-radius du haut (déjà géré par le wrapper) */}
+            <div className="[&>div]:rounded-t-none [&>div]:shadow-none [&>div]:border-0">
+              <SectionEditor
+                section={section}
+                saving={saving === idx}
+                saved={saved === idx}
+                error={saveError === idx}
+                onSave={patch => saveSection(idx, patch)}
+              />
+            </div>
+          </div>
+        )
+      })}
+
+      {/* Panneau d'ajout */}
+      {addOpen ? (
+        <div className="bg-white rounded-xl border border-blue-300 shadow-sm p-4">
+          <div className="flex items-center justify-between mb-3">
+            <p className="font-semibold text-slate-700 text-sm">Choisir le type de section</p>
+            <button onClick={() => setAddOpen(false)} className="text-slate-400 hover:text-slate-700 text-lg">×</button>
+          </div>
+          <div className="grid grid-cols-2 gap-2">
+            {SECTION_TYPES.map(({ type, label }) => (
+              <button
+                key={type}
+                onClick={() => addSection(type)}
+                className="text-left text-sm px-3 py-2.5 rounded-lg border border-slate-200 hover:border-blue-400 hover:bg-blue-50 hover:text-blue-700 transition font-medium"
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <button
+          onClick={() => setAddOpen(true)}
+          className="w-full py-3 rounded-xl border-2 border-dashed border-slate-300 text-slate-500 hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50 text-sm font-medium transition flex items-center justify-center gap-2"
+        >
+          <span className="text-lg leading-none">+</span> Ajouter une section
+        </button>
+      )}
     </div>
   )
 }
