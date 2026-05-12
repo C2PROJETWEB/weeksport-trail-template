@@ -47,6 +47,35 @@ sections.forEach((section: any, i: number) => {
           <div class="prose prose-gray prose-lg max-w-none prose-headings:font-display prose-headings:tracking-wide prose-a:text-[var(--color-primary)] prose-headings:text-gray-900 prose-p:text-gray-600"
             set:html={toHTML(section.contenu, toHTMLOptions)} />
         )}
+        {section.images?.length > 0 && (
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-10">
+            {(section.images as any[]).map((img: any) => (
+              <figure class="overflow-hidden rounded group">
+                <img
+                  src={urlFor(img).width(800).height(560).url()}
+                  alt={img.caption || ''}
+                  class="w-full h-52 object-cover transition-transform duration-500 group-hover:scale-105"
+                  loading="lazy"
+                />
+                {img.caption && <figcaption class="text-xs text-gray-400 mt-1 px-1">{img.caption}</figcaption>}
+              </figure>
+            ))}
+          </div>
+        )}
+        {section.boutons?.length > 0 && (
+          <div class="flex flex-wrap gap-3 mt-8">
+            {(section.boutons as any[]).map((btn: any) => (
+              <a
+                href={btn.url || '#'}
+                class={btn.style === 'outline' ? 'btn-outline' : 'btn-primary'}
+                target={btn.externe ? '_blank' : '_self'}
+                rel={btn.externe ? 'noopener noreferrer' : ''}
+              >
+                {btn.label}
+              </a>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   )

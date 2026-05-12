@@ -54,6 +54,41 @@ export const sectionTexte = {
         { type: 'image', options: { hotspot: true } },
         blocBouton
       ]
+    },
+    {
+      name: 'images',
+      title: 'Photos',
+      type: 'array',
+      description: 'Photos affichées en grille sous le texte',
+      options: { layout: 'grid' },
+      of: [{
+        type: 'image',
+        options: { hotspot: true },
+        fields: [{ name: 'caption', title: 'Légende', type: 'string' }]
+      }]
+    },
+    {
+      name: 'boutons',
+      title: 'Boutons',
+      type: 'array',
+      description: 'Boutons d\'action affichés sous le texte',
+      of: [{
+        type: 'object',
+        name: 'bouton',
+        fields: [
+          { name: 'label', title: 'Texte du bouton', type: 'string', validation: Rule => Rule.required() },
+          { name: 'url', title: 'URL', type: 'url', validation: Rule => Rule.required() },
+          {
+            name: 'style', title: 'Style', type: 'string', initialValue: 'primary',
+            options: { list: [{ title: 'Primaire (fond coloré)', value: 'primary' }, { title: 'Contour', value: 'outline' }], layout: 'radio' }
+          },
+          { name: 'externe', title: 'Ouvrir dans un nouvel onglet', type: 'boolean', initialValue: false }
+        ],
+        preview: {
+          select: { title: 'label', subtitle: 'url' },
+          prepare({ title, subtitle }) { return { title: `Bouton — ${title || ''}`, subtitle } }
+        }
+      }]
     }
   ],
   preview: { select: { title: 'titre' }, prepare({ title }) { return { title: `Texte — ${title || 'Sans titre'}` } } }
