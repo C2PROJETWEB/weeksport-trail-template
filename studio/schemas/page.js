@@ -1,3 +1,6 @@
+const adminOnly = ({ currentUser }) =>
+  !currentUser?.roles?.find(r => r.name === 'administrator')
+
 export default {
   name: 'page',
   title: 'Page',
@@ -9,7 +12,9 @@ export default {
       title: 'Site',
       type: 'reference',
       to: [{ type: 'site' }],
-      validation: Rule => Rule.required()
+      validation: Rule => Rule.required(),
+      hidden: adminOnly,
+      readOnly: adminOnly,
     },
     {
       name: 'title',
@@ -22,11 +27,13 @@ export default {
       title: 'URL (slug)',
       type: 'slug',
       options: { source: 'title' },
-      validation: Rule => Rule.required()
+      validation: Rule => Rule.required(),
+      hidden: adminOnly,
+      readOnly: adminOnly,
     },
     {
       name: 'sections',
-      title: 'Sections de la page',
+      title: 'Contenu de la page',
       type: 'array',
       of: [
         { type: 'sectionTexte' },

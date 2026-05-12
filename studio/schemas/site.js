@@ -1,3 +1,7 @@
+// Champs réservés à l'administrateur (cachés pour les éditeurs)
+const adminOnly = ({ currentUser }) =>
+  !currentUser?.roles?.find(r => r.name === 'administrator')
+
 export default {
   name: 'site',
   title: 'Site',
@@ -15,7 +19,9 @@ export default {
       title: 'Identifiant unique',
       type: 'slug',
       options: { source: 'name' },
-      validation: Rule => Rule.required()
+      validation: Rule => Rule.required(),
+      hidden: adminOnly,
+      readOnly: adminOnly,
     },
     {
       name: 'logo',
@@ -24,45 +30,52 @@ export default {
       options: { hotspot: true }
     },
     {
+      name: 'logoUrl',
+      title: 'URL logo (externe)',
+      type: 'url',
+      description: 'Utilisé si pas de logo uploadé dans Sanity',
+      hidden: adminOnly,
+    },
+    {
       name: 'favicon',
       title: 'Favicon',
-      type: 'image'
+      type: 'image',
+      hidden: adminOnly,
     },
     {
       name: 'couleurPrimaire',
       title: 'Couleur principale',
       type: 'string',
       description: 'Code hexadécimal, ex: #E63946',
-      validation: Rule => Rule.regex(/^#([A-Fa-f0-9]{6})$/, { name: 'hex color' })
+      validation: Rule => Rule.regex(/^#([A-Fa-f0-9]{6})$/, { name: 'hex color' }),
+      hidden: adminOnly,
     },
     {
       name: 'couleurSecondaire',
       title: 'Couleur secondaire',
       type: 'string',
-      description: 'Code hexadécimal, ex: #1D3557'
+      description: 'Code hexadécimal, ex: #1D3557',
+      hidden: adminOnly,
     },
     {
       name: 'heroImage',
-      title: "Image d'en-tête",
+      title: "Photo d'en-tête",
       type: 'image',
-      options: { hotspot: true }
+      options: { hotspot: true },
+      description: 'Photo principale affichée en haut du site'
     },
     {
       name: 'heroImageUrl',
       title: "URL image d'en-tête (externe)",
       type: 'url',
-      description: 'Utilisé si pas d\'image uploadée dans Sanity'
-    },
-    {
-      name: 'logoUrl',
-      title: 'URL logo (externe)',
-      type: 'url',
-      description: 'Utilisé si pas de logo uploadé dans Sanity'
+      description: 'Utilisé si pas d\'image uploadée',
+      hidden: adminOnly,
     },
     {
       name: 'heroTitre',
-      title: "Titre principal",
-      type: 'string'
+      title: 'Titre principal',
+      type: 'string',
+      description: 'Nom de l\'événement affiché en grand sur l\'en-tête'
     },
     {
       name: 'heroDate',
@@ -72,19 +85,22 @@ export default {
     },
     {
       name: 'heroCTA',
-      title: "Texte du bouton principal",
-      type: 'string'
+      title: 'Texte du bouton principal',
+      type: 'string',
+      description: 'Ex: S\'inscrire maintenant'
     },
     {
       name: 'heroCTAUrl',
-      title: "Lien du bouton principal",
-      type: 'url'
+      title: 'Lien du bouton principal',
+      type: 'url',
+      description: 'URL vers le formulaire d\'inscription'
     },
     {
       name: 'metaDescription',
       title: 'Description SEO',
       type: 'text',
-      rows: 2
+      rows: 2,
+      description: 'Texte affiché dans les résultats Google (160 caractères max)'
     }
   ],
   preview: {

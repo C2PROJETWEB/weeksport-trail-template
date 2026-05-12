@@ -1,3 +1,6 @@
+const adminOnly = ({ currentUser }) =>
+  !currentUser?.roles?.find(r => r.name === 'administrator')
+
 export default {
   name: 'navigation',
   title: 'Menu de navigation',
@@ -9,7 +12,9 @@ export default {
       title: 'Site',
       type: 'reference',
       to: [{ type: 'site' }],
-      validation: Rule => Rule.required()
+      validation: Rule => Rule.required(),
+      hidden: adminOnly,
+      readOnly: adminOnly,
     },
     {
       name: 'items',
